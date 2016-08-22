@@ -1,3 +1,23 @@
+/*
+ * BrowserLauncher.java
+ * Missing License Header, Copyright 2016 (C) Andrew Maitland <amaitland@users.sourceforge.net>
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *
+ */
+
 //package edu.stanford.ejalbert;
 package pcgen.gui2.tools;
 
@@ -66,7 +86,7 @@ import pcgen.util.Logging;
  * 
  * @deprecated DesktopBrowserLauncher should be used instead of this class now.
  *
- * @author Eric Albert (<a href="mailto:ejalbert@cs.stanford.edu">ejalbert@cs.stanford.edu</a>)
+ * @author Eric Albert (&lt;a href="mailto:ejalbert@cs.stanford.edu"&gt;ejalbert@cs.stanford.edu&lt;/a&gt;)
  * @version 1.4b1 (Released June 20, 2001)
  */
 final class BrowserLauncher
