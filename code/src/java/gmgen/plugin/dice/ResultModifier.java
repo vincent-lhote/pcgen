@@ -1,6 +1,5 @@
 /*
- *  GMGen - A role playing utility
- *  Copyright (C) 2003 Devon D Jones
+ *  Initiative - A role playing utility to track turns
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -16,20 +15,27 @@
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
-package gmgen.io;
 
-import java.io.File;
+package gmgen.plugin.dice;
 
-/**
- * This is the interface for the classes that will be exporting or saving to a
- * file.<br>
- */
-public interface ExportHandler
+@FunctionalInterface
+public interface ResultModifier
 {
+
+
 	/**
-	 * This method will be overridden in the using classes to save
-	 * the class to a file.
-	 * @param path the file and path which will be used to save.
+	 * Given a sequence of values, produces a new sequence of values
+	 * This allows the modification of a value to be abstracted from the production of the original value.
+	 * @param in sequence of original values
+	 * @return sequence of values
 	 */
-	public abstract void export(File path);
+	int[] resultAsModified(int[] in);
+
+	static int[] modify(final ResultModifier... modifiers) {
+		int[] result = new int[0];
+		for(final ResultModifier rm: modifiers) {
+			result = rm.resultAsModified(result);
+		}
+		return result;
+	}
 }

@@ -541,7 +541,7 @@ public class PlayerCharacter  implements Cloneable, VariableContainer
 	 * Constructor.
 	 */
 	public PlayerCharacter() {
-		this(true, Collections.EMPTY_LIST);
+		this(true, Collections.<Campaign>emptyList());
 	}
 
 	/**
@@ -596,7 +596,7 @@ public class PlayerCharacter  implements Cloneable, VariableContainer
 		addSpellBook(new SpellBook(Constants.INNATE_SPELL_BOOK_NAME, SpellBook.TYPE_INNATE_SPELLS));
 	}
 	
-	private final void doFormulaSetup()
+	private void doFormulaSetup()
 	{
 		SplitFormulaSetup formulaSetup =
 				formulaSetupFacet.get(id.getDatasetID());

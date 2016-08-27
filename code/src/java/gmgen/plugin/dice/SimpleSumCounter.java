@@ -1,6 +1,5 @@
 /*
- *  GMGen - A role playing utility
- *  Copyright (C) 2003 Devon D Jones
+ *  Initiative - A role playing utility to track turns
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -16,20 +15,16 @@
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
-package gmgen.io;
 
-import java.io.File;
+package gmgen.plugin.dice;
 
-/**
- * This is the interface for the classes that will be exporting or saving to a
- * file.<br>
- */
-public interface ExportHandler
+import java.util.stream.IntStream;
+
+public class SimpleSumCounter implements ResultCounter
 {
-	/**
-	 * This method will be overridden in the using classes to save
-	 * the class to a file.
-	 * @param path the file and path which will be used to save.
-	 */
-	public abstract void export(File path);
+	@Override
+	public int totalCount(final int[] in)
+	{
+		return IntStream.of(in).sum();
+	}
 }
