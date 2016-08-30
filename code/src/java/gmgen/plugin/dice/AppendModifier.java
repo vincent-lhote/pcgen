@@ -20,21 +20,21 @@ package gmgen.plugin.dice;
 
 import java.util.Random;
 
-public class AppendModifier implements ResultModifier
+class AppendModifier implements ResultModifier
 {
 
 	private final int count;
 	private final int max;
 	private final Random rand;
 
-	public AppendModifier(final int count, final int max, final Random rand) {
+	AppendModifier(final int count, final int max, final Random rand) {
 		this.count = count;
 		this.max = max;
 		this.rand = rand;
 	}
 
 	@Override
-	public int[] resultAsModified(int[] in)
+	public int[] apply(final int[] in)
 	{
 		int[] newResults = new int[count + in.length];
 		System.arraycopy(in, 0, newResults, 0, in.length);
@@ -43,6 +43,7 @@ public class AppendModifier implements ResultModifier
 			int thisRoll = rand.nextInt(max) + 1;
 			newResults[in.length + i] = thisRoll;
 		}
+
 		return newResults;
 	}
 }

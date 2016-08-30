@@ -18,16 +18,16 @@
 
 package gmgen.plugin.dice;
 
-public class SimpleModifier implements ResultModifier
+class SimpleModifier implements ResultModifier
 {
-	private int mod;
+	private final int mod;
 
-	public SimpleModifier(int mod) {
+	public SimpleModifier(final int mod) {
 		this.mod = mod;
 	}
 
 	@Override
-	public int[] resultAsModified(final int[] in)
+	public int[] apply(final int[] in)
 	{
 		int[] result = new int[in.length];
 		for (int i = 0; i < in.length; ++i)

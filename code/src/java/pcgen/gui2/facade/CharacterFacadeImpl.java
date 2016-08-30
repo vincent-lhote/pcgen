@@ -39,12 +39,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-
 import javax.swing.undo.UndoManager;
-
 import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.lang.StringUtils;
-
 import pcgen.cdom.base.AssociatedPrereqObject;
 import pcgen.cdom.base.CDOMObject;
 import pcgen.cdom.base.CDOMReference;
@@ -57,10 +54,13 @@ import pcgen.cdom.enumeration.CharID;
 import pcgen.cdom.enumeration.EquipmentLocation;
 import pcgen.cdom.enumeration.Gender;
 import pcgen.cdom.enumeration.Handed;
+import pcgen.cdom.enumeration.HandedPCAttr;
 import pcgen.cdom.enumeration.IntegerKey;
 import pcgen.cdom.enumeration.ListKey;
 import pcgen.cdom.enumeration.Nature;
+import pcgen.cdom.enumeration.NumericPCAttribute;
 import pcgen.cdom.enumeration.ObjectKey;
+import pcgen.cdom.enumeration.PCAttribute;
 import pcgen.cdom.enumeration.PCStringKey;
 import pcgen.cdom.enumeration.SkillFilter;
 import pcgen.cdom.enumeration.StringKey;
@@ -180,7 +180,6 @@ import pcgen.io.ExportException;
 import pcgen.io.ExportHandler;
 import pcgen.io.PCGIOHandler;
 import pcgen.output.channel.ChannelCompatibility;
-import pcgen.output.channel.compat.StatAdapter;
 import pcgen.pluginmgr.PluginManager;
 import pcgen.pluginmgr.messages.PlayerCharacterWasClosedMessage;
 import pcgen.system.CharacterManager;
@@ -2016,7 +2015,7 @@ public class CharacterFacadeImpl implements CharacterFacade, EquipmentListListen
 	public void setTabName(String name)
 	{
 		tabName.set(name);
-		theCharacter.setTabName(name);
+		theCharacter.setPCAttribute(PCAttribute.TABNAME, name);
 	}
 
 	/* (non-Javadoc)
@@ -2084,7 +2083,7 @@ public class CharacterFacadeImpl implements CharacterFacade, EquipmentListListen
 	public void setSkinColor(String color)
 	{
 		skinColor.set(color);
-		theCharacter.setSkinColor(color);
+		theCharacter.setPCAttribute(PCAttribute.SKINCOLOR, color);
 	}
 
 	/**
@@ -2103,7 +2102,7 @@ public class CharacterFacadeImpl implements CharacterFacade, EquipmentListListen
 	public void setHairColor(String color)
 	{
 		hairColor.set(color);
-		theCharacter.setHairColor(color);
+		theCharacter.setPCAttribute(PCAttribute.HAIRCOLOR, color);
 	}
 
 	/**
@@ -2143,7 +2142,7 @@ public class CharacterFacadeImpl implements CharacterFacade, EquipmentListListen
 		int heightInInches =
 				Globals.getGameModeUnitSet().convertHeightFromUnitSet(height);
 		heightRef.set(height);
-		theCharacter.setHeight(heightInInches);
+		theCharacter.setPCAttribute(NumericPCAttribute.HEIGHT, heightInInches);
 	}
 
 	/**
@@ -2155,9 +2154,6 @@ public class CharacterFacadeImpl implements CharacterFacade, EquipmentListListen
 		return weightRef;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void setWeight(int weight)
 	{
@@ -2165,7 +2161,7 @@ public class CharacterFacadeImpl implements CharacterFacade, EquipmentListListen
 				(int) Globals.getGameModeUnitSet().convertWeightFromUnitSet(
 					weight);
 		weightRef.set(weight);
-		theCharacter.setWeight(weightInPounds);
+		theCharacter.setPCAttribute(NumericPCAttribute.WEIGHT,weightInPounds);
 	}
 
 	/* (non-Javadoc)
@@ -2840,7 +2836,7 @@ public class CharacterFacadeImpl implements CharacterFacade, EquipmentListListen
 	public void setHanded(HandedFacade handedness)
 	{
 		this.handedness.set(handedness);
-		theCharacter.setHanded((Handed) handedness);
+		theCharacter.setPCAttribute(HandedPCAttr.HANDED, (Handed) handedness);
 	}
 
 	/* (non-Javadoc)
@@ -2858,8 +2854,8 @@ public class CharacterFacadeImpl implements CharacterFacade, EquipmentListListen
 	@Override
 	public void setPlayersName(String name)
 	{
-		this.playersName.set(name);
-		theCharacter.setPlayersName(name);
+		playersName.set(name);
+		theCharacter.setPCAttribute(PCAttribute.PLAYERSNAME, name);
 	}
 
 	/* (non-Javadoc)
@@ -3071,7 +3067,7 @@ public class CharacterFacadeImpl implements CharacterFacade, EquipmentListListen
 			return;
 		}
 
-		theCharacter.setAge(age);
+		theCharacter.setPCAttribute(NumericPCAttribute.AGE, age);
 		this.age.set(age);
 		updateAgeCategoryForAge();
 		refreshStatScores();
