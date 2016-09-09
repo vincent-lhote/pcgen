@@ -20,8 +20,6 @@
  * Created on 14-Aug-2005
  *
  * Current Ver: $Revision$
- * Last Editor: $Author$
- * Last Edited: $Date$
  *
  */
 package pcgen.core;
@@ -56,7 +54,7 @@ public class EquipmentTest extends AbstractCharacterTestCase
 
 	private Equipment eq = null;
 	private Equipment eqDouble = null;
-	private final String OriginalKey = "OrigKey";
+	private static final String OriginalKey = "OrigKey";
 	private CampaignSourceEntry source;
 
 	/**
@@ -113,7 +111,7 @@ public class EquipmentTest extends AbstractCharacterTestCase
 		}
 
 		GenericLoader<Equipment> eqLoader =
-				new GenericLoader<Equipment>(Equipment.class);
+				new GenericLoader<>(Equipment.class);
 		eq = eqLoader.parseLine(Globals.getContext(), null,
 			"Dummy	SIZE:M 	KEY:OrigKey	TYPE:Weapon", source);
 		eq = Globals.getContext().getReferenceContext().silentlyGetConstructedCDOMObject(
@@ -126,7 +124,7 @@ public class EquipmentTest extends AbstractCharacterTestCase
 				Equipment.class, "DoubleKey");
 		
 		GenericLoader<EquipmentModifier> loader =
-				new GenericLoader<EquipmentModifier>(EquipmentModifier.class);
+				new GenericLoader<>(EquipmentModifier.class);
 		loader
 			.parseLine(
 				Globals.getContext(),
@@ -459,7 +457,7 @@ public class EquipmentTest extends AbstractCharacterTestCase
 	public void testGetItemNameFromModifiersNothing() throws Exception
 	{
 		GenericLoader<EquipmentModifier> loader =
-				new GenericLoader<EquipmentModifier>(EquipmentModifier.class);
+				new GenericLoader<>(EquipmentModifier.class);
 		loader
 			.parseLine(
 				Globals.getContext(),
@@ -541,7 +539,7 @@ assertNotNull("Eqmod should be present", eqMod);
 	public void testGetCostWithHeadPlus() throws Exception
 	{
 		GenericLoader<EquipmentModifier> loader =
-				new GenericLoader<EquipmentModifier>(EquipmentModifier.class);
+				new GenericLoader<>(EquipmentModifier.class);
 		loader
 			.parseLine(
 				Globals.getContext(),

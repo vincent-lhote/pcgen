@@ -45,10 +45,8 @@ import pcgen.cdom.enumeration.MapKey;
  * 
  * **NOTE** This class is NOT thread safe.
  * 
- * Last Editor: $Author: $ Last Edited: $Date: $
  * 
  * @author James Dempsey &lt;jdempsey@users.sourceforge.net&gt;
- * @version $Revision: $
  */
 public class MapKeyMap
 {

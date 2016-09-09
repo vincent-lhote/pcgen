@@ -41,11 +41,8 @@ import pcgen.util.SortKeyAware;
  * displaying the spell on the UI. 
  *
  * <br>
- * Last Editor: $Author$
- * Last Edited: $Date$
  * 
  * @author James Dempsey &lt;jdempsey@users.sourceforge.net&gt;
- * @version $Revision$
  */
 public class SpellFacadeImplem implements SpellFacade, SortKeyAware
 {
@@ -151,9 +148,6 @@ public class SpellFacadeImplem implements SpellFacade, SortKeyAware
 		return pc.parseSpellString(charSpell, spell.getListAsString(ListKey.DURATION));
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public String getCastTime()
 	{
@@ -295,27 +289,18 @@ public class SpellFacadeImplem implements SpellFacade, SortKeyAware
 		return true;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public boolean isNamePI()
 	{
 		return spell.isNamePI();
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public String getType()
 	{
 		return spell.getType();
 	}
 	
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public String getSortKey()
 	{

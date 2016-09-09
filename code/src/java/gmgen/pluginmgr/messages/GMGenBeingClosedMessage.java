@@ -29,11 +29,8 @@ import pcgen.pluginmgr.PCGenMessage;
  * GMGen is being shut down.
  *
  * <br>
- * Last Editor: $Author$
- * Last Edited: $Date$
  * 
  * @author James Dempsey &lt;jdempsey@users.sourceforge.net&gt;
- * @version $Revision$
  */
 @SuppressWarnings("serial")
 public class GMGenBeingClosedMessage extends PCGenMessage

@@ -35,11 +35,8 @@ import pcgen.cdom.facet.base.AbstractStorageFacet;
  * should be hidden from output.
  * 
  * <br>
- * Last Editor: $Author$
- * Last Edited: $Date$
  * 
  * @author James Dempsey &lt;jdempsey@users.sourceforge.net&gt;
- * @version $Revision$
  */
 
 public class SuppressBioFieldFacet extends AbstractStorageFacet<CharID>

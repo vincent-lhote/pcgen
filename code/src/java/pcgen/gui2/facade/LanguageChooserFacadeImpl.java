@@ -54,11 +54,8 @@ import pcgen.facade.util.ListFacade;
  * details of a possible selection of languages. 
  *
  * <br>
- * Last Editor: $Author$
- * Last Edited: $Date$
  * 
  * @author James Dempsey &lt;jdempsey@users.sourceforge.net&gt;
- * @version $Revision$
  */
 public final class LanguageChooserFacadeImpl implements LanguageChooserFacade
 {

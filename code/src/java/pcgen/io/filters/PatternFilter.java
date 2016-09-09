@@ -37,7 +37,6 @@ import pcgen.util.Logging;
  * into safe XML equivalents for outputting to xml files.
  *    
  * @author apsen
- * @version $Revision: $
  */
 public class PatternFilter implements OutputFilter
 {
@@ -144,12 +143,7 @@ public class PatternFilter implements OutputFilter
 								.errorPrint("Incorrect line format in PatternFilter: Line ignored");
 						}
 					}
-					catch (NullPointerException e)
-					{
-						Logging.errorPrint(
-							"Exception in setCurrentOutputFilter", e);
-					}
-					catch (NumberFormatException e)
+					catch (NullPointerException | NumberFormatException e)
 					{
 						Logging.errorPrint(
 							"Exception in setCurrentOutputFilter", e);

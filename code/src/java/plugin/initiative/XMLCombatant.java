@@ -38,8 +38,6 @@ import pcgen.util.Logging;
 
 /**
  *@author     devon
- *@since    March 20, 2003
- *@version $Revision$
  */
 public class XMLCombatant extends Combatant
 {
@@ -786,7 +784,7 @@ public class XMLCombatant extends Combatant
 
 			statBuf.append("<br>");
 
-			List<SystemAttribute> statList = new ArrayList<SystemAttribute>();
+			List<SystemAttribute> statList = new ArrayList<>();
 			statList.add(new SystemAttribute("Str", getAttribute("Strength")));
 			statList.add(new SystemAttribute("Con",
 				getAttribute("Constitution")));

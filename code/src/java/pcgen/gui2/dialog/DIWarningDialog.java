@@ -46,11 +46,8 @@ import pcgen.system.LanguageBundle;
  * displaying warnings for the data installer. The list of 
  * files will be displayed in a scrollable area.
  * 
- * Last Editor: $Author$
- * Last Edited: $Date$
  * 
  * @author James Dempsey &lt;jdempsey@users.sourceforge.net&gt;
- * @version $Revision$
  */
 @SuppressWarnings("serial")
 public class DIWarningDialog extends JDialog implements

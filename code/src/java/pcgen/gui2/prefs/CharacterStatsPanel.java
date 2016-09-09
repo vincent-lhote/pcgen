@@ -56,11 +56,8 @@ import pcgen.system.LanguageBundle;
  * The Class <code>CharacterStatsPanel</code> is responsible for managing 
  * the character stats preferences.
  * 
- * Last Editor: $Author: $
- * Last Edited: $Date:  $
  * 
  * @author James Dempsey &lt;jdempsey@users.sourceforge.net&gt;
- * @version $Revision:  $
  */
 @SuppressWarnings("serial")
 public class CharacterStatsPanel extends PCGenPrefsPanel

@@ -46,11 +46,8 @@ import pcgen.system.LanguageBundle;
  * setting the name, cost etc.  
  *
  * <br>
- * Last Editor: $Author$
- * Last Edited: $Date$
  * 
  * @author James Dempsey &lt;jdempsey@users.sourceforge.net&gt;
- * @version $Revision$
  */
 @SuppressWarnings("serial")
 public class EquipCustomizerDialog extends JDialog
@@ -113,10 +110,7 @@ public class EquipCustomizerDialog extends JDialog
 		Utility.installEscapeCloseOperation(this);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override 
+	@Override
 	public void actionPerformed(ActionEvent e)
 	{
 		purchase = e.getSource() == buyButton;

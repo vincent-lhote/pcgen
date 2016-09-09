@@ -58,7 +58,6 @@ import pcgen.system.PCGenSettings;
  * Convenience methods from various sources.
  *
  * @author &lt;a href="mailto:binkley@alumni.rice.edu"&gt;B. K. Oxley (binkley)&lt;/a&gt;
- * @version $Revision: 14613 $
  */
 public final class Utility
 {
@@ -469,12 +468,7 @@ public final class Utility
 			awtAppClassNameField.setAccessible(true);
 			awtAppClassNameField.set(xToolkit, title);
 		}
-		catch (NoSuchFieldException e)
-		{
-			// Rather than do a OS system condition, just ignore this expected exception
-			//Logging.log(Level.FINEST, "Can not set name of application for window manager", e);
-		}
-		catch (IllegalAccessException e)
+		catch (NoSuchFieldException | IllegalAccessException e)
 		{
 			// Rather than do a OS system condition, just ignore this expected exception
 			//Logging.log(Level.FINEST, "Can not set name of application for window manager", e);

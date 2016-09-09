@@ -18,8 +18,6 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *
  * Current Ver: $Revision$
- * Last Editor: $Author$
- * Last Edited: $Date$
  */
 package plugin.lsttokens;
 
@@ -106,7 +104,6 @@ import pcgen.rules.persistence.token.ParseResult;
  *
  * @author boomer70 &lt;boomer70@yahoo.com&gt;
  *
- * @since 5.11.1
  *
  */
 public class AbilityLst extends AbstractTokenWithSeparator<CDOMObject>
@@ -183,7 +180,7 @@ public class AbilityLst extends AbstractTokenWithSeparator<CDOMObject>
 		ListKey glk = ListKey.getKeyFor(ChooseSelectionActor.class, lkString);
 		ListKey<ChooseSelectionActor<?>> lk = glk;
 
-		ArrayList<PrereqObject> edgeList = new ArrayList<PrereqObject>();
+		ArrayList<PrereqObject> edgeList = new ArrayList<>();
 
 		CDOMReference<AbilityList> abilList =
 				AbilityList.getAbilityListReference(acRef, nature);
@@ -251,7 +248,7 @@ public class AbilityLst extends AbstractTokenWithSeparator<CDOMObject>
 				List<String> choices = null;
 				if (token.indexOf('(') != -1)
 				{
-					choices = new ArrayList<String>();
+					choices = new ArrayList<>();
 					AbilityUtilities.getUndecoratedName(token, choices);
 					if (choices.size() == 1)
 					{
@@ -332,11 +329,11 @@ public class AbilityLst extends AbstractTokenWithSeparator<CDOMObject>
 					.getChangedLists(obj, AbilityList.class);
 		Changes<ListKey<ChooseSelectionActor<?>>> actors = context.getObjectContext()
 				.getListChanges(obj, ListKey.GA_CAKEYS);
-		Set<String> returnSet = new TreeSet<String>();
+		Set<String> returnSet = new TreeSet<>();
 		TripleKeyMapToList<Nature, CDOMSingleRef<AbilityCategory>, List<Prerequisite>, CDOMReference<Ability>> m =
-				new TripleKeyMapToList<Nature, CDOMSingleRef<AbilityCategory>, List<Prerequisite>, CDOMReference<Ability>>();
+				new TripleKeyMapToList<>();
 		TripleKeyMapToList<Nature, CDOMSingleRef<AbilityCategory>, List<Prerequisite>, CDOMReference<Ability>> clear =
-				new TripleKeyMapToList<Nature, CDOMSingleRef<AbilityCategory>, List<Prerequisite>, CDOMReference<Ability>>();
+				new TripleKeyMapToList<>();
 
 		Changes<ChooseSelectionActor<?>> listChanges =
 				context.getObjectContext().getListChanges(obj,

@@ -19,8 +19,6 @@
  * Created on March 19, 2002, 4:15 PM
  *
  * Current Ver: $Revision$
- * Last Editor: $Author$
- * Last Edited: $Date$
  *
  */
 package pcgen.io;
@@ -117,7 +115,6 @@ import pcgen.util.StringPClassUtil;
  * <i>simpletag</i> := TAGNAME ':' TAGVALUE
  *
  * @author Thomas Behr 19-03-02
- * @version $Revision$
  */
 public final class PCGVer2Creator implements IOConstants
 {

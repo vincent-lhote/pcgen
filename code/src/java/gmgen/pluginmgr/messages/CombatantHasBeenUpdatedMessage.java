@@ -30,11 +30,8 @@ import pcgen.pluginmgr.PCGenMessage;
  * message that a specific combatant has been modified.
  *
  * <br>
- * Last Editor: $Author$
- * Last Edited: $Date$
  * 
  * @author James Dempsey &lt;jdempsey@users.sourceforge.net&gt;
- * @version $Revision$
  */
 
 @SuppressWarnings("serial")

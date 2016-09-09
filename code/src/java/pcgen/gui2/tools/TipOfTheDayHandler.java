@@ -47,9 +47,8 @@ import pcgen.util.Logging;
  * <br>
 
  * @author James Dempsey &lt;jdempsey@users.sourceforge.net&gt;
- * @version $Revision$
  */
-public class TipOfTheDayHandler
+public final class TipOfTheDayHandler
 {
 	private static final UIPropertyContext propertyContext = UIPropertyContext.createContext("TipOfTheDay");
 
@@ -109,13 +108,6 @@ public class TipOfTheDayHandler
 				Logging.log(Logging.INFO, "Loaded tips from " + path); //$NON-NLS-1$
 				loaded = true;
 				break;
-			}
-			catch (FileNotFoundException e)
-			{
-				if (Logging.isDebugMode())
-				{
-					Logging.debugPrint("Unable to load tips file " + path, e); //$NON-NLS-1$
-				}
 			}
 			catch (IOException e)
 			{

@@ -41,11 +41,8 @@ import pcgen.core.utils.CoreUtility;
  * sets to match newer requirements.
  *
  * <br>
- * Last Editor: $Author$
- * Last Edited: $Date$
  * 
  * @author James Dempsey &lt;jdempsey@users.sourceforge.net&gt;
- * @version $Revision$
  */
 public class EquipSetMigration
 {
@@ -141,9 +138,6 @@ public class EquipSetMigration
 			Comparator<EquipSet>
 	{
 
-		/**
-		 * {@inheritDoc}
-		 */
 		@Override
 		public int compare(EquipSet arg0, EquipSet arg1)
 		{

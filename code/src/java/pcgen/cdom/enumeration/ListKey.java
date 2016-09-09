@@ -18,8 +18,6 @@
  * Created on June 18, 2005.
  *
  * Current Ver: $Revision$
- * Last Editor: $Author$
- * Last Edited: $Date$
  */
 package pcgen.cdom.enumeration;
 
@@ -289,6 +287,7 @@ public final class ListKey<T>
 	public static final ListKey<CampaignSourceEntry> FILE_GLOBALMOD = new ListKey<>();
 	public static final ListKey<CampaignSourceEntry> FILE_DYNAMIC = new ListKey<>();
 	public static final ListKey<CDOMReference<Dynamic>> GRANTED = new ListKey<>();
+	public static final ListKey<CampaignSourceEntry> FILE_DATATABLE = new ListKey<>();
 
 	private static CaseInsensitiveMap<ListKey<?>> map = null;
 
@@ -347,11 +346,7 @@ public final class ListKey<T>
 						map.put(fields[i].getName(), (ListKey<?>) obj);
 					}
 				}
-				catch (IllegalArgumentException e)
-				{
-					throw new UnreachableError(e);
-				}
-				catch (IllegalAccessException e)
+				catch (IllegalArgumentException | IllegalAccessException e)
 				{
 					throw new UnreachableError(e);
 				}

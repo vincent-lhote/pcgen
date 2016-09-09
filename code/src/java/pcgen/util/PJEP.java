@@ -41,7 +41,6 @@ import pcgen.system.PluginLoader;
  * <code>PJEP</code>
  *
  * @author  Greg Bingleman &lt;byngl@hotmail.com&gt;
- * @version $Revision$
  *
  * Provides a common interface setup for Singular Systems' Java Mathematical Expression Parser.
  *
@@ -99,11 +98,7 @@ public final class PJEP extends JEP
 				addFunction(com.getFunctionName().toLowerCase(), com);
 				addFunction(com.getFunctionName().toUpperCase(), com);
 			}
-			catch (InstantiationException e)
-			{
-				e.printStackTrace();
-			}
-			catch (IllegalAccessException e)
+			catch (InstantiationException | IllegalAccessException e)
 			{
 				e.printStackTrace();
 			}

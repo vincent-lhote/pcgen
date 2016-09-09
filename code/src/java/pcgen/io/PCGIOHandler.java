@@ -19,8 +19,6 @@
  * Created on March 11, 2002, 8:30 PM
  *
  * Current Ver: $Revision$
- * Last Editor: $Author$
- * Last Edited: $Date$
  *
  */
 package pcgen.io;
@@ -71,7 +69,6 @@ import pcgen.util.Logging;
  * Reading and Writing PlayerCharacters in PCGen's own format (PCG).
  *
  * @author Thomas Behr 11-03-02
- * @version $Revision$
  */
 public final class PCGIOHandler extends IOHandler
 {
@@ -489,7 +486,7 @@ public final class PCGIOHandler extends IOHandler
 
 					if (iRoll > iSides)
 					{
-						currentPC.setHP(pcl, Integer.valueOf(iSides));
+						currentPC.setHP(pcl, iSides);
 						fixMade = true;
 					}
 				}

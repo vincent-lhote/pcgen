@@ -68,11 +68,8 @@ import pcgen.system.LanguageBundle;
  * allow the allocation of kit to the currently selected character. 
  *
  * <br>
- * Last Editor: $Author$
- * Last Edited: $Date$
  * 
  * @author James Dempsey &lt;jdempsey@users.sourceforge.net&gt;
- * @version $Revision$
  */
 @SuppressWarnings("serial")
 public class KitPanel extends FlippingSplitPane
@@ -380,9 +377,6 @@ public class KitPanel extends FlippingSplitPane
 				|| !context.getKits().containsElement(element);
 		}
 
-		/**
-		 * {@inheritDoc}
-		 */
 		@Override
 		public String getPrefsKey()
 		{

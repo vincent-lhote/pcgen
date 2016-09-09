@@ -67,11 +67,9 @@ import pcgen.util.enumeration.Tab;
  * character sheet tab.
  *
  * <br>
- * Last Editor: $Author: cpmeister $ Last Edited: $Date: 2011-02-22 22:16:07
  * -0800 (Tue, 22 Feb 2011) $
  *
  * @author James Dempsey &lt;jdempsey@users.sourceforge.net&gt;
- * @version $Revision: 14593 $
  */
 public class CharacterSheetInfoTab extends FlippingSplitPane implements CharacterInfoTab, DisplayAwareTab
 {
@@ -178,9 +176,6 @@ public class CharacterSheetInfoTab extends FlippingSplitPane implements Characte
 		return tabTitle;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void tabSelected()
 	{

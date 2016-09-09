@@ -48,7 +48,6 @@ import pcgen.core.SettingsHandler;
  * Java logging API.
  * 
  * @author     Jonas Karlsson &lt;jujutsunerd@sf.net&gt;
- * @version    $Revision$
  */
 public class Logging
 {
@@ -105,13 +104,7 @@ public class Logging
 		{
 			LogManager.getLogManager().readConfiguration();
 		}
-		catch (SecurityException e)
-		{
-			System.err
-				.println("Failed to read logging configuration. Error was:");
-			e.printStackTrace();
-		}
-		catch (IOException e)
+		catch (SecurityException | IOException e)
 		{
 			System.err
 				.println("Failed to read logging configuration. Error was:");

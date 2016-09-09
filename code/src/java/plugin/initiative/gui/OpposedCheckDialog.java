@@ -83,10 +83,8 @@ import java.util.ArrayList;
  * Current Ver: $Revision$
  * </p>
  * <p>
- * Last Editor: $Author$
  * </p>
  * <p>
- * Last Edited: $Date$
  * </p>
  *
  * @author LodgeR
@@ -133,7 +131,7 @@ public class OpposedCheckDialog extends JDialog
 				{
 					OpposedSkillBasicModel model =
 							(OpposedSkillBasicModel) table.getModel();
-					items = new ArrayList<PcgCombatant>();
+					items = new ArrayList<>();
 					for (int i = 0; i < rows.length; i++)
 					{
 						items.add(model.getCombatant(rows[i]));
@@ -351,7 +349,7 @@ public class OpposedCheckDialog extends JDialog
 	/** Table that holds the main (rolling) group of combatants */
 	private javax.swing.JTable rollingGroupTable = null; //
 	/** Sorted list of skill names */
-	private TreeSet<String> skillNames = new TreeSet<String>();
+	private TreeSet<String> skillNames = new TreeSet<>();
 
 	/**
 	 * This is the default constructor
@@ -773,17 +771,7 @@ public class OpposedCheckDialog extends JDialog
 		{
 			okButton = new javax.swing.JButton();
 			okButton.setText("Ok");
-			okButton.addActionListener(new java.awt.event.ActionListener()
-			{
-
-                @Override
-				public void actionPerformed(java.awt.event.ActionEvent e)
-				{
-
-					okButtonActionPerformed(e);
-
-				}
-			});
+			okButton.addActionListener(this::okButtonActionPerformed);
 
 		}
 		return okButton;
@@ -803,17 +791,7 @@ public class OpposedCheckDialog extends JDialog
 			opposingComboBox = new javax.swing.JComboBox(skillNames.toArray());
 			opposingComboBox.setSelectedIndex(-1);
 			opposingComboBox
-				.addActionListener(new java.awt.event.ActionListener()
-				{
-
-                @Override
-					public void actionPerformed(java.awt.event.ActionEvent e)
-					{
-
-						opposingComboBoxActionPerformed(e);
-
-					}
-				});
+				.addActionListener(this::opposingComboBoxActionPerformed);
 
 		}
 		return opposingComboBox;
@@ -888,17 +866,7 @@ public class OpposedCheckDialog extends JDialog
 		{
 			rollButton = new javax.swing.JButton();
 			rollButton.setText("Roll");
-			rollButton.addActionListener(new java.awt.event.ActionListener()
-			{
-
-                @Override
-				public void actionPerformed(java.awt.event.ActionEvent e)
-				{
-
-					rollButtonActionPerformed(e);
-
-				}
-			});
+			rollButton.addActionListener(this::rollButtonActionPerformed);
 
 		}
 		return rollButton;
@@ -918,15 +886,7 @@ public class OpposedCheckDialog extends JDialog
 			rollingComboBox = new javax.swing.JComboBox(skillNames.toArray());
 			rollingComboBox.setSelectedIndex(-1);
 			rollingComboBox
-				.addActionListener(new java.awt.event.ActionListener()
-				{
-
-                @Override
-					public void actionPerformed(java.awt.event.ActionEvent e)
-					{
-						rollingComboBoxActionPerformed(e);
-					}
-				});
+				.addActionListener(this::rollingComboBoxActionPerformed);
 
 		}
 		return rollingComboBox;

@@ -19,8 +19,6 @@
  * Created on December 15, 2003, 12:21 PM
  *
  * Current Ver: $Revision$
- * Last Editor: $Author$
- * Last Edited: $Date$
  *
  */
 package plugin.exporttokens.deprecated;
@@ -165,15 +163,11 @@ public class TemplateToken extends Token
 	 * 
 	 * @param pc
 	 *
-	 * @param level
-	 *
-	 * @param hitdice
-	 *
-	 * @return a list of feats 
+	 * @return a list of feats
 	 */
-	public static List<CNAbilitySelection> feats(PlayerCharacter pc, PCTemplate pct, final int level, final int hitdice)
+	public static List<CNAbilitySelection> feats(PlayerCharacter pc, PCTemplate pct)
 	{
-		final List<CNAbilitySelection> feats = new ArrayList<CNAbilitySelection>();
+		final List<CNAbilitySelection> feats = new ArrayList<>();
 	
 		for (PCTemplate rlt : pct.getSafeListFor(ListKey.REPEATLEVEL_TEMPLATES))
 		{
@@ -234,12 +228,9 @@ public class TemplateToken extends Token
 	 * @param pc
 	 * @return value of FEAT sub token
 	 */
-	public static String getFeatToken(PCTemplate template, PlayerCharacter pc)
+	private static String getFeatToken(PCTemplate template, PlayerCharacter pc)
 	{
-		CharacterDisplay display = pc.getDisplay();
-		List<CNAbilitySelection> fList =
-				feats(pc, template, display.getTotalLevels(),
-					display.totalHitDice());
+		List<CNAbilitySelection> fList = feats(pc, template);
 		return StringUtil.join(fList, ", ");
 	}
 
@@ -306,17 +297,17 @@ public class TemplateToken extends Token
 	public static String getSAToken(PCTemplate template, PlayerCharacter pc)
 	{
 		CharacterDisplay display = pc.getDisplay();
-		List<SpecialAbility> saList = new ArrayList<SpecialAbility>();
+		List<SpecialAbility> saList = new ArrayList<>();
 		saList.addAll(display.getResolvedUserSpecialAbilities(template));
 		saList.addAll(display.getResolvedSpecialAbilities(template));
-		List<PCTemplate> subList = new ArrayList<PCTemplate>();
+		List<PCTemplate> subList = new ArrayList<>();
 		subList.addAll(template.getConditionalTemplates(display.getTotalLevels(), display.totalHitDice()));
 		for (PCTemplate subt : subList)
 		{
 			saList.addAll(display.getResolvedUserSpecialAbilities(subt));
 			saList.addAll(display.getResolvedSpecialAbilities(subt));
 		}
-		List<String> saDescList = new ArrayList<String>();
+		List<String> saDescList = new ArrayList<>();
 		for (SpecialAbility sa : saList)
 		{
 			if (!sa.qualifies(pc, template))

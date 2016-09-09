@@ -19,8 +19,6 @@
  * Created on March 20, 2007
  *
  * Current Ver: $Revision$
- * Last Editor: $Author$
- * Last Edited: $Date$
  *
  */
 package plugin.lsttokens.add;
@@ -83,11 +81,9 @@ import pcgen.util.enumeration.Visibility;
  * <li>Choices can be specified by including them in parenthesis after the
  * ability key name (whitespace is ignored).</li>
  * </ul>
- * Last Editor: $Author$ Last Edited: $Date: 2007-05-20 19:00:17 -0400
  * (Sun, 20 May 2007) $
  *
  * @author James Dempsey &lt;jdempsey@users.sourceforge.net&gt;
- * @version $Rev$
  */
 public class AbilityToken extends AbstractNonEmptyToken<CDOMObject> implements
 		CDOMSecondaryToken<CDOMObject>, PersistentChoiceActor<CNAbilitySelection>
@@ -198,7 +194,7 @@ public class AbilityToken extends AbstractNonEmptyToken<CDOMObject> implements
 			return pr;
 		}
 
-		List<CDOMReference<Ability>> refs = new ArrayList<CDOMReference<Ability>>();
+		List<CDOMReference<Ability>> refs = new ArrayList<>();
 		ParsingSeparator tok = new ParsingSeparator(third, ',');
 		tok.addGroupingPair('[', ']');
 		tok.addGroupingPair('(', ')');
@@ -298,8 +294,8 @@ public class AbilityToken extends AbstractNonEmptyToken<CDOMObject> implements
 		title.append(" Choice");
 		cs.setTitle(title.toString());
 		PersistentTransitionChoice<CNAbilitySelection> tc =
-				new ConcretePersistentTransitionChoice<CNAbilitySelection>(
-					cs, count);
+				new ConcretePersistentTransitionChoice<>(
+						cs, count);
 		context.getObjectContext().addToList(obj, ListKey.ADD, tc);
 		tc.allowStack(allowStack);
 		if (dupChoices != 0)
@@ -322,7 +318,7 @@ public class AbilityToken extends AbstractNonEmptyToken<CDOMObject> implements
 			// Zero indicates no Token
 			return null;
 		}
-		List<String> addStrings = new ArrayList<String>();
+		List<String> addStrings = new ArrayList<>();
 		for (TransitionChoice<?> container : addedItems)
 		{
 			SelectableSet<?> cs = container.getChoices();

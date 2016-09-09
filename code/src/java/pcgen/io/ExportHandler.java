@@ -19,8 +19,6 @@
  * Created on March 07, 2002, 8:30 PM
  *
  * Current Ver: $Revision$
- * Last Editor: $Author$
- * Last Edited: $Date$
  *
  */
 package pcgen.io;
@@ -109,7 +107,6 @@ import pcgen.util.enumeration.View;
  * constructs that can be found in the character sheet templates. 
  *
  * @author Thomas Behr
- * @version $Revision$
  */
 public final class ExportHandler
 {
@@ -347,17 +344,11 @@ public final class ExportHandler
 			// Process the template
 			template.process(input, outputWriter);
 		}
-		catch (IOException exc)
+		catch (IOException | TemplateException exc)
 		{
 			String message = "Error exporting character using template " + templateFile;
 			Logging.errorPrint(message, exc);
 			throw new ExportException(exc, message + " : " + exc.getLocalizedMessage());
-		}
-		catch (TemplateException e)
-		{
-			String message = "Error exporting character using template " + templateFile;
-			Logging.errorPrint(message, e);
-			throw new ExportException(e, message + " : " + e.getLocalizedMessage());
 		}
 		finally
 		{
@@ -3831,7 +3822,6 @@ public final class ExportHandler
 	 * <code>PStringTokenizer</code>
 	 *
 	 * @author Bryan McRoberts &lt;merton_monk@users.sourceforge.net&gt;
-	 * @version $Revision$
 	 */
 	private static final class PStringTokenizer
 	{

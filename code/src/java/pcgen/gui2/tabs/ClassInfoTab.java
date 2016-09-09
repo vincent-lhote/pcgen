@@ -489,13 +489,7 @@ public class ClassInfoTab extends FlippingSplitPane implements CharacterInfoTab
 					addCharacterLevels(character, c);
 					return true;
 				}
-				catch (UnsupportedFlavorException ex)
-				{
-					Logger.getLogger(ClassInfoTab.class.getName()).log(Level.SEVERE,
-							null,
-							ex);
-				}
-				catch (IOException ex)
+				catch (UnsupportedFlavorException | IOException ex)
 				{
 					Logger.getLogger(ClassInfoTab.class.getName()).log(Level.SEVERE,
 							null,
@@ -551,9 +545,6 @@ public class ClassInfoTab extends FlippingSplitPane implements CharacterInfoTab
 			this.character = character;
 		}
 
-		/**
-		 * {@inheritDoc}
-		 */
 		@Override
 		public String getPrefsKey()
 		{
@@ -809,7 +800,7 @@ public class ClassInfoTab extends FlippingSplitPane implements CharacterInfoTab
 				if (data != null)
 				{
 					text = character.getInfoFactory().getHTMLInfo(
-							(ClassFacade) data, null);
+							data, null);
 					infoPane.setText(text);
 				}
 				else

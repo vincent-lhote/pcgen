@@ -42,7 +42,6 @@ import java.util.Set;
  * <code>SpinningTabbedPane</code>.
  *
  * @author &lt;a href="binkley@alumni.rice.edu"&gt;B. K. Oxley (binkley)&lt;/a&gt;
- * @version $Revision: 1184 $
  *
  * @see JTabbedPane
  */
@@ -218,7 +217,6 @@ public class SpinningTabbedPane extends JTabbedPane
      * @param y the y location relative to this tabbedpane
      * @return the tab index which intersects the location, or
      *         -1 if no tab intersects the location
-     * @since 1.4
      */
     @Override
     public final int indexAtLocation(int x, int y)

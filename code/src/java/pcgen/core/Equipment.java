@@ -19,8 +19,6 @@
  * Created on April 21, 2001, 2:15 PM
  *
  * Current Ver: $Revision$
- * Last Editor: $Author$
- * Last Edited: $Date$
  *
  */
 package pcgen.core;
@@ -108,7 +106,6 @@ import pcgen.util.enumeration.Visibility;
  * @author Bryan McRoberts &lt;merton_monk@users.sourceforge.net&gt; created December
  *         27
  * @author 2001
- * @version $Revision$
  */
 public final class Equipment extends PObject implements Serializable,
 		Comparable<Object>, VariableContainer, EquipmentFacade, VarScoped
@@ -2282,7 +2279,7 @@ public final class Equipment extends PObject implements Serializable,
 	 */
 	public Float getWeight(final PlayerCharacter aPC)
 	{
-		if (this.isVirtual())
+		if (virtualItem)
 		{
 			return new Float(0.0);
 		}
@@ -2311,7 +2308,7 @@ public final class Equipment extends PObject implements Serializable,
 	 */
 	public double getWeightAsDouble(final PlayerCharacter aPC)
 	{
-		if (this.isVirtual())
+		if (isVirtual())
 		{
 			return 0.0;
 		}
@@ -3016,9 +3013,6 @@ public final class Equipment extends PObject implements Serializable,
 		return getName().compareToIgnoreCase(e.getName());
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public boolean equals(Object obj)
 	{
@@ -3141,9 +3135,6 @@ public final class Equipment extends PObject implements Serializable,
 		return sbuf.toString();
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public int hashCode()
 	{
@@ -6739,10 +6730,7 @@ public final class Equipment extends PObject implements Serializable,
 		return type.split("\\.");
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-    @Override
+	@Override
 	public List<String> getTypesForDisplay()
 	{
 		List<Type> trueTypeList = getTrueTypeList(true);

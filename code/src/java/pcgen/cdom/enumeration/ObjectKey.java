@@ -18,8 +18,6 @@
  * Created on June 18, 2005.
  *
  * Current Ver: $Revision: 513 $
- * Last Editor: $Author: soulcatcher $
- * Last Edited: $Date: 2006-03-29 12:17:43 -0500 (Wed, 29 Mar 2006) $
  */
 package pcgen.cdom.enumeration;
 
@@ -413,11 +411,7 @@ public class ObjectKey<T>
 						map.put(fields[i].getName(), (ObjectKey<?>) obj);
 					}
 				}
-				catch (IllegalArgumentException e)
-				{
-					throw new UnreachableError(e);
-				}
-				catch (IllegalAccessException e)
+				catch (IllegalArgumentException | IllegalAccessException e)
 				{
 					throw new UnreachableError(e);
 				}

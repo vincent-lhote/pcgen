@@ -46,11 +46,8 @@ import pcgen.system.LanguageBundle;
  * generate a random name for their character.
  *
  * <br>
- * Last Editor: $Author$
- * Last Edited: $Date$
  * 
  * @author James Dempsey &lt;jdempsey@users.sourceforge.net&gt;
- * @version $Revision$
  */
 @SuppressWarnings("serial")
 public class RandomNameDialog extends JDialog

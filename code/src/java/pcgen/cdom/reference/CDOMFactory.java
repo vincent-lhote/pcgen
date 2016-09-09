@@ -40,15 +40,15 @@ public class CDOMFactory<T extends Loadable> implements
 		}
 		catch (InstantiationException e)
 		{
-			throw new IllegalArgumentException("Class for "
-					+ getClass().getName()
-					+ " must possess a zero-argument constructor", e);
+			throw new IllegalArgumentException("Class " + objClass + " for "
+				+ getClass().getName()
+				+ " must possess a zero-argument constructor", e);
 		}
 		catch (IllegalAccessException e)
 		{
-			throw new IllegalArgumentException("Class for "
-					+ getClass().getName()
-					+ " must possess a public zero-argument constructor", e);
+			throw new IllegalArgumentException("Class " + objClass + " for "
+				+ getClass().getName()
+				+ " must possess a public zero-argument constructor", e);
 		}
 		refClass = objClass;
 	}
@@ -78,13 +78,7 @@ public class CDOMFactory<T extends Loadable> implements
 		{
 			return refClass.newInstance();
 		}
-		catch (InstantiationException e)
-		{
-			throw new UnreachableError("Class was tested at "
-				+ "construction to ensure it had a public, "
-				+ "zero-argument constructor");
-		}
-		catch (IllegalAccessException e)
+		catch (InstantiationException | IllegalAccessException e)
 		{
 			throw new UnreachableError("Class was tested at "
 				+ "construction to ensure it had a public, "

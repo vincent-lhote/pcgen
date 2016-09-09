@@ -36,11 +36,8 @@ import pcgen.PCGenTestCase;
  * The Class <code>IsgamemodeCommandTest</code> is responsible for checking 
  * that IsgamemodeCommand is working correctly. 
  * 
- * Last Editor: $Author: $
- * Last Edited: $Date:  $
  * 
  * @author James Dempsey <jdempsey@users.sourceforge.net>
- * @version $Revision:  $
  */
 public class IsgamemodeCommandTest extends PCGenTestCase
 {
@@ -96,7 +93,7 @@ public class IsgamemodeCommandTest extends PCGenTestCase
      */
     public void testIsGameModeTrue()
     {
-        final Stack<Object>         s = new Stack<Object>();
+        final Stack<Object>         s = new Stack<>();
 
         s.push("3.5");
 
@@ -112,7 +109,7 @@ public class IsgamemodeCommandTest extends PCGenTestCase
      */
     public void testIsGameModeFalse()
     {
-        final Stack<Object>         s = new Stack<Object>();
+        final Stack<Object>         s = new Stack<>();
 
         s.push("3e");
 

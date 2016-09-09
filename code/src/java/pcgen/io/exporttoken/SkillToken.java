@@ -56,11 +56,8 @@ import pcgen.util.enumeration.View;
  * where id cna be either an index or a skill name and the
  * property is optional. eg SKILL.2.RANK or SKILL.BALANCE
  *
- * Last Editor: $Author$
- * Last Edited: $Date$
  *
  * @author James Dempsey &lt;jdempsey@users.sourceforge.net&gt;
- * @version $Revision$
  */
 public class SkillToken extends Token
 {

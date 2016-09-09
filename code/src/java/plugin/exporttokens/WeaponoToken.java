@@ -19,8 +19,6 @@
  * Created on December 15, 2003, 12:21 PM
  *
  * Current Ver: $Revision$
- * Last Editor: $Author$
- * Last Edited: $Date$
  *
  */
 package plugin.exporttokens;
@@ -39,7 +37,6 @@ import pcgen.io.exporttoken.WeaponToken;
  * <code>WeaponoToken</code>.
  * 
  * @author	binkley
- * @version	$Revision$
  */
 public class WeaponoToken extends WeaponToken
 {
@@ -103,7 +100,7 @@ public class WeaponoToken extends WeaponToken
 	 */
 	public static Equipment getWeaponEquipment(CharacterDisplay display, final int anIndex)
 	{
-		final List<Equipment> secWeapons = new ArrayList<Equipment>(display.getSecondaryWeapons());
+		final List<Equipment> secWeapons = new ArrayList<>(display.getSecondaryWeapons());
 		if (!secWeapons.isEmpty() && anIndex < secWeapons.size())
 		{
 			return secWeapons.get(anIndex);

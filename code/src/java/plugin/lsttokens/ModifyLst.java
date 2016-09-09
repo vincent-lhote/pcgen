@@ -123,9 +123,10 @@ public class ModifyLst implements CDOMPrimaryToken<CDOMObject>
 		LegalScope scope = scopeInst.getLegalScope();
 		if (!context.getVariableContext().isLegalVariableID(scope, varName))
 		{
-			return new ParseResult.Fail(getTokenName()
-				+ " found invalid var name: " + varName + " Modified on "
-				+ obj.getClass().getSimpleName() + " " + obj.getKeyName(),
+			return new ParseResult.Fail(
+				getTokenName() + " found invalid var name: " + varName
+					+ "(scope: " + scope.getName() + ") Modified on "
+					+ obj.getClass().getSimpleName() + " " + obj.getKeyName(),
 				context);
 		}
 		FormatManager<?> format =
@@ -153,7 +154,7 @@ public class ModifyLst implements CDOMPrimaryToken<CDOMObject>
 				+ modIdentification + " had value " + modInstructions
 				+ " but it was not valid: " + iae.getMessage(), context);
 		}
-		VarModifier<T> vm = new VarModifier<T>(varName, scope, modifier);
+		VarModifier<T> vm = new VarModifier<>(varName, scope, modifier);
 		context.getObjectContext().addToList(obj, ListKey.MODIFY, vm);
 		return ParseResult.SUCCESS;
 	}
@@ -175,7 +176,7 @@ public class ModifyLst implements CDOMPrimaryToken<CDOMObject>
 			return null;
 		}
 		Collection<VarModifier<?>> added = changes.getAdded();
-		List<String> modifiers = new ArrayList<String>();
+		List<String> modifiers = new ArrayList<>();
 		if (added != null && added.size() > 0)
 		{
 			for (VarModifier<?> vm : added)

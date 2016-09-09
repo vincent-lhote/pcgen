@@ -21,8 +21,6 @@
  * Created on November 28, 2003
  *
  * Current Ver: $Revision: 7951 $
- * Last Editor: $Author: thpr $
- * Last Edited: $Date: 2008-10-05 15:21:21 -0400 (Sun, 05 Oct 2008) $
  *
  */
 package plugin.pretokens.test;
@@ -94,7 +92,7 @@ public class PreRaceTypeTester extends AbstractDisplayPrereqTest implements Prer
     @Deprecated
 	public static ArrayList<String> getCritterTypes(CharacterDisplay display)
 	{
-		ArrayList<String> critterTypes = new ArrayList<String>();
+		ArrayList<String> critterTypes = new ArrayList<>();
 	
 		// Not too sure about this if, but that's what the previous code
 		// implied...

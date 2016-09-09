@@ -50,7 +50,6 @@ import pcgen.core.character.EquipSet;
  * <code>KitGear</code>.
  *
  * @author Greg Bingleman &lt;byngl@hotmail.com&gt;
- * @version $Revision$
  */
 public final class KitGear extends BaseKit
 {
@@ -250,7 +249,7 @@ public final class KitGear extends BaseKit
 				|| (!theEquipment.isWeapon() && !theEquipment.isAmmunition()))
 			{
 				tryResize =
-						Globals.canResizeHaveEffect(aPC, theEquipment, null);
+						Globals.canResizeHaveEffect(theEquipment, null);
 			}
 		}
 		else
@@ -258,7 +257,7 @@ public final class KitGear extends BaseKit
 			if (sizeToPC != null && sizeToPC)
 			{
 				tryResize =
-						Globals.canResizeHaveEffect(aPC, theEquipment, null);
+						Globals.canResizeHaveEffect(theEquipment, null);
 			}
 			else
 			{

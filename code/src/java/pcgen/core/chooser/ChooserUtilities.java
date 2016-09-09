@@ -16,8 +16,6 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *
  * Current Version: $Revision$
- * Last Editor: $Author$
- * Last Edited: $Date$
  * Copyright 2005 Andrew Wilson <nuance@sourceforge.net>
  */
 
@@ -46,7 +44,6 @@ import pcgen.core.Skill;
  * The guts of chooser moved from PObject
  * 
  * @author Andrew Wilson
- * @version $Revision$
  */
 
 public class ChooserUtilities
@@ -90,7 +87,7 @@ public class ChooserUtilities
 
 		aMan.getChoices(aPC, availableList, selectedList);
 
-		if (availableList.size() > 0 || selectedList.size() > 0)
+		if (!availableList.isEmpty() || !selectedList.isEmpty())
 		{
 			if (addIt)
 			{

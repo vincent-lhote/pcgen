@@ -36,7 +36,6 @@ import pcgen.persistence.lst.GameModeLstToken;
  * types designated as able to be automatically resized. 
  *
  * @author James Dempsey &lt;jdempsey@users.sourceforge.net&gt;
- * @version $Revision: 6171 $
  */
 public class CharacterTypeToken implements GameModeLstToken
 {
@@ -56,7 +55,7 @@ public class CharacterTypeToken implements GameModeLstToken
     @Override
 	public boolean parse(GameMode gameMode, String value, URI source)
 	{
-		List<String> typelist = new ArrayList<String>();
+		List<String> typelist = new ArrayList<>();
 		final StringTokenizer aTok = new StringTokenizer(value, Constants.PIPE, false);
 
 		while (aTok.hasMoreTokens())

@@ -29,7 +29,6 @@ import pcgen.facade.core.UIDelegate;
  * Currently only a SwingChooser has been implemented.
  *
  * @author    Jonas Karlsson
- * @version $Revision$
  */
 public final class ChooserFactory
 {
@@ -65,15 +64,7 @@ public final class ChooserFactory
 			ChoiceHandler ci = (ChoiceHandler) c.newInstance();
 			return ci;
 		}
-		catch (ClassNotFoundException e)
-		{
-			e.printStackTrace();
-		}
-		catch (InstantiationException e)
-		{
-			e.printStackTrace();
-		}
-		catch (IllegalAccessException e)
+		catch (ClassNotFoundException | IllegalAccessException | InstantiationException e)
 		{
 			e.printStackTrace();
 		}

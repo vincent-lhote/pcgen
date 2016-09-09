@@ -19,8 +19,6 @@
  * Created 09-Aug-2008 23:19:38
  *
  * Current Ver: $Revision:$
- * Last Editor: $Author:$
- * Last Edited: $Date:$
  *
  */
 
@@ -61,7 +59,7 @@ public class PCMaxCastableSpellTypeTermEvaluator
 				else
 				{
 					for (int i = 0; i < cutoff; i++) {
-						if (pc.getSpellSupport(spClass).getKnownForLevel(i, "null", pc) != 0)
+						if (pc.getSpellSupport(spClass).getKnownForLevel(i, pc) != 0)
 						{
 							max = Math.max(max,i);
 						}

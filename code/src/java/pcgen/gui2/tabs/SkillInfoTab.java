@@ -238,9 +238,6 @@ public class SkillInfoTab extends FlippingSplitPane implements CharacterInfoTab,
 		return tabTitle;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void adviseTodo(String fieldName)
 	{
@@ -394,9 +391,6 @@ public class SkillInfoTab extends FlippingSplitPane implements CharacterInfoTab,
 			updateSelectedIndex(false);
 		}
 
-		/**
-		 * {@inheritDoc}
-		 */
 		@Override
 		public void valueChanged(ListSelectionEvent e)
 		{
@@ -611,7 +605,7 @@ public class SkillInfoTab extends FlippingSplitPane implements CharacterInfoTab,
 			SkillCost cost = levels.getSkillCost(targetLevel, skill);
 			if (value < 0)
 			{
-				value = Float.valueOf(0);
+				value = 0f;
 			}
 			float max =
 					levels.getMaxRanks(targetLevel, cost,

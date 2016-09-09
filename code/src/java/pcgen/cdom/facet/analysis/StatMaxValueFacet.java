@@ -39,11 +39,8 @@ import pcgen.core.PCStat;
  * value set on a Player Character.
  *
  * <br>
- * Last Editor: $Author$
- * Last Edited: $Date$
  * 
  * @author James Dempsey &lt;jdempsey@users.sourceforge.net&gt;
- * @version $Revision$
  */
 public class StatMaxValueFacet extends AbstractSourcedListFacet<CharID, StatLock> implements
 		DataFacetChangeListener<CharID, CDOMObject>

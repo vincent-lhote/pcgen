@@ -21,8 +21,6 @@
  * Created on November 28, 2003
  *
  * Current Ver: $Revision$
- * Last Editor: $Author$
- * Last Edited: $Date$
  *
  */
 package plugin.pretokens.test;
@@ -220,7 +218,7 @@ public class PreRaceTester extends AbstractDisplayPrereqTest implements Prerequi
 	
 	private Set<Race> getRacesImitatedBy(Race pcRace)
 	{
-		Set<Race> servesAs = new HashSet<Race>();
+		Set<Race> servesAs = new HashSet<>();
 		if (pcRace != null)
 		{
 			for(CDOMReference<Race> ref: pcRace.getSafeListFor(ListKey.SERVES_AS_RACE))

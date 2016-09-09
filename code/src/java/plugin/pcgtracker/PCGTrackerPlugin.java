@@ -22,7 +22,6 @@
 import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
@@ -65,7 +64,6 @@ import plugin.pcgtracker.gui.PCGTrackerView;
  * Created on February 26, 2003<br>
  * Updated on February 26, 2003
  * @author  Expires 2003
- * @version 2.10
  */
 public class PCGTrackerPlugin implements InteractivePlugin,
 		java.awt.event.ActionListener
@@ -115,10 +113,7 @@ public class PCGTrackerPlugin implements InteractivePlugin,
 		initMenus();
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-    @Override
+	@Override
 	public void stop()
 	{
 		messageHandler = null;
@@ -463,14 +458,7 @@ public class PCGTrackerPlugin implements InteractivePlugin,
 	{
 		charToolsItem.setMnemonic(LanguageBundle.getMnemonic("in_mn_plugin_pcgtracker_name")); //$NON-NLS-1$
 		charToolsItem.setText(LanguageBundle.getString("in_plugin_pcgtracker_name")); //$NON-NLS-1$
-		charToolsItem.addActionListener(new ActionListener()
-		{
-            @Override
-			public void actionPerformed(ActionEvent evt)
-			{
-				toolMenuItem(evt);
-			}
-		});
+		charToolsItem.addActionListener(this::toolMenuItem);
 		messageHandler.handleMessage(new AddMenuItemToGMGenToolsMenuMessage(this, charToolsItem));
 	}
 

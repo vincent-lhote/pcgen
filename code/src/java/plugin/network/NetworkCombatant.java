@@ -38,8 +38,6 @@ import org.jdom.Element;
 
 /**
  *@author     devon
- *@since    March 20, 2003
- *@version $Revision$
  */
 public class NetworkCombatant extends Combatant
 {
@@ -140,7 +138,7 @@ public class NetworkCombatant extends Combatant
     @Override
 	public Vector<Object> getRowVector(List<String> columnOrder)
 	{
-		Vector<Object> rowVector = new Vector<Object>();
+		Vector<Object> rowVector = new Vector<>();
 
 		//Iterate through all the columns, and create the vector in that order
 		for (String columnName : columnOrder)
