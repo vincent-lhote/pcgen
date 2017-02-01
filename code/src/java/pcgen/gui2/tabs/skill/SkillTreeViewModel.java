@@ -49,8 +49,6 @@ import pcgen.gui2.util.treeview.TreeViewModel;
 import pcgen.gui2.util.treeview.TreeViewPath;
 import pcgen.system.LanguageBundle;
 
-import org.apache.commons.lang3.StringUtils;
-
 /**
  *
  * @author Connor Petty &lt;cpmeister@users.sourceforge.net&gt;
@@ -211,7 +209,7 @@ public class SkillTreeViewModel implements TreeViewModel<SkillFacade>,
 		Object displayPath[];
 		if (path.length > 0 && StringUtils.isEmpty(String.valueOf(path[path.length - 1])))
 		{
-			displayPath = Arrays.copyOf(path, path.length);
+			displayPath = Arrays.copyOf(path, path.length - 1);
 		}
 		else
 		{
