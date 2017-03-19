@@ -15,8 +15,6 @@ CLASS:Evangelist	STARTSKILLPTS:6	CSKILL:TYPE=Craft|Diplomacy|Heal|Knowledge (Rel
 1	ABILITY:Evangelist Class Feature|AUTOMATIC|Evangelist ~ Obedience
 1	ABILITY:Evangelist Class Feature|AUTOMATIC|Evangelist ~ Skilled
 2	ABILITY:Evangelist Class Feature|AUTOMATIC|Evangelist ~ Aligned Class
-# Just for odina
-2	ADD:SPELLCASTER|ANY	BONUS:VAR|Summoner_CFP_Level|1	BONUS:VAR|MakersCallTimes|1	BONUS:VAR|EidolonCompanionBonusHD|1
 2	ABILITY:Evangelist Class Feature|AUTOMATIC|Evangelist ~ Protective Grace
 3	ABILITY:Evangelist Class Feature|AUTOMATIC|Evangelist ~ Divine Boon
 4	ABILITY:Evangelist Class Feature|AUTOMATIC|Evangelist ~ Gift of Tongues
