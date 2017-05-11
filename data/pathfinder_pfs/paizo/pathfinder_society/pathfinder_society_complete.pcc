@@ -126,8 +126,10 @@ PCC:@/pathfinder/paizo/campaign_setting/seekers_of_secrets/seekers_of_secrets.pc
 # PCC:@/pathfinder/paizo/campaign_setting/technology_guide/technology_guide.pcc
 
 PCC:@/pathfinder/paizo/player_companion/adventurers_armory/_adventurers_armory.pcc
+PCC:@/pathfinder/paizo/player_companion/alchemy_manual/_alchemy_manual.pcc
 PCC:@/pathfinder/paizo/player_companion/andoran_spirit_of_liberty/andoran_spirit_of_liberty.pcc
 PCC:@/pathfinder/paizo/player_companion/animal_archive/_animal_archive.pcc
+PCC:@/pathfinder/paizo/player_companion/arcane_anthology/_arcane_anthology.pcc
 PCC:@/pathfinder/paizo/player_companion/blood_of_angels/blood_of_angels.pcc
 PCC:@/pathfinder/paizo/player_companion/blood_of_fiends/blood_of_fiends.pcc
 PCC:@/pathfinder/paizo/player_companion/blood_of_the_moon/_blood_of_the_moon.pcc
@@ -144,6 +146,7 @@ PCC:@/pathfinder/paizo/player_companion/halflings_of_golarion/halflings_of_golar
 PCC:@/pathfinder/paizo/player_companion/inner_sea_primer/inner_sea_primer.pcc
 PCC:@/pathfinder/paizo/player_companion/orcs_of_golarion/orcs_of_golarion.pcc
 PCC:@/pathfinder/paizo/player_companion/people_of_the_stars/_people_of_the_stars.pcc
+PCC:@/pathfinder/paizo/player_companion/people_of_the_north/_people_of_the_north.pcc
 PCC:@/pathfinder/paizo/player_companion/pirates_of_the_inner_sea/pirates_of_the_inner_sea.pcc
 PCC:@/pathfinder/paizo/player_companion/qadira_gateway_to_the_east/qadira_gateway_to_the_east.pcc
 PCC:@/pathfinder/paizo/player_companion/sargava_the_lost_colony/sargava_the_lost_colony.pcc
