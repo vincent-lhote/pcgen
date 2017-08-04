@@ -12,7 +12,6 @@
  * You should have received a copy of the GNU Lesser General Public License along with this library;
  * if not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
  * 02111-1307 USA
- *
  */
 package pcgen.gui2.tabs;
 
@@ -103,7 +102,6 @@ import pcgen.util.enumeration.Tab;
 /**
  * This component allows a user to manage a character's companions (animal,
  * familiar, cohort, mount, etc).
- *
  */
 @SuppressWarnings("serial")
 public class CompanionInfoTab extends FlippingSplitPane implements CharacterInfoTab, TodoHandler, DisplayAwareTab
@@ -716,7 +714,8 @@ public class CompanionInfoTab extends FlippingSplitPane implements CharacterInfo
 		{
 			if (!"null".equals(e.getActionCommand()))
 			{
-				if ("SELECT".equals(e.getActionCommand()) || (JTreeTable.ACTION_DOUBLECLICK == e.getID()))
+				if ("SELECT".equals(e.getActionCommand()) || (
+						e.getID() == JTreeTable.ACTION_DOUBLECLICK))
 				{
 					newCompanion = CharacterManager.createNewCharacter(character.getUIDelegate(), character.getDataSet());
 					CompanionStubFacade selected = (CompanionStubFacade) raceTable.getSelectedObject();

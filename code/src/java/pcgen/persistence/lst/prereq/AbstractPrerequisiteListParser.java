@@ -147,12 +147,12 @@ public abstract class AbstractPrerequisiteListParser
 		{
 			throw new PersistenceLayerException(parseResult.toString());
 		}
-		if (!allowsNegate() && (formula.indexOf("[") >= 0 || formula.indexOf("]") >= 0))
+		if (!allowsNegate() && (formula.indexOf('[') >= 0 || formula.indexOf(']') >= 0))
 		{
 			throw new PersistenceLayerException("Prerequisite " + kind
 				+ " can not contain []: " + formula);
 		}
-		if (formula.indexOf("|") >= 0)
+		if (formula.indexOf('|') >= 0)
 		{
 			throw new PersistenceLayerException("Prerequisite " + kind
 				+ " can not contain |: " + formula);
@@ -389,7 +389,6 @@ public abstract class AbstractPrerequisiteListParser
 						}
 						subreq.setKey(elements[i]);
 					}
-					break;
 				}
 			}
 			else

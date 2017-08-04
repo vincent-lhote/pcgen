@@ -1712,7 +1712,7 @@ public final class ExportHandler
 		for (String string : splitStr)
 		{
 			if (string.contains("(")
-				&& (string.indexOf(")") < string.indexOf("(")))
+				&& (string.indexOf(')') < string.indexOf('(')))
 			{
 				inFormula = true;
 				buf.append(string);
@@ -2151,7 +2151,7 @@ public final class ExportHandler
 	 */
 	private String replaceSubToken(String tokenString)
 	{
-		int iEnd = tokenString.indexOf(".");
+		int iEnd = tokenString.indexOf('.');
 		int maxLength;
 
 		try
@@ -2428,7 +2428,7 @@ public final class ExportHandler
 		// Filter out PHOBIAS
 		if ("PHOBIAS".equals(aString.substring(1)))
 		{
-			String phobias = display.getSafeStringFor(PCStringKey.PHOBIAS);;
+			String phobias = display.getSafeStringFor(PCStringKey.PHOBIAS);
 			if (phobias.equals(Constants.NONE))
 			{
 				canWrite = false;

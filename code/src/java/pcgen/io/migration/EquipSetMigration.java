@@ -38,11 +38,15 @@ import pcgen.core.utils.CoreUtility;
  *
  * 
  */
-public class EquipSetMigration
+public final class EquipSetMigration
 {
 
 	private static EquipSetOutputOrderComparator comparator =
 			new EquipSetOutputOrderComparator();
+
+	private EquipSetMigration()
+	{
+	}
 
 	/**
 	 * Update the character's equipment sets, if required.

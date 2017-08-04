@@ -14,8 +14,6 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- *
- *
  */
 package pcgen.gui2.facade;
 
@@ -666,7 +664,6 @@ public class SpellBuilderFacadeImpl implements SpellBuilderFacade
 
 		// Handle variants
 		List<String> variants = new ArrayList<>();
-		;
 		if (newSpell != null)
 		{
 			variants = newSpell.getSafeListFor(ListKey.VARIANTS);

@@ -30,6 +30,10 @@ public class TermUtilities {
 	public static final String sString = "(?:EQUIPPED|NOTEQUIPPED)";
 	public static final Pattern sPat = Pattern.compile(sString);
 
+	private TermUtilities()
+	{
+	}
+
 	public static void checkEqTypeTypesArray(
 			String originalText,
 			String[] types, 
@@ -115,7 +119,7 @@ public class TermUtilities {
 			String src,
 			int fixed) throws TermEvaulatorException
 	{
-		int expEnd = expressionString.lastIndexOf("]");
+		int expEnd = expressionString.lastIndexOf(']');
 
 		if (expEnd != expressionString.length() - 1)
 		{

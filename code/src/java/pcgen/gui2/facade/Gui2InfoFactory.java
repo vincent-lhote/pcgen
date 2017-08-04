@@ -14,8 +14,6 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- *
- *
  */
 package pcgen.gui2.facade;
 
@@ -969,7 +967,7 @@ public class Gui2InfoFactory implements InfoFactory
 		{
 			bString = EqToken.multAsString(equip.getCritMultiplier());
 			if (equip.isDouble()
-				&& !(equip.getCritMultiplier() == equip.getAltCritMultiplier()))
+					&& (equip.getCritMultiplier() != equip.getAltCritMultiplier()))
 			{
 				bString += "/" + EqToken.multAsString(equip.getAltCritMultiplier()); //$NON-NLS-1$
 			}

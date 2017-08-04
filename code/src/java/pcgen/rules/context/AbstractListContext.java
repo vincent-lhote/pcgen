@@ -355,7 +355,7 @@ public abstract class AbstractListContext
 		protected static class CDOMShell extends CDOMObject
 		{
 			@Override
-			public CDOMObject clone() throws CloneNotSupportedException
+			public CDOMShell clone() throws CloneNotSupportedException
 			{
 				throw new CloneNotSupportedException();
 			}
@@ -762,8 +762,8 @@ public abstract class AbstractListContext
 					newapo.addAllPrerequisites(apo.getPrerequisiteList());
 					for (AssociationKey assocKey : apo.getAssociationKeys())
 					{
-						if (assocKey != AssociationKey.TOKEN
-								&& assocKey != AssociationKey.OWNER)
+						if ((assocKey != AssociationKey.TOKEN)
+								&& (assocKey != AssociationKey.OWNER))
 						{
 							newapo.setAssociation(assocKey, apo
 									.getAssociation(assocKey));
