@@ -177,8 +177,8 @@
 			<trait>${pcstring('PERSONALITY2')}</trait>
 		</personality>
 		<portrait>
-			<portrait>${pcstring('PORTRAIT')}</portrait>
-			<portrait_thumb>${pcstring('PORTRAIT.THUMB')}</portrait_thumb>
+			<portrait>${pcstring('PORTRAIT')?url_path('utf-8')}</portrait>
+			<portrait_thumb>${pcstring('PORTRAIT.THUMB')?url_path('utf-8')}</portrait_thumb>
 		</portrait>
 		<phobias>${pcstring('PHOBIAS')}</phobias>
 		<#if (pcstring("ABILITYALL.ANY.0.TYPE=RaceName.HASASPECT.RaceName") = "Y")>
@@ -1737,6 +1737,26 @@
 	<animal_tricks>
 	<@abilityBlock category="Special Ability" nature="ALL" hidden=false typeName="AnimalTrick" nodeName="animal_trick" />
 	</animal_tricks>
+
+		<!--
+	  ====================================
+	  ====================================
+			Racial Trait
+	  ====================================
+	  ====================================-->
+	<racial_traits>
+	<@abilityBlock category="Racial Trait" nature="ALL" hidden=false typeName="Racial Trait" nodeName="racial_trait" />
+	</racial_traits>
+
+		<!--
+	  ====================================
+	  ====================================
+			Class Feature
+	  ====================================
+	  ====================================-->
+	<class_features>
+	<@abilityBlock category="Class Feature" nature="ALL" hidden=false typeName="Class Feature" nodeName="class_feature" />
+	</class_features>
 
 	<!--
 	  ====================================
