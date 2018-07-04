@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2007 Tom Parker <thpr@users.sourceforge.net>
+ * Copyright (c) 2007-18 Tom Parker <thpr@users.sourceforge.net>
  * 
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -36,6 +36,8 @@ import pcgen.base.util.DoubleKeyMapToList;
 import pcgen.base.util.Indirect;
 import pcgen.base.util.MapToList;
 import pcgen.base.util.ObjectContainer;
+import pcgen.cdom.content.RemoteModifier;
+import pcgen.cdom.content.VarModifier;
 import pcgen.cdom.enumeration.FactKey;
 import pcgen.cdom.enumeration.FactSetKey;
 import pcgen.cdom.enumeration.FormulaKey;
@@ -45,6 +47,8 @@ import pcgen.cdom.enumeration.MapKey;
 import pcgen.cdom.enumeration.ObjectKey;
 import pcgen.cdom.enumeration.StringKey;
 import pcgen.cdom.enumeration.VariableKey;
+import pcgen.cdom.formula.PCGenScoped;
+import pcgen.cdom.helper.InfoBoolean;
 import pcgen.cdom.util.FactSetKeyMapToList;
 import pcgen.cdom.util.ListKeyMapToList;
 import pcgen.cdom.util.MapKeyMap;
@@ -54,12 +58,17 @@ import pcgen.core.PlayerCharacter;
 import pcgen.core.analysis.BonusActivation;
 import pcgen.core.bonus.BonusObj;
 
-public abstract class CDOMObject extends ConcretePrereqObject implements
-		Cloneable, BonusContainer, Loadable, Reducible, VarScoped
+public abstract class CDOMObject extends ConcretePrereqObject
+		implements Cloneable, BonusContainer, Loadable, Reducible, PCGenScoped, VarHolder
 {
 
+	/**
+	 * An Empty String array to support VarHolder
+	 */
+	private static final String[] EMPTY_STRING_ARRAY = new String[0];
+
 	private URI sourceURI = null;
-	
+
 	private String displayName = Constants.EMPTY_STRING;
 
 	/*
@@ -101,7 +110,7 @@ public abstract class CDOMObject extends ConcretePrereqObject implements
 	/** A map of Maps for the object */
 	// TODO make this final once clone() is no longer required...
 	private MapKeyMap mapChar = null;
-	
+
 	// TODO make this final once clone() is no longer required...
 	/*
 	 * CONSIDER This is currently order enforcing the reference fetching to
@@ -148,8 +157,7 @@ public abstract class CDOMObject extends ConcretePrereqObject implements
 
 	public final Set<IntegerKey> getIntegerKeys()
 	{
-		return integerChar == null ? Collections.emptySet()
-			: new HashSet<>(integerChar.keySet());
+		return integerChar == null ? Collections.emptySet() : new HashSet<>(integerChar.keySet());
 	}
 
 	public final boolean containsKey(StringKey key)
@@ -189,8 +197,7 @@ public abstract class CDOMObject extends ConcretePrereqObject implements
 
 	public final Set<StringKey> getStringKeys()
 	{
-		return stringChar == null ? Collections.emptySet()
-			: new HashSet<>(stringChar.keySet());
+		return stringChar == null ? Collections.emptySet() : new HashSet<>(stringChar.keySet());
 	}
 
 	public final boolean containsKey(FormulaKey key)
@@ -230,8 +237,7 @@ public abstract class CDOMObject extends ConcretePrereqObject implements
 
 	public final Set<FormulaKey> getFormulaKeys()
 	{
-		return formulaChar == null ? Collections.emptySet()
-			: new HashSet<>(formulaChar.keySet());
+		return formulaChar == null ? Collections.emptySet() : new HashSet<>(formulaChar.keySet());
 	}
 
 	public final boolean containsKey(VariableKey key)
@@ -246,8 +252,7 @@ public abstract class CDOMObject extends ConcretePrereqObject implements
 
 	public final Set<VariableKey> getVariableKeys()
 	{
-		return variableChar == null ? Collections.emptySet()
-			: new HashSet<>(variableChar.keySet());
+		return variableChar == null ? Collections.emptySet() : new HashSet<>(variableChar.keySet());
 	}
 
 	public final Formula put(VariableKey key, Formula value)
@@ -325,7 +330,9 @@ public abstract class CDOMObject extends ConcretePrereqObject implements
 		{
 			return null;
 		}
-		return (Indirect<FT>) factChar.get(key);
+		@SuppressWarnings("unchecked")
+		Indirect<FT> indirect = (Indirect<FT>) factChar.get(key);
+		return indirect;
 	}
 
 	public final <FT> FT getResolved(FactKey<FT> key)
@@ -334,6 +341,7 @@ public abstract class CDOMObject extends ConcretePrereqObject implements
 		{
 			return null;
 		}
+		@SuppressWarnings("unchecked")
 		Indirect<FT> indirect = (Indirect<FT>) factChar.get(key);
 		if (indirect == null)
 		{
@@ -397,9 +405,9 @@ public abstract class CDOMObject extends ConcretePrereqObject implements
 	public final <T> List<Indirect<T>> getSafeSetFor(FactSetKey<T> key)
 	{
 		return factSetChar != null && factSetChar.containsListFor(key) ? factSetChar.getListFor(key)
-				: new ArrayList<>();
+			: new ArrayList<>();
 	}
-	
+
 	public final String getSetAsString(FactSetKey<?> key)
 	{
 		return StringUtil.join(getSetFor(key), ", ");
@@ -515,10 +523,9 @@ public abstract class CDOMObject extends ConcretePrereqObject implements
 	 */
 	public final <T> List<T> getSafeListFor(ListKey<T> key)
 	{
-		return listChar != null && listChar.containsListFor(key) ? listChar.getListFor(key)
-				: new ArrayList<>();
+		return listChar != null && listChar.containsListFor(key) ? listChar.getListFor(key) : new ArrayList<>();
 	}
-	
+
 	/**
 	 * Returns a non-null Set of the objects stored in this CDOMObject for the
 	 * given ListKey. The List is converted to a Set to ensure that each entry
@@ -540,8 +547,7 @@ public abstract class CDOMObject extends ConcretePrereqObject implements
 	 * @return A Set of objects in the List contained in this CDOMObject for the
 	 *         given key.
 	 */
-	public final <T extends Comparable<T>> Set<T> getUniqueListFor(
-		ListKey<T> key)
+	public final <T extends Comparable<T>> Set<T> getUniqueListFor(ListKey<T> key)
 	{
 		if (listChar == null)
 		{
@@ -554,7 +560,7 @@ public abstract class CDOMObject extends ConcretePrereqObject implements
 		}
 		return new LinkedHashSet<>(list);
 	}
-	
+
 	public final String getListAsString(ListKey<?> key)
 	{
 		return StringUtil.join(getListFor(key), ", ");
@@ -612,7 +618,7 @@ public abstract class CDOMObject extends ConcretePrereqObject implements
 	}
 
 	// ===== MapKeyMap Methods =====
-	
+
 	/**
 	 * Add a value to the map of maps.
 	 * 
@@ -731,7 +737,7 @@ public abstract class CDOMObject extends ConcretePrereqObject implements
 	{
 		return mapChar == null ? Collections.emptySet() : mapChar.getKeySet();
 	}
-	
+
 	@Override
 	public String getKeyName()
 	{
@@ -814,10 +820,10 @@ public abstract class CDOMObject extends ConcretePrereqObject implements
 		}
 		if (listChar == null ? cdo.listChar != null : !listChar.equals(cdo.listChar))
 		{
-//			 System.err.println("CDOM Inequality List");
-//			 System.err.println(listChar + " " + cdo.listChar);
-//			 System.err.println(listChar.getKeySet() + " "
-//			 + cdo.listChar.getKeySet());
+			//			 System.err.println("CDOM Inequality List");
+			//			 System.err.println(listChar + " " + cdo.listChar);
+			//			 System.err.println(listChar.getKeySet() + " "
+			//			 + cdo.listChar.getKeySet());
 			return false;
 		}
 		if (mapChar == null ? cdo.mapChar != null : !mapChar.equals(cdo.mapChar))
@@ -827,26 +833,22 @@ public abstract class CDOMObject extends ConcretePrereqObject implements
 		return cdomListMods == null ? cdo.cdomListMods == null : cdomListMods.equals(cdo.cdomListMods);
 	}
 
-	public final <T extends CDOMObject> void putToList(
-		CDOMReference<? extends CDOMList<?>> listRef, CDOMReference<T> granted,
-		AssociatedPrereqObject associations)
+	public final <T extends CDOMObject> void putToList(CDOMReference<? extends CDOMList<?>> listRef,
+		CDOMReference<T> granted, AssociatedPrereqObject associations)
 	{
 		if (cdomListMods == null)
 		{
-			cdomListMods =
-                    new DoubleKeyMapToList<>(
-                            HashMap.class, LinkedHashMap.class);
+			cdomListMods = new DoubleKeyMapToList<>(HashMap.class, LinkedHashMap.class);
 		}
 		cdomListMods.addToListFor(listRef, granted, associations);
 	}
 
-	public final <T extends CDOMObject> void removeFromList(
-		CDOMReference<? extends CDOMList<?>> listRef, CDOMReference<T> granted)
+	public final <T extends CDOMObject> void removeFromList(CDOMReference<? extends CDOMList<?>> listRef,
+		CDOMReference<T> granted)
 	{
 		if (cdomListMods != null)
 		{
-			List<AssociatedPrereqObject> removed =
-					cdomListMods.removeListFor(listRef, granted);
+			List<AssociatedPrereqObject> removed = cdomListMods.removeListFor(listRef, granted);
 			if (removed != null && cdomListMods.isEmpty())
 			{
 				cdomListMods = null;
@@ -854,8 +856,7 @@ public abstract class CDOMObject extends ConcretePrereqObject implements
 		}
 	}
 
-	public final boolean hasListMods(
-		CDOMReference<? extends CDOMList<?>> listRef)
+	public final boolean hasListMods(CDOMReference<? extends CDOMList<?>> listRef)
 	{
 		return cdomListMods != null && cdomListMods.containsListFor(listRef);
 	}
@@ -868,8 +869,7 @@ public abstract class CDOMObject extends ConcretePrereqObject implements
 			return null;
 		}
 		Collection<CDOMReference<BT>> set =
-				(Collection<CDOMReference<BT>>) (Set<?>) cdomListMods
-					.getSecondaryKeySet(listRef);
+				(Collection<CDOMReference<BT>>) (Set<?>) cdomListMods.getSecondaryKeySet(listRef);
 		if (set == null || set.isEmpty())
 		{
 			return null;
@@ -878,7 +878,7 @@ public abstract class CDOMObject extends ConcretePrereqObject implements
 	}
 
 	public final <BT extends CDOMObject> Collection<CDOMReference<BT>> getSafeListMods(
-			CDOMReference<? extends CDOMList<BT>> listRef)
+		CDOMReference<? extends CDOMList<BT>> listRef)
 	{
 		Collection<CDOMReference<BT>> set = getListMods(listRef);
 		if (set == null)
@@ -888,8 +888,8 @@ public abstract class CDOMObject extends ConcretePrereqObject implements
 		return set;
 	}
 
-	public final Collection<AssociatedPrereqObject> getListAssociations(
-		CDOMReference<? extends CDOMList<?>> listRef, CDOMReference<?> key)
+	public final Collection<AssociatedPrereqObject> getListAssociations(CDOMReference<? extends CDOMList<?>> listRef,
+		CDOMReference<?> key)
 	{
 		return cdomListMods == null ? null : cdomListMods.getListFor(listRef, key);
 	}
@@ -899,16 +899,7 @@ public abstract class CDOMObject extends ConcretePrereqObject implements
 	 */
 	public final Collection<CDOMReference<? extends CDOMList<?>>> getModifiedLists()
 	{
-		return cdomListMods == null
-			? Collections
-				.emptySet()
-			: cdomListMods.getKeySet();
-	}
-
-	@Override
-	public final String getLSTformat()
-	{
-		return getKeyName();
+		return cdomListMods == null ? Collections.emptySet() : cdomListMods.getKeySet();
 	}
 
 	public final void overlayCDOMObject(CDOMObject cdo)
@@ -990,9 +981,7 @@ public abstract class CDOMObject extends ConcretePrereqObject implements
 		{
 			if (cdomListMods == null)
 			{
-				cdomListMods =
-                        new DoubleKeyMapToList<>(
-                                HashMap.class, LinkedHashMap.class);
+				cdomListMods = new DoubleKeyMapToList<>(HashMap.class, LinkedHashMap.class);
 			}
 			cdomListMods.addAll(cdo.cdomListMods);
 		}
@@ -1032,8 +1021,7 @@ public abstract class CDOMObject extends ConcretePrereqObject implements
 	{
 		if (cdomListMods != null)
 		{
-			MapToList<CDOMReference<?>, AssociatedPrereqObject> removed =
-					cdomListMods.removeListsFor(listRef);
+			MapToList<CDOMReference<?>, AssociatedPrereqObject> removed = cdomListMods.removeListsFor(listRef);
 			if (removed != null && cdomListMods.isEmpty())
 			{
 				cdomListMods = null;
@@ -1041,8 +1029,7 @@ public abstract class CDOMObject extends ConcretePrereqObject implements
 		}
 	}
 
-	public <T extends CDOMObject> boolean hasObjectOnList(
-			CDOMReference<? extends CDOMList<T>> list, T element)
+	public <T extends CDOMObject> boolean hasObjectOnList(CDOMReference<? extends CDOMList<T>> list, T element)
 	{
 		if (element == null)
 		{
@@ -1101,7 +1088,7 @@ public abstract class CDOMObject extends ConcretePrereqObject implements
 	{
 		return Constants.EMPTY_STRING;
 	}
-	
+
 	/**
 	 * Get the list of bonuses for this object
 	 * @param pc the current player character
@@ -1143,7 +1130,7 @@ public abstract class CDOMObject extends ConcretePrereqObject implements
 	{
 		return getRawBonusList(assocStore);
 	}
-	
+
 	public List<BonusObj> getBonusList(Equipment e)
 	{
 		return getRawBonusList(null);
@@ -1188,7 +1175,7 @@ public abstract class CDOMObject extends ConcretePrereqObject implements
 	{
 		BonusActivation.activateBonuses(this, pc);
 	}
-	
+
 	@Override
 	public boolean isInternal()
 	{
@@ -1203,7 +1190,7 @@ public abstract class CDOMObject extends ConcretePrereqObject implements
 	{
 		return this;
 	}
-	
+
 	@Override
 	@SuppressWarnings("PMD.EmptyMethodInAbstractClassShouldBeAbstract")
 	public String getLocalScopeName()
@@ -1220,4 +1207,139 @@ public abstract class CDOMObject extends ConcretePrereqObject implements
 		return null;
 	}
 
+	@Override
+	public boolean hasPrerequisites()
+	{
+		return super.hasPrerequisites() || (getListFor(ListKey.ALLOW) != null) || (getListFor(ListKey.ENABLE) != null);
+	}
+
+	@Override
+	public boolean isAvailable(PlayerCharacter aPC)
+	{
+		List<InfoBoolean> prerequisites = getListFor(ListKey.ALLOW);
+		if ((prerequisites == null) || prerequisites.isEmpty())
+		{
+			return true;
+		}
+		for (InfoBoolean info : prerequisites)
+		{
+			if (!aPC.solve(info.getFormula()))
+			{
+				return false;
+			}
+		}
+		return true;
+	}
+
+	@Override
+	public boolean isActive(PlayerCharacter aPC)
+	{
+		List<InfoBoolean> requirements = getListFor(ListKey.ENABLE);
+		if ((requirements == null) || requirements.isEmpty())
+		{
+			return true;
+		}
+		for (InfoBoolean info : requirements)
+		{
+			if (!aPC.solve(info.getFormula()))
+			{
+				return false;
+			}
+		}
+		return true;
+	}
+
+	/*
+	 * Begin implementation of methods for VarHolder interface
+	 */
+	@Override
+	public void addModifier(VarModifier<?> vm)
+	{
+		addToListFor(ListKey.MODIFY, vm);
+	}
+
+	@Override
+	public VarModifier<?>[] getModifierArray()
+	{
+		List<VarModifier<?>> list = getListFor(ListKey.MODIFY);
+		return (list == null) ? VarModifier.EMPTY_VARMODIFIER : list.toArray(new VarModifier[list.size()]);
+	}
+
+	@Override
+	public void addRemoteModifier(RemoteModifier<?> vm)
+	{
+		addToListFor(ListKey.REMOTE_MODIFIER, vm);
+	}
+
+	@Override
+	public RemoteModifier<?>[] getRemoteModifierArray()
+	{
+		List<RemoteModifier<?>> list = getListFor(ListKey.REMOTE_MODIFIER);
+		return (list == null) ? RemoteModifier.EMPTY_REMOTEMODIFIER : list.toArray(new RemoteModifier[list.size()]);
+	}
+
+	@Override
+	public void addGrantedVariable(String variableName)
+	{
+		addToListFor(ListKey.GRANTEDVARS, variableName);
+	}
+
+	@Override
+	public String[] getGrantedVariableArray()
+	{
+		List<String> list = getListFor(ListKey.GRANTEDVARS);
+		return (list == null) ? EMPTY_STRING_ARRAY : list.toArray(new String[list.size()]);
+	}
+	/*
+	 * End implementation of methods supporting VarHolder.
+	 */
+
+	/**
+	 * Returns the local child of the given child type and child name. Returns null if no
+	 * such type or no child of that type with the given name exists.
+	 * 
+	 * @param childType
+	 *            The child type for which the child should be returned
+	 * @param childName
+	 *            The name of the child of the given type that should be returned
+	 * @return The local child of the given child type and child name
+	 */
+	@Override
+	@SuppressWarnings("PMD.EmptyMethodInAbstractClassShouldBeAbstract")
+	public PCGenScoped getLocalChild(String childType, String childName)
+	{
+		//none by default
+		return null;
+	}
+
+	/**
+	 * Returns the List of child types that this CDOMObject contains.
+	 * 
+	 * Contract for implementations of this method: Will not return null (return an empty
+	 * list instead).
+	 * 
+	 * @return The List of child types that this CDOMObject contains
+	 */
+	@Override
+	@SuppressWarnings("PMD.EmptyMethodInAbstractClassShouldBeAbstract")
+	public List<String> getChildTypes()
+	{
+		return Collections.emptyList();
+	}
+
+	/**
+	 * Returns the List of children of the given child type. Returns null if this
+	 * CDOMObject has no children of the given type.
+	 * 
+	 * @param childType
+	 *            The child type for which the list of children should be returned
+	 * @return The List of children of the given child type
+	 */
+	@Override
+	@SuppressWarnings("PMD.EmptyMethodInAbstractClassShouldBeAbstract")
+	public List<PCGenScoped> getChildren(String childType)
+	{
+		//none by default
+		return null;
+	}
 }

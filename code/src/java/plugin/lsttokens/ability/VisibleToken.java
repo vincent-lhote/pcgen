@@ -32,13 +32,9 @@ import pcgen.util.enumeration.Visibility;
  * (Sat, 10 Feb 2007) $
  * 
  */
-public class VisibleToken extends AbstractNonEmptyToken<Ability> implements
-		CDOMPrimaryToken<Ability>
+public class VisibleToken extends AbstractNonEmptyToken<Ability> implements CDOMPrimaryToken<Ability>
 {
 
-	/**
-	 * @see pcgen.persistence.lst.LstToken#getTokenName()
-	 */
 	@Override
 	public String getTokenName()
 	{
@@ -67,8 +63,7 @@ public class VisibleToken extends AbstractNonEmptyToken<Ability> implements
 		}
 		else
 		{
-			return new ParseResult.Fail("Unable to understand " + getTokenName()
-					+ " tag: " + value, context);
+			return new ParseResult.Fail("Unable to understand " + getTokenName() + " tag: " + value);
 		}
 		context.getObjectContext().put(ability, ObjectKey.VISIBILITY, vis);
 		return ParseResult.SUCCESS;
@@ -77,8 +72,7 @@ public class VisibleToken extends AbstractNonEmptyToken<Ability> implements
 	@Override
 	public String[] unparse(LoadContext context, Ability ability)
 	{
-		Visibility vis = context.getObjectContext().getObject(ability,
-				ObjectKey.VISIBILITY);
+		Visibility vis = context.getObjectContext().getObject(ability, ObjectKey.VISIBILITY);
 		if (vis == null)
 		{
 			return null;
@@ -102,11 +96,10 @@ public class VisibleToken extends AbstractNonEmptyToken<Ability> implements
 		}
 		else
 		{
-			context.addWriteMessage("Visibility " + vis
-					+ " is not a valid Visibility for an Ability");
+			context.addWriteMessage("Visibility " + vis + " is not a valid Visibility for an Ability");
 			return null;
 		}
-		return new String[] { visString };
+		return new String[]{visString};
 	}
 
 	@Override

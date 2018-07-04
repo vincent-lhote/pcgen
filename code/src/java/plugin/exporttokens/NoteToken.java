@@ -33,21 +33,14 @@ public class NoteToken extends Token
 {
 	public static final String TOKENNAME = "NOTE";
 
-	/**
-	 * @see pcgen.io.exporttoken.Token#getTokenName()
-	 */
 	@Override
 	public String getTokenName()
 	{
 		return TOKENNAME;
 	}
 
-	/**
-	 * @see pcgen.io.exporttoken.Token#getToken(java.lang.String, pcgen.core.PlayerCharacter, pcgen.io.ExportHandler)
-	 */
 	@Override
-	public String getToken(String tokenSource, PlayerCharacter pc,
-		ExportHandler eh)
+	public String getToken(String tokenSource, PlayerCharacter pc, ExportHandler eh)
 	{
 		StringTokenizer tok = new StringTokenizer(tokenSource, ".");
 		tok.nextToken();
@@ -118,8 +111,7 @@ public class NoteToken extends Token
 			if ("ALL".equals(token))
 			{
 				// TODO - Why doesn't this handle value the same as the VALUE token
-				sb.append(ni.getExportString(beforeHeader, afterHeader,
-					beforeValue, afterValue));
+				sb.append(ni.getExportString(beforeHeader, afterHeader, beforeValue, afterValue));
 			}
 			else if ("NAME".equals(token))
 			{
@@ -193,13 +185,11 @@ public class NoteToken extends Token
 	 * @param baseList The source list for notes
 	 * @param parentNode The id of the node to be processed.
 	 */
-	private static void buildSubTree(List<NoteItem> targetList,
-		Collection<NoteItem> baseList, int parentNode)
+	private static void buildSubTree(List<NoteItem> targetList, Collection<NoteItem> baseList, int parentNode)
 	{
 		for (NoteItem note : baseList)
 		{
-			if (note.getParentId() == parentNode
-				|| (parentNode == -1 && note.getParentId() < 0))
+			if (note.getParentId() == parentNode || (parentNode == -1 && note.getParentId() < 0))
 			{
 				targetList.add(note);
 				buildSubTree(targetList, baseList, note.getId());

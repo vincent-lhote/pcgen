@@ -48,26 +48,20 @@ public class UrlToken implements CDOMPrimaryToken<Campaign>
 	private static final String URL_KIND_NAME_WEBSITE = "WEBSITE";
 	private static final String URL_KIND_NAME_SURVEY = "SURVEY";
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see pcgen.persistence.lst.LstToken#getTokenName()
-	 */
-    @Override
+	@Override
 	public String getTokenName()
 	{
 		return "URL";
 	}
 
-    @Override
-	public ParseResult parseToken(LoadContext context, Campaign campaign,
-		String value)
+	@Override
+	public ParseResult parseToken(LoadContext context, Campaign campaign, String value)
 	{
 		final StringTokenizer tok = new StringTokenizer(value, Constants.PIPE);
 		if (tok.countTokens() != 3)
 		{
-			return new ParseResult.Fail("URL token requires three arguments. Link kind, "
-							+ "link and description.  : " + value, context);
+			return new ParseResult.Fail(
+				"URL token requires three arguments. Link kind, " + "link and description.  : " + value);
 		}
 		String urlTypeName = tok.nextToken();
 		String urlText = tok.nextToken();
@@ -78,8 +72,7 @@ public class UrlToken implements CDOMPrimaryToken<Campaign>
 		{
 			if (!urlTypeName.equals(URL_KIND_NAME_WEBSITE))
 			{
-				Logging.log(Logging.LST_WARNING,
-						"URL type should be WEBSITE in upper case : " + value);
+				Logging.log(Logging.LST_WARNING, "URL type should be WEBSITE in upper case : " + value);
 			}
 			urlType = CampaignURL.URLKind.WEBSITE;
 			urlTypeName = "";
@@ -88,8 +81,7 @@ public class UrlToken implements CDOMPrimaryToken<Campaign>
 		{
 			if (!urlTypeName.equals(URL_KIND_NAME_SURVEY))
 			{
-				Logging.log(Logging.LST_WARNING,
-						"URL type should be SURVEY in upper case : " + value);
+				Logging.log(Logging.LST_WARNING, "URL type should be SURVEY in upper case : " + value);
 			}
 			urlType = CampaignURL.URLKind.SURVEY;
 			urlTypeName = "";
@@ -106,23 +98,20 @@ public class UrlToken implements CDOMPrimaryToken<Campaign>
 		}
 		catch (URISyntaxException e)
 		{
-			return new ParseResult.Fail("Invalid URL (" + e.getMessage()
-					+ ") : " + value, context);
+			return new ParseResult.Fail("Invalid URL (" + e.getMessage() + ") : " + value);
 		}
 		// Create URL object
-		CampaignURL campUrl = new CampaignURL(urlType, urlTypeName, uri,
-				urlDesc);
+		CampaignURL campUrl = new CampaignURL(urlType, urlTypeName, uri, urlDesc);
 
 		// Add URL Object to campaign
 		context.getObjectContext().addToList(campaign, ListKey.CAMPAIGN_URL, campUrl);
 		return ParseResult.SUCCESS;
 	}
 
-    @Override
+	@Override
 	public String[] unparse(LoadContext context, Campaign campaign)
 	{
-		Changes<CampaignURL> changes = context.getObjectContext()
-				.getListChanges(campaign, ListKey.CAMPAIGN_URL);
+		Changes<CampaignURL> changes = context.getObjectContext().getListChanges(campaign, ListKey.CAMPAIGN_URL);
 		if (changes == null || changes.isEmpty())
 		{
 			return null;
@@ -145,7 +134,7 @@ public class UrlToken implements CDOMPrimaryToken<Campaign>
 		return null;
 	}
 
-    @Override
+	@Override
 	public Class<Campaign> getTokenClass()
 	{
 		return Campaign.class;

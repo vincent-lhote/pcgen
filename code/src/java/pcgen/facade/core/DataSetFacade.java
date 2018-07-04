@@ -20,19 +20,19 @@ package pcgen.facade.core;
 
 import java.util.List;
 
+import pcgen.core.PCAlignment;
 import pcgen.facade.core.generator.StatGenerationFacade;
 import pcgen.facade.util.ListFacade;
 import pcgen.facade.util.MapFacade;
 
-
 public interface DataSetFacade
 {
 
-    public MapFacade<AbilityCategoryFacade, ListFacade<AbilityFacade>> getAbilities();
-    
-//	public ListFacade<AbilityFacade> getAbilities(AbilityCategoryFacade category);
-//
-//	public ListFacade<AbilityCategoryFacade> getAbilityCategories();
+	public MapFacade<AbilityCategoryFacade, ListFacade<AbilityFacade>> getAbilities();
+
+	//	public ListFacade<AbilityFacade> getAbilities(AbilityCategoryFacade category);
+	//
+	//	public ListFacade<AbilityCategoryFacade> getAbilityCategories();
 
 	/**
 	 * Retrieve the abilities that must be taken before this ability can be taken.
@@ -56,7 +56,7 @@ public interface DataSetFacade
 
 	public GameModeFacade getGameMode();
 
-	public ListFacade<AlignmentFacade> getAlignments();
+	public ListFacade<PCAlignment> getAlignments();
 
 	public ListFacade<StatFacade> getStats();
 
@@ -71,7 +71,7 @@ public interface DataSetFacade
 	 * @param equip The item of equipment to be added.
 	 */
 	public void addEquipment(EquipmentFacade equip);
-	
+
 	public ListFacade<BodyStructureFacade> getEquipmentLocations();
 
 	public ListFacade<String> getXPTableNames();
@@ -92,9 +92,16 @@ public interface DataSetFacade
 	 * @return The list of sizes
 	 */
 	public ListFacade<SizeAdjustmentFacade> getSizes();
-	
+
 	/**
 	 * Update the equipment list from the global equipment list. 
 	 */
 	public void refreshEquipment();
+
+	/**
+	 * Returns true if the DataSet understands Deities and Domains.
+	 * 
+	 * @return true if the DataSet understands Deities and Domains; false otherwise
+	 */
+	public boolean hasDeityDomain();
 }

@@ -17,9 +17,9 @@
  */
 package pcgen.core;
 
-import pcgen.util.Logging;
-
 import java.math.BigDecimal;
+
+import pcgen.util.Logging;
 
 /**
  * {@code LevelInfo} describes the data associated with a level
@@ -27,17 +27,9 @@ import java.math.BigDecimal;
 public final class LevelInfo
 {
 	private String maxClassSkillString = "0";
-	private String maxCrossClassSkillString= "0";
+	private String maxCrossClassSkillString = "0";
 	private String levelString = "0";
 	private String minXPString = "0";
-
-	/**
-	 * Default constructor for LevelInfo. Initialises everything to zero.
-	 */
-	public LevelInfo()
-	{
-	    // Empty Constructor
-	}
 
 	/**
 	 * Sets the levelString that this LevelInfo object describes.
@@ -104,7 +96,7 @@ public final class LevelInfo
 	public String toString()
 	{
 		return "Level: " + levelString + " MinXP: " + minXPString + " MaxClassSkill: " + maxClassSkillString
-		+ " MaxCrossClassSkill: " + maxCrossClassSkillString + ".";
+			+ " MaxCrossClassSkill: " + maxCrossClassSkillString + ".";
 	}
 
 	/**
@@ -157,12 +149,14 @@ public final class LevelInfo
 	private BigDecimal getMaxSkillRank(final int levelArg, final PlayerCharacter calcPC, final String maxSkillString)
 	{
 		double ranks;
-		if (calcPC == null) {
+		if (calcPC == null)
+		{
 			return BigDecimal.ZERO;
 		}
 		try
 		{
-			ranks = calcPC.getVariableValue(maxSkillString.replaceAll(levelString,String.valueOf(levelArg)), "").doubleValue();
+			ranks = calcPC.getVariableValue(maxSkillString.replaceAll(levelString, String.valueOf(levelArg)), "")
+				.doubleValue();
 		}
 		catch (Exception e)
 		{
@@ -170,7 +164,7 @@ public final class LevelInfo
 			Logging.errorPrint("Exception while getting max rank for " + levelString, e);
 			//final String rankString = maxSkillString.replaceAll(levelString, String.valueOf(levelArg));
 			//ranks = calcPC.getVariableValue(rankString, "").doubleValue();
-			ranks =0.0d;
+			ranks = 0.0d;
 		}
 
 		return new BigDecimal(ranks);

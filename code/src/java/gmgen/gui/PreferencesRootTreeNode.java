@@ -20,11 +20,11 @@
  */
 package gmgen.gui;
 
-import java.util.Collections;
-import javax.swing.tree.DefaultMutableTreeNode;
-
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+
+import javax.swing.tree.DefaultMutableTreeNode;
 
 /** This defines the preferences tree
  *
@@ -52,7 +52,7 @@ public class PreferencesRootTreeNode extends DefaultMutableTreeNode
 
 	private DefaultMutableTreeNode getPluginNode(final String plugin)
 	{
-		if(children != null)
+		if (children != null)
 		{
 			for (final Object obj : children)
 			{

@@ -1,8 +1,18 @@
 package plugin.lsttokens.datacontrol;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collection;
+
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 import pcgen.base.format.StringManager;
 import pcgen.base.util.BasicIndirect;
@@ -21,12 +31,8 @@ import pcgen.rules.context.LoadContext;
 import pcgen.rules.context.RuntimeLoadContext;
 import pcgen.rules.context.RuntimeReferenceContext;
 import pcgen.util.enumeration.Visibility;
-
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
 import plugin.lsttokens.testsupport.TokenRegistration;
-import static org.junit.Assert.*;
+import util.TestURI;
 
 public class SelectableTokenIntegrationTest
 {
@@ -45,8 +51,7 @@ public class SelectableTokenIntegrationTest
 	public static void classSetUp() throws URISyntaxException
 	{
 		testCampaign =
-				new CampaignSourceEntry(new Campaign(), new URI(
-					"file:/Test%20Case"));
+				new CampaignSourceEntry(new Campaign(), TestURI.getURI());
 	}
 
 	@Before
@@ -61,7 +66,7 @@ public class SelectableTokenIntegrationTest
 	{
 		URI testURI = testCampaign.getURI();
 		context =
-				new RuntimeLoadContext(new RuntimeReferenceContext(),
+				new RuntimeLoadContext(RuntimeReferenceContext.createRuntimeReferenceContext(),
 					new ConsolidatedListCommitStrategy());
 		context.setSourceURI(testURI);
 		context.setExtractURI(testURI);

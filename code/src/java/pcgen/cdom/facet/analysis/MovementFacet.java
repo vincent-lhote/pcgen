@@ -33,8 +33,8 @@ import pcgen.core.Movement;
  * in a Player Character.
  * 
  */
-public class MovementFacet extends AbstractSourcedListFacet<CharID, Movement> implements
-		DataFacetChangeListener<CharID, CDOMObject>
+public class MovementFacet extends AbstractSourcedListFacet<CharID, Movement>
+		implements DataFacetChangeListener<CharID, CDOMObject>
 {
 
 	private CDOMObjectConsolidationFacet consolidationFacet;
@@ -50,8 +50,6 @@ public class MovementFacet extends AbstractSourcedListFacet<CharID, Movement> im
 	 * @param dfce
 	 *            The DataFacetChangeEvent containing the information about the
 	 *            change
-	 * 
-	 * @see pcgen.cdom.facet.event.DataFacetChangeListener#dataAdded(pcgen.cdom.facet.event.DataFacetChangeEvent)
 	 */
 	@Override
 	public void dataAdded(DataFacetChangeEvent<CharID, CDOMObject> dfce)
@@ -90,8 +88,6 @@ public class MovementFacet extends AbstractSourcedListFacet<CharID, Movement> im
 	 * @param dfce
 	 *            The DataFacetChangeEvent containing the information about the
 	 *            change
-	 * 
-	 * @see pcgen.cdom.facet.event.DataFacetChangeListener#dataRemoved(pcgen.cdom.facet.event.DataFacetChangeEvent)
 	 */
 	@Override
 	public void dataRemoved(DataFacetChangeEvent<CharID, CDOMObject> dfce)

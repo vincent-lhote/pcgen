@@ -76,7 +76,7 @@ public class ScanForUnusedIl8nKeys
 		Set<String> keys = new TreeSet<>();
 		for (Entry e : p.entrySet())
 		{
-			keys.add((String)e.getKey());
+			keys.add((String) e.getKey());
 		}
 
 		// Grab a list of files to be scanned
@@ -256,8 +256,8 @@ public class ScanForUnusedIl8nKeys
 	}
 
 	/**
-	 * @return
-	 * @throws Exception 
+	 * @return A file list
+	 * @throws IOException 
 	 */
 	private List<File> buildFileList() throws IOException
 	{

@@ -17,16 +17,19 @@
  */
 package pcgen.cdom.base;
 
+import java.util.Objects;
+
 import pcgen.base.formula.Formula;
 import pcgen.base.formula.base.DependencyManager;
 import pcgen.base.formula.base.EvaluationManager;
 import pcgen.base.formula.base.FormulaManager;
 import pcgen.base.formula.base.FormulaSemantics;
-import pcgen.base.formula.base.LegalScope;
 import pcgen.base.formula.base.ManagerFactory;
+import pcgen.base.formula.exception.SemanticsException;
 import pcgen.base.formula.inst.ComplexNEPFormula;
 import pcgen.base.formula.inst.NEPFormula;
 import pcgen.base.util.FormatManager;
+import pcgen.cdom.formula.scope.PCGenScope;
 import pcgen.core.Equipment;
 import pcgen.core.PlayerCharacter;
 
@@ -127,8 +130,7 @@ public final class FormulaFactory
 		{
 			if (intValue == null)
 			{
-				throw new IllegalArgumentException(
-					"Cannot create an NumberFormula with a null Number");
+				throw new IllegalArgumentException("Cannot create an NumberFormula with a null Number");
 			}
 			number = intValue;
 		}
@@ -152,8 +154,7 @@ public final class FormulaFactory
 		 * @return the Number in this NumberFormula.
 		 */
 		@Override
-		public Number resolve(Equipment equipment, boolean primary,
-			PlayerCharacter pc, String source)
+		public Number resolve(Equipment equipment, boolean primary, PlayerCharacter pc, String source)
 		{
 			return number;
 		}
@@ -184,8 +185,7 @@ public final class FormulaFactory
 		@Override
 		public boolean equals(Object obj)
 		{
-			return (obj instanceof NumberFormula)
-				&& ((NumberFormula) obj).number.equals(number);
+			return (obj instanceof NumberFormula) && ((NumberFormula) obj).number.equals(number);
 		}
 
 		/**
@@ -227,26 +227,29 @@ public final class FormulaFactory
 	{
 
 		/**
-		 * The value of this SimpleFormula
+		 * The value of this SimpleFormula.
 		 */
 		private final T value;
 
 		/**
+		 * The FormatManager of this SimpleFormula.
+		 */
+		private final FormatManager<T> formatManager;
+
+		/**
 		 * Creates a new SimpleFormula from the given value.
 		 * 
-		 * @param val
+		 * @param value
 		 *            The value of this SimpleFormula.
+		 * @param formatManager
+		 *            The FormatManager for the value in this SimpleFormula
 		 * @throws IllegalArgumentException
 		 *             if the given value is null
 		 */
-		private SimpleFormula(T val)
+		private SimpleFormula(T value, FormatManager<T> formatManager)
 		{
-			if (val == null)
-			{
-				throw new IllegalArgumentException(
-					"Cannot create an SimpleFormula with a null value");
-			}
-			value = val;
+			this.value = Objects.requireNonNull(value);
+			this.formatManager = Objects.requireNonNull(formatManager);
 		}
 
 		/**
@@ -275,8 +278,7 @@ public final class FormulaFactory
 		@Override
 		public boolean equals(Object obj)
 		{
-			return (obj instanceof SimpleFormula)
-				&& ((SimpleFormula<?>) obj).value.equals(value);
+			return (obj instanceof SimpleFormula) && ((SimpleFormula<?>) obj).value.equals(value);
 		}
 
 		@Override
@@ -292,16 +294,20 @@ public final class FormulaFactory
 		}
 
 		@Override
-		public void isValid(FormatManager<T> formatManager,
-			FormulaSemantics semantics)
+		public void isValid(FormulaSemantics semantics) throws SemanticsException
 		{
 			Class<?> expectedFormat = formatManager.getManagedClass();
 			if (!expectedFormat.isAssignableFrom(value.getClass()))
 			{
-				semantics.setInvalid("Parse Error: Invalid Value Format: "
-					+ value.getClass() + " found in location requiring a "
-					+ expectedFormat + " (class cannot be evaluated)");
+				throw new SemanticsException("Parse Error: Invalid Value Format: " + value.getClass()
+					+ " found in location requiring a " + expectedFormat + " (class cannot be evaluated)");
 			}
+		}
+
+		@Override
+		public FormatManager<T> getFormatManager()
+		{
+			return formatManager;
 		}
 	}
 
@@ -320,8 +326,7 @@ public final class FormulaFactory
 	 *            The expression to be interpreted by the formula parser
 	 * @return The NEPFormula representing the given expression
 	 */
-	private static <T> NEPFormula<T> getNEPFormulaFor(
-		FormatManager<T> fmtManager, String expression)
+	private static <T> NEPFormula<T> getNEPFormulaFor(FormatManager<T> fmtManager, String expression)
 	{
 		if (expression == null || expression.isEmpty())
 		{
@@ -329,12 +334,12 @@ public final class FormulaFactory
 		}
 		try
 		{
-			return new SimpleFormula<>(fmtManager.convert(expression));
+			return new SimpleFormula<>(fmtManager.convert(expression), fmtManager);
 		}
 		catch (IllegalArgumentException e)
 		{
 			// Okay, not simple :P
-			return new ComplexNEPFormula<>(expression);
+			return new ComplexNEPFormula<>(expression, fmtManager);
 		}
 	}
 
@@ -355,26 +360,26 @@ public final class FormulaFactory
 	 * @param formulaManager
 	 *            The FormulaManager to be used for validating the NEPExpression
 	 * @param varScope
-	 *            The LegalScope in which the NEPFormula is established and
+	 *            The PCGenScope in which the NEPFormula is established and
 	 *            checked
 	 * @param formatManager
 	 *            The FormatManager in which the NEPFormula is established and
 	 *            checked
 	 * @return a "valid" NEPFormula for the given expression
 	 */
-	public static <T> NEPFormula<T> getValidFormula(String expression,
-		ManagerFactory managerFactory, FormulaManager formulaManager, LegalScope varScope,
-		FormatManager<T> formatManager)
+	public static <T> NEPFormula<T> getValidFormula(String expression, ManagerFactory managerFactory,
+		FormulaManager formulaManager, PCGenScope varScope, FormatManager<T> formatManager)
 	{
 		NEPFormula<T> formula = getNEPFormulaFor(formatManager, expression);
-		FormulaSemantics semantics = managerFactory.generateFormulaSemantics(
-			formulaManager, varScope, formatManager.getManagedClass());
-		formula.isValid(formatManager, semantics);
-		if (!semantics.isValid())
+		FormulaSemantics semantics = managerFactory.generateFormulaSemantics(formulaManager, varScope);
+		try
 		{
-			throw new IllegalArgumentException("Cannot create a Formula from: "
-				+ expression + ", due to: " + semantics.getReport()
-				+ " with format " + formatManager.getIdentifierType());
+			formula.isValid(semantics);
+		}
+		catch (SemanticsException e)
+		{
+			throw new IllegalArgumentException("Cannot create a Formula from: " + expression + ", due to: "
+				+ e.getLocalizedMessage() + " with format " + formatManager.getIdentifierType(), e);
 		}
 		return formula;
 	}

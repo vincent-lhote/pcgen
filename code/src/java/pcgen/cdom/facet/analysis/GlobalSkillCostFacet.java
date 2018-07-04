@@ -33,9 +33,8 @@ import pcgen.core.Skill;
  * skill references in CSKILL and CCSKILL
  * 
  */
-public class GlobalSkillCostFacet extends
-		AbstractScopeFacet<CharID, SkillCost, Skill> implements
-		DataFacetChangeListener<CharID, CDOMObject>
+public class GlobalSkillCostFacet extends AbstractScopeFacet<CharID, SkillCost, Skill>
+		implements DataFacetChangeListener<CharID, CDOMObject>
 {
 	private CDOMObjectConsolidationFacet consolidationFacet;
 
@@ -50,8 +49,6 @@ public class GlobalSkillCostFacet extends
 	 * @param dfce
 	 *            The DataFacetChangeEvent containing the information about the
 	 *            change
-	 * 
-	 * @see pcgen.cdom.facet.event.DataFacetChangeListener#dataAdded(pcgen.cdom.facet.event.DataFacetChangeEvent)
 	 */
 	@Override
 	public void dataAdded(DataFacetChangeEvent<CharID, CDOMObject> dfce)
@@ -85,8 +82,6 @@ public class GlobalSkillCostFacet extends
 	 * @param dfce
 	 *            The DataFacetChangeEvent containing the information about the
 	 *            change
-	 * 
-	 * @see pcgen.cdom.facet.event.DataFacetChangeListener#dataRemoved(pcgen.cdom.facet.event.DataFacetChangeEvent)
 	 */
 	@Override
 	public void dataRemoved(DataFacetChangeEvent<CharID, CDOMObject> dfce)

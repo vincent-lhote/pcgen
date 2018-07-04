@@ -18,11 +18,11 @@
 package pcgen.rules.context;
 
 import java.util.Collection;
-import java.util.List;
 
 import pcgen.base.util.FormatManager;
 import pcgen.base.util.Indirect;
 import pcgen.cdom.base.CDOMReference;
+import pcgen.cdom.base.ClassIdentity;
 import pcgen.cdom.base.Loadable;
 import pcgen.cdom.reference.CDOMGroupRef;
 import pcgen.cdom.reference.CDOMSingleRef;
@@ -37,8 +37,7 @@ class TrackingManufacturer<T extends Loadable> implements ReferenceManufacturer<
 	private final ReferenceManufacturer<T> rm;
 	private final TrackingReferenceContext context;
 
-	protected TrackingManufacturer(TrackingReferenceContext trc,
-	                               ReferenceManufacturer<T> mfg)
+	protected TrackingManufacturer(TrackingReferenceContext trc, ReferenceManufacturer<T> mfg)
 	{
 		context = trc;
 		rm = mfg;
@@ -81,9 +80,9 @@ class TrackingManufacturer<T extends Loadable> implements ReferenceManufacturer<
 	}
 
 	@Override
-	public boolean containsObject(String key)
+	public boolean containsObjectKeyed(String key)
 	{
-		return rm.containsObject(key);
+		return rm.containsObjectKeyed(key);
 	}
 
 	@Override
@@ -119,21 +118,9 @@ class TrackingManufacturer<T extends Loadable> implements ReferenceManufacturer<
 	}
 
 	@Override
-	public T getItemInOrder(int item)
-	{
-		return rm.getItemInOrder(item);
-	}
-
-	@Override
 	public T getObject(String key)
 	{
 		return rm.getObject(key);
-	}
-
-	@Override
-	public List<T> getOrderSortedObjects()
-	{
-		return rm.getOrderSortedObjects();
 	}
 
 	@Override
@@ -186,11 +173,6 @@ class TrackingManufacturer<T extends Loadable> implements ReferenceManufacturer<
 	public boolean validate(UnconstructedValidator validator)
 	{
 		return rm.validate(validator);
-	}
-
-	public boolean containsUnconstructed(String name)
-	{
-		return rm.containsObject(name);
 	}
 
 	@Override
@@ -276,7 +258,7 @@ class TrackingManufacturer<T extends Loadable> implements ReferenceManufacturer<
 	{
 		return rm.unconvert(arg0);
 	}
-	
+
 	@Override
 	public FormatManager<?> getComponentManager()
 	{
@@ -286,6 +268,18 @@ class TrackingManufacturer<T extends Loadable> implements ReferenceManufacturer<
 	@Override
 	public boolean isDirect()
 	{
-		return false;
+		return rm.isDirect();
+	}
+
+	@Override
+	public ClassIdentity<T> getReferenceIdentity()
+	{
+		return rm.getReferenceIdentity();
+	}
+
+	@Override
+	public String getPersistentFormat()
+	{
+		return rm.getPersistentFormat();
 	}
 }

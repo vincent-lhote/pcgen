@@ -28,6 +28,7 @@ import java.util.Set;
 
 import junit.textui.TestRunner;
 import pcgen.AbstractCharacterTestCase;
+import pcgen.cdom.base.BasicClassIdentity;
 import pcgen.cdom.base.CDOMReference;
 import pcgen.cdom.base.Constants;
 import pcgen.cdom.base.FormulaFactory;
@@ -55,6 +56,7 @@ import pcgen.core.spell.Spell;
 import pcgen.core.system.LoadInfo;
 import pcgen.gui2.UIPropertyContext;
 import pcgen.io.exporttoken.StatToken;
+import pcgen.persistence.lst.SimpleLoader;
 import pcgen.rules.context.LoadContext;
 import pcgen.util.Logging;
 import pcgen.util.TestHelper;
@@ -63,6 +65,7 @@ import pcgen.util.chooser.RandomChooser;
 import pcgen.util.enumeration.View;
 import pcgen.util.enumeration.Visibility;
 import plugin.lsttokens.testsupport.BuildUtilities;
+import util.TestURI;
 
 /**
  * The Class <code>PlayerCharacterTest</code> is responsible for testing 
@@ -145,9 +148,11 @@ public class PlayerCharacterTest extends AbstractCharacterTestCase
 		context.getReferenceContext().importObject(giantRace);
 	
 		// Create the monster class type
-		SettingsHandler.getGame().addClassType(
-			"Monster		CRFORMULA:0			ISMONSTER:YES	XPPENALTY:NO");
-	
+		SimpleLoader<ClassType> methodLoader = new SimpleLoader<>(ClassType.class);
+		methodLoader.parseLine(SettingsHandler.getGame().getModeContext(),
+			"Monster		CRFORMULA:0			ISMONSTER:YES	XPPENALTY:NO",
+			TestURI.getURI());
+
 		pcClass = new PCClass();
 		pcClass.setName("MyClass");
 		BuildUtilities.setFact(pcClass, "SpellType", "Arcane");
@@ -191,7 +196,7 @@ public class PlayerCharacterTest extends AbstractCharacterTestCase
 		toughness.put(ObjectKey.MULTIPLE_ALLOWED, Boolean.TRUE);
 		toughness.put(ObjectKey.STACKS, Boolean.TRUE);
 		context.unconditionallyProcess(toughness, "CHOOSE", "NOCHOICE");
-		toughness.setCDOMCategory(AbilityCategory.FEAT);
+		toughness.setCDOMCategory(BuildUtilities.getFeatCat());
 		final BonusObj aBonus = Bonus.newBonus(context, "HP|CURRENTMAX|3");
 		
 		if (aBonus != null)
@@ -201,7 +206,7 @@ public class PlayerCharacterTest extends AbstractCharacterTestCase
 		context.getReferenceContext().importObject(toughness);
 	
 		Ability exoticWpnProf =
-				TestHelper.makeAbility("Exotic Weapon Proficiency", AbilityCategory.FEAT,
+				TestHelper.makeAbility("Exotic Weapon Proficiency", BuildUtilities.getFeatCat(),
 					"General.Fighter");
 		exoticWpnProf.put(ObjectKey.MULTIPLE_ALLOWED, Boolean.TRUE);
 		context.unconditionallyProcess(exoticWpnProf, "CHOOSE", "WEAPONPROFICIENCY|!PC[TYPE.Exotic]");
@@ -237,7 +242,7 @@ public class PlayerCharacterTest extends AbstractCharacterTestCase
 		
 		specialFeatCat = Globals.getContext().getReferenceContext()
 				.constructNowIfNecessary(AbilityCategory.class, "Special Feat");
-		specialFeatCat.setAbilityCategory(CDOMDirectSingleRef.getRef(AbilityCategory.FEAT));
+		specialFeatCat.setAbilityCategory(CDOMDirectSingleRef.getRef(BuildUtilities.getFeatCat()));
 		specialAbilityCat = Globals.getContext().getReferenceContext()
 				.constructNowIfNecessary(AbilityCategory.class, "Special Ability");
 		
@@ -489,7 +494,7 @@ public class PlayerCharacterTest extends AbstractCharacterTestCase
 		is((int) character.getRemainingFeatPoints(true), eq(2), "Start with 2 feats");
 		try
 		{
-			AbstractCharacterTestCase.applyAbility(character, AbilityCategory.FEAT, toughness, "");
+			AbstractCharacterTestCase.applyAbility(character, BuildUtilities.getFeatCat(), toughness, "");
 			is((int) character.getRemainingFeatPoints(true), eq(1), "Only 1 feat used");
 		}
 		catch (HeadlessException e)
@@ -852,7 +857,8 @@ public class PlayerCharacterTest extends AbstractCharacterTestCase
 		{
 			assertEquals("Full lvl0, lvl2 list - Non specialty available for level " + i, i==1,
 					character.availableSpells(i, pcMdClass, townSpells.getName(), false, false));
-			//TODO: The current implementation only finds the domain specialty slot if a domain spell is already prepared. 
+			// TODO: The current implementation only finds the domain specialty slot if a domain spell is already
+			// prepared.
 			// So the domain spell can't be the last added. Once fixed, i==1 should be i>=1
 			assertEquals("Full lvl0, lvl2 list - Specialty available for level " + i, i>=1,
 					character.availableSpells(i, pcMdClass, townSpells.getName(), false, true));
@@ -938,11 +944,11 @@ public class PlayerCharacterTest extends AbstractCharacterTestCase
 		
 		try
 		{
-			AbstractCharacterTestCase.applyAbility(pc, AbilityCategory.FEAT, toughness, "");
+			AbstractCharacterTestCase.applyAbility(pc, BuildUtilities.getFeatCat(), toughness, "");
 			//pc.calcActiveBonuses();
 			assertEquals("Check application of single bonus", base+3, pc.getTotalBonusTo(
 				"HP", "CURRENTMAX"));
-			AbstractCharacterTestCase.applyAbility(pc, AbilityCategory.FEAT, toughness, "");
+			AbstractCharacterTestCase.applyAbility(pc, BuildUtilities.getFeatCat(), toughness, "");
 			pc.calcActiveBonuses();
 			assertEquals("Check application of second bonus", base+6, pc.getTotalBonusTo(
 				"HP", "CURRENTMAX"));
@@ -1005,7 +1011,7 @@ public class PlayerCharacterTest extends AbstractCharacterTestCase
 		setPCStat(pc, str, 14);
 
 		Ability strBonusAbility =
-				TestHelper.makeAbility("Strength power up", AbilityCategory.FEAT,
+				TestHelper.makeAbility("Strength power up", BuildUtilities.getFeatCat(),
 					"General.Fighter");
 		final BonusObj strBonus = Bonus.newBonus(context, "STAT|STR|2");
 		strBonusAbility.addToListFor(ListKey.BONUS, strBonus);
@@ -1013,7 +1019,7 @@ public class PlayerCharacterTest extends AbstractCharacterTestCase
 		assertEquals("Before bonus, no temp no equip", 14, pc.getPartialStatFor(str, false, false));
 		assertEquals("Before bonus, temp no equip", 14, pc.getPartialStatFor(str, true, false));
 
-		AbstractCharacterTestCase.applyAbility(pc, AbilityCategory.FEAT, strBonusAbility, null);
+		AbstractCharacterTestCase.applyAbility(pc, BuildUtilities.getFeatCat(), strBonusAbility, null);
 		pc.calcActiveBonuses();
 
 		assertEquals("After bonus, no temp no equip", 16, pc.getPartialStatFor(str, false, false));
@@ -1036,20 +1042,20 @@ public class PlayerCharacterTest extends AbstractCharacterTestCase
 	public void testGetAvailableFollowers()
 	{
 		readyToRun();
-		Ability ab = TestHelper.makeAbility("Tester1", AbilityCategory.FEAT, "Empty Container");
-		Ability mab = TestHelper.makeAbility("Tester2", AbilityCategory.FEAT, "Mount Container");
-		Ability fab = TestHelper.makeAbility("Tester3", AbilityCategory.FEAT, "Familiar Container");
+		Ability ab = TestHelper.makeAbility("Tester1", BuildUtilities.getFeatCat(), "Empty Container");
+		Ability mab = TestHelper.makeAbility("Tester2", BuildUtilities.getFeatCat(), "Mount Container");
+		Ability fab = TestHelper.makeAbility("Tester3", BuildUtilities.getFeatCat(), "Familiar Container");
 		PlayerCharacter pc = getCharacter();
 		CharacterDisplay display = pc.getDisplay();
 		
-		addAbility(AbilityCategory.FEAT, ab);
+		addAbility(BuildUtilities.getFeatCat(), ab);
 		CDOMSingleRef<CompanionList> ref = new CDOMSimpleSingleRef<>(
-				CompanionList.class, "Mount");
+				BasicClassIdentity.getIdentity(CompanionList.class), "Mount");
 		CDOMReference<Race> race  = new CDOMDirectSingleRef<>(giantRace);
 		FollowerOption option = new FollowerOption(race, ref);
 		mab.addToListFor(ListKey.COMPANIONLIST, option);
 		ref = new CDOMSimpleSingleRef<>(
-				CompanionList.class, "Familiar");
+				BasicClassIdentity.getIdentity(CompanionList.class), "Familiar");
 		race  = new CDOMDirectSingleRef<>(human);
 		option = new FollowerOption(race, ref);
 		fab.addToListFor(ListKey.COMPANIONLIST, option);
@@ -1059,22 +1065,25 @@ public class PlayerCharacterTest extends AbstractCharacterTestCase
 		fo = display.getAvailableFollowers("MOUNT", null).keySet();
 		assertTrue("Initially mount list should be empty", fo.isEmpty());
 		
-		addAbility(AbilityCategory.FEAT, mab);
+		addAbility(BuildUtilities.getFeatCat(), mab);
 		fo = display.getAvailableFollowers("Familiar", null).keySet();
 		assertTrue("Familiar list should still be empty", fo.isEmpty());
 		fo = display.getAvailableFollowers("MOUNT", null).keySet();
 		assertFalse("Mount list should not be empty anymore", fo.isEmpty());
-		assertEquals("Mount should be the giant race", giantRace.getKeyName(), fo.iterator().next().getRace().getKeyName());
+		assertEquals("Mount should be the giant race",
+			giantRace.getKeyName(), fo.iterator().next().getRace().getKeyName());
 		assertEquals("Mount list should only have one entry", 1, fo.size());
 		
-		addAbility(AbilityCategory.FEAT, fab);
+		addAbility(BuildUtilities.getFeatCat(), fab);
 		fo = display.getAvailableFollowers("Familiar", null).keySet();
 		assertFalse("Familiar list should not be empty anymore", fo.isEmpty());
-		assertEquals("Familiar should be the human race", human.getKeyName(), fo.iterator().next().getRace().getKeyName());
+		assertEquals("Familiar should be the human race", human.getKeyName(),
+			fo.iterator().next().getRace().getKeyName());
 		assertEquals("Familiar list should only have one entry", 1, fo.size());
 		fo = display.getAvailableFollowers("MOUNT", null).keySet();
 		assertFalse("Mount list should not be empty anymore", fo.isEmpty());
-		assertEquals("Mount should be the giant race", giantRace.getKeyName(), fo.iterator().next().getRace().getKeyName());
+		assertEquals("Mount should be the giant race", giantRace.getKeyName(),
+			fo.iterator().next().getRace().getKeyName());
 		assertEquals("Mount list should only have one entry", 1, fo.size());
 	}
 	
@@ -1082,7 +1091,7 @@ public class PlayerCharacterTest extends AbstractCharacterTestCase
 	{
 		Ability resToAcid =
 				TestHelper.makeAbility("Swelter",
-					AbilityCategory.FEAT.getKeyName(), "Foo");
+					BuildUtilities.getFeatCat().getKeyName(), "Foo");
 		LoadContext context = Globals.getContext();
 		context.unconditionallyProcess(resToAcid, "MULT", "YES");
 		context.unconditionallyProcess(resToAcid, "STACK", "YES");
@@ -1096,19 +1105,19 @@ public class PlayerCharacterTest extends AbstractCharacterTestCase
 		readyToRun();
 		PlayerCharacter pc = getCharacter();
 		
-		List<Ability> abList = pc.getAggregateAbilityListNoDuplicates(AbilityCategory.FEAT);
+		List<Ability> abList = pc.getAggregateAbilityListNoDuplicates(BuildUtilities.getFeatCat());
 		assertEquals(0, abList.size());
 
 		pc.setRace(human);
-		abList = pc.getAggregateAbilityListNoDuplicates(AbilityCategory.FEAT);
+		abList = pc.getAggregateAbilityListNoDuplicates(BuildUtilities.getFeatCat());
 		assertEquals(1, abList.size());
 		
 		pc.addTemplate(template);
-		abList = pc.getAggregateAbilityListNoDuplicates(AbilityCategory.FEAT);
+		abList = pc.getAggregateAbilityListNoDuplicates(BuildUtilities.getFeatCat());
 		assertEquals(1, abList.size());
 		
 		pc.addTemplate(templateNorm);
-		abList = pc.getAggregateAbilityListNoDuplicates(AbilityCategory.FEAT);
+		abList = pc.getAggregateAbilityListNoDuplicates(BuildUtilities.getFeatCat());
 		assertEquals(1, abList.size());
 	}
 
@@ -1118,7 +1127,7 @@ public class PlayerCharacterTest extends AbstractCharacterTestCase
 	public void testAdjustMoveRates()
 	{
 		Ability quickFlySlowSwim =
-				TestHelper.makeAbility("quickFlySlowSwim", AbilityCategory.FEAT
+				TestHelper.makeAbility("quickFlySlowSwim", BuildUtilities.getFeatCat()
 					.getKeyName(), "Foo");
 		PCTemplate template = TestHelper.makeTemplate("slowFlyQuickSwim");
 		PCTemplate template2 = TestHelper.makeTemplate("dig");
@@ -1151,7 +1160,7 @@ public class PlayerCharacterTest extends AbstractCharacterTestCase
 		assertEquals(0.0, display.movementOfType("Swim"), 0.1);
 		assertEquals(0.0, display.movementOfType("Fly"), 0.1);
 
-		addAbility(AbilityCategory.FEAT, quickFlySlowSwim);
+		addAbility(BuildUtilities.getFeatCat(), quickFlySlowSwim);
 		pc.calcActiveBonuses();
 		pc.adjustMoveRates();
 		assertEquals(10.0, display.movementOfType("Swim"), 0.1);
@@ -1179,7 +1188,8 @@ public class PlayerCharacterTest extends AbstractCharacterTestCase
 		PCClass exPaladin = new PCClass();
 		exPaladin.setName("exPaladin");
 		context.getReferenceContext().importObject(exPaladin);
-		paladin.put(ObjectKey.EX_CLASS, context.getReferenceContext().getCDOMReference(PCClass.class, exPaladin.getKeyName()));
+		paladin.put(
+			ObjectKey.EX_CLASS, context.getReferenceContext().getCDOMReference(PCClass.class, exPaladin.getKeyName()));
 		readyToRun();
 		
 		PlayerCharacter pc = getCharacter();
@@ -1198,7 +1208,7 @@ public class PlayerCharacterTest extends AbstractCharacterTestCase
 		PCClassLevel pcLvl1 = pc.getActiveClassLevel(pcExPalClass, 0);
 		assertNotNull("Level 1 should be Ex-Paladin", pcLvl1);
 		assertEquals("Should still be level 2 character", 2, pc.getTotalLevels());
-		assertEquals("Hp at first level incorrect", 10, (int)pc.getHP(pcLvl1));
+		assertEquals("Hp at first level incorrect", 10, (int) pc.getHP(pcLvl1));
 	}
 
 	public void testGetVariableCachingRollTopNode()
@@ -1306,5 +1316,99 @@ public class PlayerCharacterTest extends AbstractCharacterTestCase
 		assertEquals("Skills remaining lvl 2", 1, levelInfoList.get(1)
 			.getSkillPointsRemaining());
 		
+	}
+
+	/**
+	 * Test method for pcgen.core.PlayerCharacter.baseAttackBonus()
+	 *  and for method pcgen.core.PlayerCharacter.getNumAttacks()
+	 *
+	 * Testing with a fighter class from level 1 to level 20
+	 *
+	 * @throws Exception
+	 *
+	 * TODO Testing at epic levels 21+ needs to be fixed.
+	 */
+	public void testbaseAttackBonusAndgetNumAttacks() throws Exception 
+	{
+		readyToRun();
+		LoadContext context = Globals.getContext();
+		GameMode gamemode = SettingsHandler.getGame();
+		gamemode.setMaxNonEpicLevel(20);
+		PCClass fighterClass = null;
+		fighterClass = new PCClass();
+		fighterClass.setName("Fighter");
+		BuildUtilities.setFact(fighterClass, "ClassType", "Base.PC");
+		final BonusObj babClassBonus = Bonus.newBonus(context,
+				"COMBAT|BASEAB|classlevel(\"APPLIEDAS=NONEPIC\")|TYPE=Base.REPLACE");
+		fighterClass.getOriginalClassLevel(1).addToListFor(ListKey.BONUS, babClassBonus);
+		context.getReferenceContext().importObject(fighterClass);
+		final PlayerCharacter character = new PlayerCharacter();
+		character.setRace(human);
+		character.incrementClassLevel(1, fighterClass, true);
+		assertEquals(1, (int) character.baseAttackBonus());
+		assertEquals(1, (int) character.getNumAttacks());
+		character.incrementClassLevel(1, fighterClass, true);
+		assertEquals(2, (int) character.baseAttackBonus());
+		assertEquals(1, (int) character.getNumAttacks());
+		character.incrementClassLevel(1, fighterClass, true);
+		assertEquals(3, (int) character.baseAttackBonus());
+		assertEquals(1, (int) character.getNumAttacks());
+		character.incrementClassLevel(1, fighterClass, true);
+		assertEquals(4, (int) character.baseAttackBonus());
+		assertEquals(1, (int) character.getNumAttacks());
+		character.incrementClassLevel(1, fighterClass, true);
+		assertEquals(5, (int) character.baseAttackBonus());
+		assertEquals(1, (int) character.getNumAttacks());
+		character.incrementClassLevel(1, fighterClass, true);
+		assertEquals(6, (int) character.baseAttackBonus());
+		assertEquals(2, (int) character.getNumAttacks());
+		character.incrementClassLevel(1, fighterClass, true);
+		assertEquals(7, (int) character.baseAttackBonus());
+		assertEquals(2, (int) character.getNumAttacks());
+		character.incrementClassLevel(1, fighterClass, true);
+		assertEquals(8, (int) character.baseAttackBonus());
+		assertEquals(2, (int) character.getNumAttacks());
+		character.incrementClassLevel(1, fighterClass, true);
+		assertEquals(9, (int) character.baseAttackBonus());
+		assertEquals(2, (int) character.getNumAttacks());
+		character.incrementClassLevel(1, fighterClass, true);
+		assertEquals(10, (int) character.baseAttackBonus());
+		assertEquals(2, (int) character.getNumAttacks());
+		character.incrementClassLevel(1, fighterClass, true);
+		assertEquals(11, (int) character.baseAttackBonus());
+		assertEquals(3, (int) character.getNumAttacks());
+		character.incrementClassLevel(1, fighterClass, true);
+		assertEquals(12, (int) character.baseAttackBonus());
+		assertEquals(3, (int) character.getNumAttacks());
+		character.incrementClassLevel(1, fighterClass, true);
+		assertEquals(13, (int) character.baseAttackBonus());
+		assertEquals(3, (int) character.getNumAttacks());
+		character.incrementClassLevel(1, fighterClass, true);
+		assertEquals(14, (int) character.baseAttackBonus());
+		assertEquals(3, (int) character.getNumAttacks());
+		character.incrementClassLevel(1, fighterClass, true);
+		assertEquals(15, (int) character.baseAttackBonus());
+		assertEquals(3, (int) character.getNumAttacks());
+		character.incrementClassLevel(1, fighterClass, true);
+		assertEquals(16, (int) character.baseAttackBonus());
+		assertEquals(4, (int) character.getNumAttacks());
+		character.incrementClassLevel(1, fighterClass, true);
+		assertEquals(17, (int) character.baseAttackBonus());
+		assertEquals(4, (int) character.getNumAttacks());
+		character.incrementClassLevel(1, fighterClass, true);
+		assertEquals(18, (int) character.baseAttackBonus());
+		assertEquals(4, (int) character.getNumAttacks());
+		character.incrementClassLevel(1, fighterClass, true);
+		assertEquals(19, (int) character.baseAttackBonus());
+		assertEquals(4, (int) character.getNumAttacks());
+		character.incrementClassLevel(1, fighterClass, true);
+		assertEquals(20, (int) character.baseAttackBonus());
+		assertEquals(4, (int) character.getNumAttacks());
+		//
+		// Disabled testing for level 21+ as it is not correctly implemented.
+		//
+		// character.incrementClassLevel(1, fighterClass, true);
+		// assertEquals(20, (int) character.baseAttackBonus());
+		// assertEquals(4, (int) character.getNumAttacks());
 	}
 }

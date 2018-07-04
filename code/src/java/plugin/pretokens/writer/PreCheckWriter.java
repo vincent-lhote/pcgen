@@ -30,35 +30,23 @@ import pcgen.persistence.lst.output.prereq.PrerequisiteWriterInterface;
 /**
  * Writer for PRECHECK
  */
-public class PreCheckWriter extends AbstractPrerequisiteWriter implements
-		PrerequisiteWriterInterface
+public class PreCheckWriter extends AbstractPrerequisiteWriter implements PrerequisiteWriterInterface
 {
 
-	/**
-	 * @see pcgen.persistence.lst.output.prereq.PrerequisiteWriterInterface#kindHandled()
-	 */
-    @Override
+	@Override
 	public String kindHandled()
 	{
 		return "check";
 	}
 
-	/**
-	 * @see pcgen.persistence.lst.output.prereq.PrerequisiteWriterInterface#operatorsHandled()
-	 */
-    @Override
+	@Override
 	public PrerequisiteOperator[] operatorsHandled()
 	{
-		return new PrerequisiteOperator[]{PrerequisiteOperator.GTEQ,
-			PrerequisiteOperator.LT};
+		return new PrerequisiteOperator[]{PrerequisiteOperator.GTEQ, PrerequisiteOperator.LT};
 	}
 
-	/**
-	 * @see pcgen.persistence.lst.output.prereq.PrerequisiteWriterInterface#write(java.io.Writer, pcgen.core.prereq.Prerequisite)
-	 */
-    @Override
-	public void write(Writer writer, Prerequisite prereq)
-		throws PersistenceLayerException
+	@Override
+	public void write(Writer writer, Prerequisite prereq) throws PersistenceLayerException
 	{
 		checkValidOperator(prereq, operatorsHandled());
 
@@ -68,7 +56,7 @@ public class PreCheckWriter extends AbstractPrerequisiteWriter implements
 			{
 				writer.write('!');
 			}
-			writer.write("PRECHECK:" + (prereq.isOverrideQualify() ? "Q:":"") + "1,");
+			writer.write("PRECHECK:" + (prereq.isOverrideQualify() ? "Q:" : "") + "1,");
 			writer.write(prereq.getKey());
 			writer.write('=');
 			writer.write(prereq.getOperand());
@@ -79,10 +67,8 @@ public class PreCheckWriter extends AbstractPrerequisiteWriter implements
 		}
 	}
 
-
 	@Override
-	public boolean specialCase(Writer writer, Prerequisite prereq)
-			throws IOException
+	public boolean specialCase(Writer writer, Prerequisite prereq) throws IOException
 	{
 		PrerequisiteOperator po = getConsolidateMethod(kindHandled(), prereq, true);
 		if (po == null)
@@ -94,10 +80,8 @@ public class PreCheckWriter extends AbstractPrerequisiteWriter implements
 			writer.write('!');
 		}
 
-		writer.write("PRE" + kindHandled().toUpperCase() + ':'
-				+ (prereq.isOverrideQualify() ? "Q:" : ""));
-		writer.write(po.equals(PrerequisiteOperator.GTEQ) ? prereq.getOperand()
-				: "1");
+		writer.write("PRE" + kindHandled().toUpperCase() + ':' + (prereq.isOverrideQualify() ? "Q:" : ""));
+		writer.write(po.equals(PrerequisiteOperator.GTEQ) ? prereq.getOperand() : "1");
 		for (Prerequisite p : prereq.getPrerequisites())
 		{
 			writer.write(',');

@@ -36,19 +36,13 @@ import pcgen.util.Logging;
 public class BonusstatallowsstackToken implements GameModeLstToken
 {
 
-	/**
-	 * @see pcgen.persistence.lst.LstToken#getTokenName()
-	 */
-    @Override
+	@Override
 	public String getTokenName()
 	{
 		return "BONUSSTATALLOWSSTACK";
 	}
 
-	/**
-	 * @see pcgen.persistence.lst.GameModeLstToken#parse(pcgen.core.GameMode, java.lang.String, java.net.URI)
-	 */
-    @Override
+	@Override
 	public boolean parse(GameMode gameMode, String value, URI source)
 	{
 		Boolean set;
@@ -57,9 +51,8 @@ public class BonusstatallowsstackToken implements GameModeLstToken
 		{
 			if (value.length() > 1 && !value.equalsIgnoreCase("YES"))
 			{
-				Logging.log(Logging.LST_ERROR,
-					"You should use 'YES' or 'NO' as the " + getTokenName()
-						+ ": " + value + " in " + source.toString());
+				Logging.log(Logging.LST_ERROR, "You should use 'YES' or 'NO' as the " + getTokenName() + ": " + value
+					+ " in " + source.toString());
 				return false;
 			}
 			set = Boolean.TRUE;
@@ -68,16 +61,14 @@ public class BonusstatallowsstackToken implements GameModeLstToken
 		{
 			if (firstChar != 'N' && firstChar != 'n')
 			{
-				Logging.log(Logging.LST_ERROR,
-					"You should use 'YES' or 'NO' as the " + getTokenName()
-						+ ": " + value + " in " + source.toString());
+				Logging.log(Logging.LST_ERROR, "You should use 'YES' or 'NO' as the " + getTokenName() + ": " + value
+					+ " in " + source.toString());
 				return false;
 			}
 			if (value.length() > 1 && !value.equalsIgnoreCase("NO"))
 			{
-				Logging.log(Logging.LST_ERROR,
-					"You should use 'YES' or 'NO' as the " + getTokenName()
-						+ ": " + value + " in " + source.toString());
+				Logging.log(Logging.LST_ERROR, "You should use 'YES' or 'NO' as the " + getTokenName() + ": " + value
+					+ " in " + source.toString());
 				return false;
 			}
 			set = Boolean.FALSE;

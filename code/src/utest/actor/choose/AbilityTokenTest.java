@@ -17,20 +17,21 @@
  */
 package actor.choose;
 
+import static org.junit.Assert.assertEquals;
+
 import java.net.URISyntaxException;
+
+import org.junit.Before;
+import org.junit.Test;
 
 import pcgen.cdom.base.CategorizedChooser;
 import pcgen.core.Ability;
-import pcgen.core.AbilityCategory;
 import pcgen.core.Globals;
 import pcgen.core.SettingsHandler;
 import pcgen.persistence.PersistenceLayerException;
 import pcgen.rules.context.LoadContext;
-
-import org.junit.Before;
-import org.junit.Test;
 import plugin.lsttokens.choose.AbilityToken;
-import static org.junit.Assert.*;
+import plugin.lsttokens.testsupport.BuildUtilities;
 
 /**
  * The Class {@code AbilityTokenTest} verifies the AbilityToken
@@ -39,7 +40,6 @@ import static org.junit.Assert.*;
 public class AbilityTokenTest
 {
 
-	private static final AbilityCategory CATEGORY = AbilityCategory.FEAT;
 	private static final CategorizedChooser<Ability> pca = new AbilityToken();
 	private static final String ITEM_NAME = "ItemName";
 
@@ -50,14 +50,15 @@ public class AbilityTokenTest
 	{
 		SettingsHandler.getGame().clearLoadContext();
 		context = Globals.getContext();
-		context.getReferenceContext().importObject(CATEGORY);
+		context.getReferenceContext().importObject(BuildUtilities.getFeatCat());
 	}
 
 	private Ability getObject()
 	{
-		Ability obj = context.getReferenceContext().constructCDOMObject(Ability.class, ITEM_NAME);
-		context.getReferenceContext().reassociateCategory(CATEGORY, obj);
-		return obj;
+		Ability a = BuildUtilities.getFeatCat().newInstance();
+		a.setName(ITEM_NAME);
+		context.getReferenceContext().importObject(a);
+		return a;
 	}
 
 	@Test
@@ -74,13 +75,15 @@ public class AbilityTokenTest
 	@Test
 	public void testDecodeChoice()
 	{
-		assertEquals(getObject(), pca.decodeChoice(context, getExpected(), CATEGORY));
+		assertEquals(getObject(),
+			pca.decodeChoice(context, getExpected(), BuildUtilities.getFeatCat()));
 	}
 
 	@Test
 	public void testLegacyDecodeChoice()
 	{
-		assertEquals(getObject(), pca.decodeChoice(context, "CATEGORY=FEAT|" +ITEM_NAME, CATEGORY));
+		assertEquals(getObject(), pca.decodeChoice(context, "CATEGORY=FEAT|" + ITEM_NAME,
+			BuildUtilities.getFeatCat()));
 	}
 
 }

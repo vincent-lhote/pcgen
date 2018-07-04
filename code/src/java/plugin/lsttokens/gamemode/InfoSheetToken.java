@@ -35,20 +35,15 @@ import pcgen.util.Logging;
 public class InfoSheetToken implements GameModeLstToken
 {
 
-	/**
-	 * @see pcgen.persistence.lst.GameModeLstToken#parse(pcgen.core.GameMode, java.lang.String, java.net.URI)
-	 */
-    @Override
+	@Override
 	public boolean parse(GameMode gameMode, String value, URI source)
 	{
 		String[] tokens = value.split("\\|");
-		
+
 		if (tokens.length != 2)
 		{
-			Logging.log(Logging.LST_ERROR, "Invalid token " + getTokenName()
-				+ Constants.COLON + value
-				+ ". Expected INFOSHEET:SUMMARY|x or INFOSHEET:SKILL|x "
-				+ " in " + source.toString());
+			Logging.log(Logging.LST_ERROR, "Invalid token " + getTokenName() + Constants.COLON + value
+				+ ". Expected INFOSHEET:SUMMARY|x or INFOSHEET:SKILL|x " + " in " + source.toString());
 			return false;
 		}
 		if (tokens[0].equals("SUMMARY"))
@@ -61,22 +56,18 @@ public class InfoSheetToken implements GameModeLstToken
 		}
 		else
 		{
-			Logging.log(Logging.LST_ERROR, "Invalid token " + getTokenName()
-				+ Constants.COLON + value
-				+ ". Expected INFOSHEET:SUMMARY|x or INFOSHEET:SKILL|x "
-				+ " in " + source.toString());
+			Logging.log(Logging.LST_ERROR, "Invalid token " + getTokenName() + Constants.COLON + value
+				+ ". Expected INFOSHEET:SUMMARY|x or INFOSHEET:SKILL|x " + " in " + source.toString());
 			return false;
 		}
-			
+
 		return true;
 	}
 
 	/**
 	 * Returns the name of the token this class handles.
-	 * 
-	 * @see pcgen.persistence.lst.LstToken#getTokenName()
 	 */
-    @Override
+	@Override
 	public String getTokenName()
 	{
 		return "INFOSHEET"; //$NON-NLS-1$

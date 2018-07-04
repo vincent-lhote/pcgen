@@ -116,7 +116,6 @@ import pcgen.cdom.facet.fact.WeightFacet;
 import pcgen.cdom.facet.fact.XPFacet;
 import pcgen.cdom.facet.input.ProhibitedSchoolFacet;
 import pcgen.cdom.facet.input.UserSpecialAbilityFacet;
-import pcgen.cdom.facet.model.AlignmentFacet;
 import pcgen.cdom.facet.model.ArmorProfProviderFacet;
 import pcgen.cdom.facet.model.BioSetFacet;
 import pcgen.cdom.facet.model.ClassFacet;
@@ -164,6 +163,7 @@ import pcgen.core.character.Follower;
 import pcgen.core.character.SpellBook;
 import pcgen.core.pclevelinfo.PCLevelInfo;
 import pcgen.core.spell.Spell;
+import pcgen.output.channel.ChannelCompatibility;
 import pcgen.util.enumeration.Load;
 import pcgen.util.enumeration.View;
 import pcgen.util.enumeration.VisionType;
@@ -219,7 +219,8 @@ public class CharacterDisplay
 	private LevelInfoFacet levelInfoFacet = FacetLibrary.getFacet(LevelInfoFacet.class);
 	private KitFacet kitFacet = FacetLibrary.getFacet(KitFacet.class);
 	private AutoLanguageGrantedFacet autoLangGrantedFacet = FacetLibrary.getFacet(AutoLanguageGrantedFacet.class);
-	private AutoLanguageUnconditionalFacet autoLangUnconditionalFacet = FacetLibrary.getFacet(AutoLanguageUnconditionalFacet.class);
+	private AutoLanguageUnconditionalFacet autoLangUnconditionalFacet =
+			FacetLibrary.getFacet(AutoLanguageUnconditionalFacet.class);
 	private XPTableFacet xpTableFacet = FacetLibrary.getFacet(XPTableFacet.class);
 	private XPFacet xpFacet = FacetLibrary.getFacet(XPFacet.class);
 	private WeightFacet weightFacet = FacetLibrary.getFacet(WeightFacet.class);
@@ -238,7 +239,6 @@ public class CharacterDisplay
 	private StatCalcFacet statCalcFacet = FacetLibrary.getFacet(StatCalcFacet.class);
 	private EquipmentFacet equipmentFacet = FacetLibrary.getFacet(EquipmentFacet.class);
 	private EquipSetFacet equipSetFacet = FacetLibrary.getFacet(EquipSetFacet.class);
-	private AlignmentFacet alignmentFacet = FacetLibrary.getFacet(AlignmentFacet.class);
 	private SkillFacet skillFacet = FacetLibrary.getFacet(SkillFacet.class);
 	private DomainFacet domainFacet = FacetLibrary.getFacet(DomainFacet.class);
 	private ChallengeRatingFacet crFacet = FacetLibrary.getFacet(ChallengeRatingFacet.class);
@@ -250,8 +250,8 @@ public class CharacterDisplay
 	private InitiativeFacet initiativeFacet = FacetLibrary.getFacet(InitiativeFacet.class);
 	private HandedFacet handedFacet = FacetLibrary.getFacet(HandedFacet.class);
 	private DeityFacet deityFacet = FacetLibrary.getFacet(DeityFacet.class);
-	private PortraitThumbnailRectFacet portraitThumbnailRectFacet = FacetLibrary
-			.getFacet(PortraitThumbnailRectFacet.class);
+	private PortraitThumbnailRectFacet portraitThumbnailRectFacet =
+			FacetLibrary.getFacet(PortraitThumbnailRectFacet.class);
 	private PreviewSheetFacet previewSheetFacet = FacetLibrary.getFacet(PreviewSheetFacet.class);
 	private SkillFilterFacet skillFilterFacet = FacetLibrary.getFacet(SkillFilterFacet.class);
 	private final ResultFacet resultFacet = FacetLibrary.getFacet(ResultFacet.class);
@@ -376,7 +376,7 @@ public class CharacterDisplay
 	{
 		return suppressBioFieldFacet.getSuppressField(id, field);
 	}
-	
+
 	public Collection<Vision> getVisionList()
 	{
 		return visionFacet.getActiveVision(id);
@@ -420,9 +420,7 @@ public class CharacterDisplay
 	{
 		String qualifiedKey = pct.getQualifiedKey();
 		Formula reduction = pct.getSafe(ObjectKey.SR).getReduction();
-		int aSR =
-				formulaResolvingFacet.resolve(id, reduction, qualifiedKey)
-					.intValue();
+		int aSR = formulaResolvingFacet.resolve(id, reduction, qualifiedKey).intValue();
 
 		for (PCTemplate rlt : pct.getSafeListFor(ListKey.REPEATLEVEL_TEMPLATES))
 		{
@@ -430,11 +428,8 @@ public class CharacterDisplay
 			{
 				if (lt.get(IntegerKey.LEVEL) <= level)
 				{
-					Formula ltReduction =
-							lt.getSafe(ObjectKey.SR).getReduction();
-					int ltSR =
-							formulaResolvingFacet.resolve(id, ltReduction,
-								qualifiedKey).intValue();
+					Formula ltReduction = lt.getSafe(ObjectKey.SR).getReduction();
+					int ltSR = formulaResolvingFacet.resolve(id, ltReduction, qualifiedKey).intValue();
 					aSR = Math.max(aSR, ltSR);
 				}
 			}
@@ -445,22 +440,17 @@ public class CharacterDisplay
 			if (lt.get(IntegerKey.LEVEL) <= level)
 			{
 				Formula ltReduction = lt.getSafe(ObjectKey.SR).getReduction();
-				int ltSR =
-						formulaResolvingFacet.resolve(id, ltReduction,
-							qualifiedKey).intValue();
+				int ltSR = formulaResolvingFacet.resolve(id, ltReduction, qualifiedKey).intValue();
 				aSR = Math.max(aSR, ltSR);
 			}
 		}
 
 		for (PCTemplate lt : pct.getSafeListFor(ListKey.HD_TEMPLATES))
 		{
-			if ((lt.get(IntegerKey.HD_MAX) <= hitdice)
-					&& (lt.get(IntegerKey.HD_MIN) >= hitdice))
+			if ((lt.get(IntegerKey.HD_MAX) <= hitdice) && (lt.get(IntegerKey.HD_MIN) >= hitdice))
 			{
 				Formula ltReduction = lt.getSafe(ObjectKey.SR).getReduction();
-				int ltSR =
-						formulaResolvingFacet.resolve(id, ltReduction,
-							qualifiedKey).intValue();
+				int ltSR = formulaResolvingFacet.resolve(id, ltReduction, qualifiedKey).intValue();
 				aSR = Math.max(aSR, ltSR);
 			}
 		}
@@ -496,10 +486,8 @@ public class CharacterDisplay
 		List<PCTemplate> tl = new ArrayList<>();
 
 		Collection<PCTemplate> treeSet = new TreeSet<>(CDOMObjectUtilities::compareKeys);
-		templateFacet.getSet(id)
-		             .stream()
-		             .filter(template -> template.getSafe(ObjectKey.VISIBILITY).isVisibleTo(v))
-		             .forEach(treeSet::add);
+		templateFacet.getSet(id).stream().filter(template -> template.getSafe(ObjectKey.VISIBILITY).isVisibleTo(v))
+			.forEach(treeSet::add);
 		tl.addAll(treeSet);
 		return tl;
 	}
@@ -780,7 +768,7 @@ public class CharacterDisplay
 	 */
 	public PCAlignment getPCAlignment()
 	{
-		return alignmentFacet.get(id);
+		return ChannelCompatibility.getCurrentAlignment(id);
 	}
 
 	public Object getGlobal(String varName)
@@ -1350,34 +1338,33 @@ public class CharacterDisplay
 		// TODO - i18n
 		switch (SettingsHandler.getNameDisplayStyle())
 		{
-		case Constants.DISPLAY_STYLE_NAME:
-			break;
+			case Constants.DISPLAY_STYLE_NAME:
+				break;
 
-		case Constants.DISPLAY_STYLE_NAME_CLASS:
-			displayName.append(" the ").append(getDisplayClassName());
+			case Constants.DISPLAY_STYLE_NAME_CLASS:
+				displayName.append(" the ").append(getDisplayClassName());
 
-			break;
+				break;
 
-		case Constants.DISPLAY_STYLE_NAME_RACE:
-			displayName.append(" the ").append(getDisplayRaceName());
+			case Constants.DISPLAY_STYLE_NAME_RACE:
+				displayName.append(" the ").append(getDisplayRaceName());
 
-			break;
+				break;
 
-		case Constants.DISPLAY_STYLE_NAME_RACE_CLASS:
-			displayName.append(" the ").append(getDisplayRaceName()).append(' ').append(getDisplayClassName());
+			case Constants.DISPLAY_STYLE_NAME_RACE_CLASS:
+				displayName.append(" the ").append(getDisplayRaceName()).append(' ').append(getDisplayClassName());
 
-			break;
+				break;
 
-		case Constants.DISPLAY_STYLE_NAME_FULL:
-			return getFullDisplayName();
+			case Constants.DISPLAY_STYLE_NAME_FULL:
+				return getFullDisplayName();
 
-		default:
-			break; // custom broken
+			default:
+				break; // custom broken
 		}
 
 		return displayName.toString();
 	}
-
 
 	/**
 	 * Returns a very descriptive name for the character.
@@ -1395,25 +1382,25 @@ public class CharacterDisplay
 		// information in addition to the total PC level
 		displayClass = (classFacet.getCount(id) > 1) ? getFullDisplayClassName() : getDisplayClassName();
 
-		return getName() + " the " + levels + getOrdinal(levels) +
-				" level " + getDisplayRaceName() + ' ' + displayClass;
+		return getName() + " the " + levels + getOrdinal(levels) + " level " + getDisplayRaceName() + ' '
+			+ displayClass;
 	}
 
 	private static String getOrdinal(final int cardinal)
 	{
 		switch (cardinal)
 		{
-		case 1:
-			return "st";
+			case 1:
+				return "st";
 
-		case 2:
-			return "nd";
+			case 2:
+				return "nd";
 
-		case 3:
-			return "rd";
+			case 3:
+				return "rd";
 
-		default:
-			return "th";
+			default:
+				return "th";
 		}
 	}
 
@@ -1425,9 +1412,12 @@ public class CharacterDisplay
 
 	private String getDisplayRaceName()
 	{
-		final String raceName = getRace().toString();
-
-		return (raceName.equals(Constants.NONESELECTED) ? "Nothing" : raceName);
+		Race race = getRace();
+		if (race.isUnselected())
+		{
+			return "Nothing";
+		}
+		return getRace().toString();
 	}
 
 	private String getFullDisplayClassName()
@@ -1455,8 +1445,7 @@ public class CharacterDisplay
 
 	public String getFullDisplayClassName(PCClass pcClass)
 	{
-		String buf = getDisplayClassName(pcClass) +
-				" " + getLevel(pcClass);
+		String buf = getDisplayClassName(pcClass) + " " + getLevel(pcClass);
 
 		return buf;
 	}
@@ -1466,8 +1455,7 @@ public class CharacterDisplay
 		if (pcClass != null)
 		{
 			String subClassKey = getSubClassName(pcClass);
-			if ((subClassKey != null) && (!subClassKey.isEmpty())
-					&& !subClassKey.equals(Constants.NONE))
+			if ((subClassKey != null) && (!subClassKey.isEmpty()) && !subClassKey.equals(Constants.NONE))
 			{
 				SubClass sc = pcClass.getSubClassKeyed(subClassKey);
 				if (sc != null)
@@ -1476,7 +1464,7 @@ public class CharacterDisplay
 				}
 			}
 		}
-	
+
 		return pcClass.getDisplayName();
 	}
 
@@ -1487,8 +1475,7 @@ public class CharacterDisplay
 	 */
 	public double getLoadToken(String type)
 	{
-		Float mult = SettingsHandler.getGame().getLoadInfo().getLoadMultiplier(
-				type.toUpperCase());
+		Float mult = SettingsHandler.getGame().getLoadInfo().getLoadMultiplier(type.toUpperCase());
 		if (mult != null)
 		{
 			return getMaxLoad(mult).intValue();

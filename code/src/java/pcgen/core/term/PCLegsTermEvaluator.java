@@ -21,30 +21,25 @@
 package pcgen.core.term;
 
 import pcgen.cdom.util.CControl;
-import pcgen.cdom.util.ControlUtilities;
-import pcgen.core.Globals;
-import pcgen.core.display.CharacterDisplay;
+import pcgen.core.PlayerCharacter;
 import pcgen.util.Logging;
 
-public class PCLegsTermEvaluator
-		extends BasePCDTermEvaluator implements TermEvaluator {
+public class PCLegsTermEvaluator extends BasePCTermEvaluator implements TermEvaluator
+{
 
-	public PCLegsTermEvaluator(
-			String originalText)
+	public PCLegsTermEvaluator(String originalText)
 	{
 		this.originalText = originalText;
 	}
 
 	@Override
-	public Float resolve(CharacterDisplay display)
+	public Float resolve(PlayerCharacter pc)
 	{
-		if (ControlUtilities.hasControlToken(Globals.getContext(),
-			CControl.LEGS))
+		if (pc.hasControl(CControl.LEGS))
 		{
-			Logging
-				.errorPrint("LEGS term is deprecated (does not function) when LEGS CodeControl is used");
+			Logging.errorPrint("LEGS term is deprecated (does not function) when LEGS CodeControl is used");
 		}
-		return (float) display.getPreFormulaLegs();
+		return (float) pc.getDisplay().getPreFormulaLegs();
 	}
 
 	@Override

@@ -45,8 +45,7 @@ import pcgen.util.Logging;
  * @param <F>
  *            The format of the data stored in the FactSet
  */
-public class FactSetDefinition<T extends CDOMObject, F> extends
-		ContentDefinition<T, F> implements FactSetInfo<T, F>
+public class FactSetDefinition<T extends CDOMObject, F> extends ContentDefinition<T, F> implements FactSetInfo<T, F>
 {
 
 	/**
@@ -61,29 +60,18 @@ public class FactSetDefinition<T extends CDOMObject, F> extends
 		getFactSetKey();
 	}
 
-	/**
-	 * @see pcgen.cdom.content.ContentDefinition#activateOutput(DataSetID)
-	 */
 	@Override
 	protected void activateOutput(DataSetID dsID)
 	{
 		FactSetKeyActor<F> fca = new FactSetKeyActor<>(getFactSetKey());
-		CDOMWrapperInfoFacet wiFacet =
-				FacetLibrary.getFacet(CDOMWrapperInfoFacet.class);
+		CDOMWrapperInfoFacet wiFacet = FacetLibrary.getFacet(CDOMWrapperInfoFacet.class);
 		if (!wiFacet.set(dsID, getUsableLocation(), factSetName.toLowerCase(), fca))
 		{
-			Logging
-				.errorPrint(getUsableLocation().getSimpleName()
-					+ " output "
-					+ factSetName.toLowerCase()
-					+ " already exists, ignoring Visibility to EXPORT for FACTSET: "
-					+ factSetName);
+			Logging.errorPrint(getUsableLocation().getSimpleName() + " output " + factSetName.toLowerCase()
+				+ " already exists, ignoring Visibility to EXPORT for FACTSET: " + factSetName);
 		}
 	}
 
-	/**
-	 * @see pcgen.cdom.content.ContentDefinition#activateTokens(pcgen.rules.context.LoadContext)
-	 */
 	@Override
 	protected void activateTokens(LoadContext context)
 	{
@@ -121,18 +109,12 @@ public class FactSetDefinition<T extends CDOMObject, F> extends
 		factSetName = name;
 	}
 
-	/**
-	 * @see pcgen.cdom.content.factset.FactSetInfo#getFactSetName()
-	 */
 	@Override
 	public String getFactSetName()
 	{
 		return factSetName;
 	}
 
-	/**
-	 * @see pcgen.cdom.content.factset.FactSetInfo#getFactSetKey()
-	 */
 	@Override
 	public FactSetKey<F> getFactSetKey()
 	{

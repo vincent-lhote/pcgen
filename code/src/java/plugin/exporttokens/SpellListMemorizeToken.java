@@ -36,27 +36,18 @@ public class SpellListMemorizeToken extends SpellListToken
 	/** Token name */
 	public static final String TOKENNAME = "SPELLLISTMEMORIZE";
 
-	/**
-	 * @see pcgen.io.exporttoken.Token#getTokenName()
-	 */
 	@Override
 	public String getTokenName()
 	{
 		return TOKENNAME;
 	}
 
-	/**
-	 * @see pcgen.io.exporttoken.Token#getToken(java.lang.String, pcgen.core.PlayerCharacter, pcgen.io.ExportHandler)
-	 */
 	@Override
-	public String getToken(String tokenSource, PlayerCharacter pc,
-		ExportHandler eh)
+	public String getToken(String tokenSource, PlayerCharacter pc, ExportHandler eh)
 	{
 		StringBuilder retValue = new StringBuilder();
 
-		SpellListTokenParams params =
-				new SpellListTokenParams(tokenSource,
-					SpellListToken.SPELLTAG_MEMORIZE);
+		SpellListTokenParams params = new SpellListTokenParams(tokenSource, SpellListToken.SPELLTAG_MEMORIZE);
 
 		final CDOMObject aObject = pc.getSpellClassAtIndex(params.getClassNum());
 

@@ -24,13 +24,9 @@ import pcgen.core.prereq.AbstractDisplayPrereqTest;
 import pcgen.core.prereq.Prerequisite;
 import pcgen.core.prereq.PrerequisiteTest;
 
-
 public class PreCharactertypeTester extends AbstractDisplayPrereqTest implements PrerequisiteTest
 {
 
-	/**
-	 * @see pcgen.core.prereq.PrerequisiteTest#passes(pcgen.core.PlayerCharacter)
-	 */
 	@Override
 	public int passes(final Prerequisite prereq, final CharacterDisplay display, CDOMObject source)
 	{
@@ -46,7 +42,7 @@ public class PreCharactertypeTester extends AbstractDisplayPrereqTest implements
 	 * Get the type of prerequisite handled by this token.
 	 * @return the type of prerequisite handled by this token.
 	 */
-    @Override
+	@Override
 	public String kindHandled()
 	{
 		return "CHARACTERTYPE"; //$NON-NLS-1$

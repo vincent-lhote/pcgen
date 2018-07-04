@@ -20,13 +20,12 @@ package pcgen.facade.core;
 
 import java.util.List;
 
-
 public interface RaceFacade extends InfoFacade
 {
 
 	public String getSize();
 
-    @Override
+	@Override
 	public String getType();
 
 	/**
@@ -38,4 +37,9 @@ public interface RaceFacade extends InfoFacade
 	 * @return A list of the race's racesubtype names.
 	 */
 	public List<String> getRaceSubTypes();
+
+	/**
+	 * Indicate if the race is the "unselected" race
+	 */
+	public boolean isUnselected();
 }

@@ -17,10 +17,12 @@
  */
 package pcgen.persistence.lst;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
 import pcgen.cdom.base.CDOMObject;
+import pcgen.cdom.base.Category;
 import pcgen.cdom.enumeration.ObjectKey;
 import pcgen.core.Ability;
 import pcgen.core.AbilityCategory;
@@ -30,16 +32,13 @@ import pcgen.persistence.SystemLoader;
 import pcgen.rules.context.LoadContext;
 import pcgen.util.Logging;
 
-
 public class AbilityLoader extends LstObjectFileLoader<Ability>
 {
+	private static final Class<AbilityCategory> ABILITY_CATEGORY_CLASS = AbilityCategory.class;
 
-	/**
-	 * @see pcgen.persistence.lst.LstObjectFileLoader#parseLine(LoadContext, CDOMObject, String, SourceEntry)
-	 */
 	@Override
-	public Ability parseLine(LoadContext context, Ability ability,
-		String lstLine, SourceEntry source) throws PersistenceLayerException
+	public Ability parseLine(LoadContext context, Ability ability, String lstLine, SourceEntry source)
+		throws PersistenceLayerException
 	{
 		Ability anAbility = ability;
 
@@ -50,33 +49,68 @@ public class AbilityLoader extends LstObjectFileLoader<Ability>
 			isnew = true;
 		}
 
-		final StringTokenizer colToken = new StringTokenizer(lstLine,
-				SystemLoader.TAB_DELIM);
-		
+		final StringTokenizer colToken = new StringTokenizer(lstLine, SystemLoader.TAB_DELIM);
+
 		if (colToken.hasMoreTokens())
 		{
 			anAbility.setName(colToken.nextToken().intern());
 			anAbility.put(ObjectKey.SOURCE_CAMPAIGN, source.getCampaign());
 			anAbility.setSourceURI(source.getURI());
+			List<String> additionalTokens = new ArrayList<>();
+			boolean foundCategory = false;
+			while (colToken.hasMoreTokens())
+			{
+				String token = colToken.nextToken();
+				if (token.startsWith("CATEGORY:"))
+				{
+					if (foundCategory)
+					{
+						Logging.errorPrint("Ignoring CATEGORY which appeared twice on original line of an Ability ("
+							+ anAbility.getDisplayName() + ")", context);
+						continue;
+					}
+					foundCategory = true;
+					if (isnew)
+					{
+						final Category<Ability> cat = context.getReferenceContext()
+							.silentlyGetConstructedCDOMObject(ABILITY_CATEGORY_CLASS, token.substring(9));
+						if (cat == null)
+						{
+							Logging.errorPrint("Ignoring Ability " + anAbility.getKeyName()
+								+ ", due to: Cannot find Ability Category: " + token.substring(9), context);
+							break;
+						}
+						else
+						{
+							anAbility.setCDOMCategory(cat);
+						}
+					}
+					else
+					{
+						Logging.errorPrint("Ignoring CATEGORY which is not on original line of an Ability ("
+							+ anAbility.getDisplayName() + ")", context);
+					}
+				}
+				else
+				{
+					additionalTokens.add(token);
+				}
+			}
 			if (isnew)
 			{
 				context.addStatefulInformation(anAbility);
 				context.getReferenceContext().importObject(anAbility);
 			}
-		}
-
-		while (colToken.hasMoreTokens()) 
-		{
-			LstUtils.processToken(context, anAbility, source, colToken.nextToken());
+			for (String token : additionalTokens)
+			{
+				LstUtils.processToken(context, anAbility, source, token);
+			}
 		}
 
 		completeObject(context, source, anAbility);
 		return null;
 	}
 
-	/**
-	 * @see pcgen.persistence.lst.LstObjectFileLoader#getObjectKeyed(LoadContext, java.lang.String)
-	 */
 	@Override
 	protected Ability getObjectKeyed(LoadContext context, String aKey)
 	{
@@ -96,23 +130,20 @@ public class AbilityLoader extends LstObjectFileLoader<Ability>
 		}
 		else
 		{
-			String message = "Attempt to Modify/Copy/Forget an Ability ("
-				+ aKey + ") without a CATEGORY=\n"
+			String message = "Attempt to Modify/Copy/Forget an Ability (" + aKey + ") without a CATEGORY=\n"
 				+ "  Proper format is CATEGORY=cat|abilityKey";
 			Logging.log(Logging.LST_ERROR, message);
 			return null;
 		}
-		AbilityCategory ac = SettingsHandler.getGame().getAbilityCategory(
-				abilityCatName);
-		return context.getReferenceContext().silentlyGetConstructedCDOMObject(Ability.class, ac,
-				abilityKey);
+		AbilityCategory ac = SettingsHandler.getGame().getAbilityCategory(abilityCatName);
+		return context.getReferenceContext().getManufacturerId(ac).getActiveObject(abilityKey);
 	}
 
 	@Override
 	protected Ability getMatchingObject(LoadContext context, CDOMObject key)
 	{
-		return context.getReferenceContext().silentlyGetConstructedCDOMObject(Ability.class,
-				((Ability) key).getCDOMCategory(), key.getKeyName());
+		return context.getReferenceContext().getManufacturerId(((Ability) key).getCDOMCategory())
+			.getActiveObject(key.getKeyName());
 	}
 
 	/**
@@ -125,14 +156,12 @@ public class AbilityLoader extends LstObjectFileLoader<Ability>
 	 * @return boolean true if the object should be included, else false
 	 *         to exclude it
 	 */
-    @Override
+	@Override
 	protected final boolean includeObject(SourceEntry source, CDOMObject cdo)
 	{
 		// Null check; never add nulls or objects without a name/key name
-		if ((cdo == null) || (cdo.getDisplayName() == null)
-			|| (cdo.getDisplayName().trim().isEmpty())
-			|| (cdo.getKeyName() == null)
-			|| (cdo.getKeyName().trim().isEmpty()))
+		if ((cdo == null) || (cdo.getDisplayName() == null) || (cdo.getDisplayName().trim().isEmpty())
+			|| (cdo.getKeyName() == null) || (cdo.getKeyName().trim().isEmpty()))
 		{
 			return false;
 		}
@@ -149,12 +178,10 @@ public class AbilityLoader extends LstObjectFileLoader<Ability>
 			}
 			if (includeItems.contains(ability.getKeyName()))
 			{
-				Logging.deprecationPrint("Deprecated INCLUDE value when loading "
-					+ source.getURI()
-					+ " . Abilities (including feats) must always have "
-					+ "categories (e.g. "
+				Logging.deprecationPrint("Deprecated INCLUDE value when loading " + source.getURI()
+					+ " . Abilities (including feats) must always have " + "categories (e.g. "
 					+ "INCLUDE:CATEGORY=cat1,key1,key2|CATEGORY=cat2,key3 ).");
-				
+
 				return true;
 			}
 			return false;
@@ -170,10 +197,8 @@ public class AbilityLoader extends LstObjectFileLoader<Ability>
 			}
 			if (excludeItems.contains(ability.getKeyName()))
 			{
-				Logging.deprecationPrint("Deprecated EXCLUDE value when loading "
-					+ source.getURI()
-					+ " . Abilities (including feats) must always have "
-					+ "categories (e.g. "
+				Logging.deprecationPrint("Deprecated EXCLUDE value when loading " + source.getURI()
+					+ " . Abilities (including feats) must always have " + "categories (e.g. "
 					+ "EXCLUDE:CATEGORY=cat1,key1,key2|CATEGORY=cat2,key3 ).");
 				return false;
 			}

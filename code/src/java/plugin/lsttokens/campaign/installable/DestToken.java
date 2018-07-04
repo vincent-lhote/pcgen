@@ -33,29 +33,22 @@ import pcgen.util.Logging;
 public class DestToken implements InstallLstToken
 {
 
-	/**
-	 * @see pcgen.persistence.lst.LstToken#getTokenName()
-	 */
-    @Override
+	@Override
 	public String getTokenName()
 	{
 		return "DEST";
 	}
 
-	/**
-	 * @see pcgen.persistence.lst.InstallLstToken#parse(pcgen.core.Campaign, java.lang.String, java.net.URI)
-	 */
-    @Override
+	@Override
 	public boolean parse(Campaign campaign, String value, URI sourceUri)
 	{
 		if (!(campaign instanceof InstallableCampaign))
 		{
-			Logging.log(Logging.ERROR, "Campaign " + campaign.getDisplayName()
-				+ " is not an installable campaign.");
+			Logging.log(Logging.ERROR, "Campaign " + campaign.getDisplayName() + " is not an installable campaign.");
 			return false;
 		}
 		InstallableCampaign ic = (InstallableCampaign) campaign;
-		
+
 		if (value.equals("DATA"))
 		{
 			ic.put(ObjectKey.DESTINATION, Destination.DATA);
@@ -66,11 +59,11 @@ public class DestToken implements InstallLstToken
 		}
 		else
 		{
-			Logging.log(Logging.LST_ERROR, "DEST value '" + value
-				+ "' not valid for campaign " + campaign.getDisplayName());
+			Logging.log(Logging.LST_ERROR,
+				"DEST value '" + value + "' not valid for campaign " + campaign.getDisplayName());
 			return false;
 		}
-		
+
 		return true;
 	}
 }

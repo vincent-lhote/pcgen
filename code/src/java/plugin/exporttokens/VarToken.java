@@ -18,13 +18,13 @@
  */
 package plugin.exporttokens;
 
+import java.util.StringTokenizer;
+
 import pcgen.core.PlayerCharacter;
 import pcgen.io.ExportHandler;
 import pcgen.io.exporttoken.Token;
 import pcgen.util.Delta;
 import pcgen.util.Logging;
-
-import java.util.StringTokenizer;
 
 /**
  * {@code VarToken} produces the output for the output token VAR.
@@ -38,21 +38,14 @@ public class VarToken extends Token
 	/** The name of the token handled by this class. */
 	public static final String TOKENNAME = "VAR";
 
-	/**
-	 * @see pcgen.io.exporttoken.Token#getTokenName()
-	 */
 	@Override
 	public String getTokenName()
 	{
 		return TOKENNAME;
 	}
 
-	/**
-	 * @see pcgen.io.exporttoken.Token#getToken(java.lang.String, pcgen.core.PlayerCharacter, pcgen.io.ExportHandler)
-	 */
 	@Override
-	public String getToken(String tokenSource, PlayerCharacter pc,
-		ExportHandler eh)
+	public String getToken(String tokenSource, PlayerCharacter pc, ExportHandler eh)
 	{
 		boolean isMin = tokenSource.lastIndexOf(".MINVAL") >= 0;
 		boolean isInt = tokenSource.lastIndexOf(".INTVAL") >= 0;
@@ -60,10 +53,8 @@ public class VarToken extends Token
 		if (tokenSource.lastIndexOf(".NOSIGN") >= 0)
 		{
 			isSign = false;
-			Logging
-				.errorPrint(".NOSIGN in output token " + tokenSource
-					+ " is deprecated. "
-					+ "The default output format is unsigned.");
+			Logging.errorPrint(".NOSIGN in output token " + tokenSource + " is deprecated. "
+				+ "The default output format is unsigned.");
 		}
 
 		String workingSource = tokenSource;

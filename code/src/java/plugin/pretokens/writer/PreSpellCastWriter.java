@@ -18,44 +18,32 @@
  */
 package plugin.pretokens.writer;
 
+import java.io.IOException;
+import java.io.Writer;
+
 import pcgen.core.prereq.Prerequisite;
 import pcgen.core.prereq.PrerequisiteOperator;
 import pcgen.persistence.PersistenceLayerException;
 import pcgen.persistence.lst.output.prereq.AbstractPrerequisiteWriter;
 import pcgen.persistence.lst.output.prereq.PrerequisiteWriterInterface;
 
-import java.io.IOException;
-import java.io.Writer;
-
-public class PreSpellCastWriter extends AbstractPrerequisiteWriter implements
-		PrerequisiteWriterInterface
+public class PreSpellCastWriter extends AbstractPrerequisiteWriter implements PrerequisiteWriterInterface
 {
 
-	/**
-	 * @see pcgen.persistence.lst.output.prereq.PrerequisiteWriterInterface#kindHandled()
-	 */
-    @Override
+	@Override
 	public String kindHandled()
 	{
 		return "spellcast.type";
 	}
 
-	/**
-	 * @see pcgen.persistence.lst.output.prereq.PrerequisiteWriterInterface#operatorsHandled()
-	 */
-    @Override
+	@Override
 	public PrerequisiteOperator[] operatorsHandled()
 	{
-		return new PrerequisiteOperator[]{PrerequisiteOperator.GTEQ,
-			PrerequisiteOperator.LT};
+		return new PrerequisiteOperator[]{PrerequisiteOperator.GTEQ, PrerequisiteOperator.LT};
 	}
 
-	/**
-	 * @see pcgen.persistence.lst.output.prereq.PrerequisiteWriterInterface#write(java.io.Writer, pcgen.core.prereq.Prerequisite)
-	 */
-    @Override
-	public void write(Writer writer, Prerequisite prereq)
-		throws PersistenceLayerException
+	@Override
+	public void write(Writer writer, Prerequisite prereq) throws PersistenceLayerException
 	{
 		checkValidOperator(prereq, operatorsHandled());
 
@@ -66,7 +54,7 @@ public class PreSpellCastWriter extends AbstractPrerequisiteWriter implements
 				writer.write('!');
 			}
 
-			writer.write("PRESPELLCAST:" + (prereq.isOverrideQualify() ? "Q:":"") + "TYPE=");
+			writer.write("PRESPELLCAST:" + (prereq.isOverrideQualify() ? "Q:" : "") + "TYPE=");
 			writer.write(prereq.getKey());
 		}
 		catch (IOException e)
@@ -75,10 +63,8 @@ public class PreSpellCastWriter extends AbstractPrerequisiteWriter implements
 		}
 	}
 
-
 	@Override
-	public boolean specialCase(Writer writer, Prerequisite prereq)
-			throws IOException
+	public boolean specialCase(Writer writer, Prerequisite prereq) throws IOException
 	{
 		PrerequisiteOperator po = getConsolidateMethod(kindHandled(), prereq, false);
 		if (po == null)
@@ -94,8 +80,7 @@ public class PreSpellCastWriter extends AbstractPrerequisiteWriter implements
 			writer.write('!');
 		}
 
-		writer.write("PRESPELLCAST:"
-				+ (prereq.isOverrideQualify() ? "Q:" : ""));
+		writer.write("PRESPELLCAST:" + (prereq.isOverrideQualify() ? "Q:" : ""));
 		boolean first = true;
 		for (Prerequisite p : prereq.getPrerequisites())
 		{

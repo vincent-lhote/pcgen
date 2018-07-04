@@ -27,7 +27,7 @@ public class ConvertingFacetView<S, D> implements FacetView<Object>
 {
 
 	private AbstractItemConvertingFacet<S, D> facet;
-	
+
 	ConvertingFacetView(AbstractItemConvertingFacet<S, D> facet)
 	{
 		this.facet = facet;
@@ -69,26 +69,21 @@ public class ConvertingFacetView<S, D> implements FacetView<Object>
 	{
 		return facet.equals(src);
 	}
-	
+
 	@Override
 	public String toString()
 	{
 		return "Facet: " + facet.getClass().getSimpleName();
 	}
-	
+
 	private final class SourceDest
 	{
 		private final S source;
 		private final D destination;
-		
+
 		public S getSource()
 		{
 			return source;
-		}
-
-		public D getDestination()
-		{
-			return destination;
 		}
 
 		private SourceDest(S source, D destination)

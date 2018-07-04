@@ -19,6 +19,7 @@
 package pcgen.gui2;
 
 import javax.swing.JToolBar;
+
 import pcgen.gui2.util.ToolBarUtilities;
 
 /**
@@ -56,7 +57,7 @@ public final class PCGenToolBar extends JToolBar
 		addSeparator();
 
 		add(ToolBarUtilities.createToolBarButton(actionMap.get(PCGenActionMap.PREFERENCES_COMMAND)));
-       // addSeparator();
+		// addSeparator();
 
 		// add(ToolBarUtilities.createToolBarButton(actionMap.get(PCGenActionMap.HELP_CONTEXT_COMMAND)));
 	}

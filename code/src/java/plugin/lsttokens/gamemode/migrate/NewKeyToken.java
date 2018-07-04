@@ -38,38 +38,27 @@ public class NewKeyToken implements MigrationLstToken
 {
 	private Pattern invalidKeyPattern = Pattern.compile(".*[,|\\||\\\\|:|;|\\.|%|\\*|=|\\[|\\]].*");
 	private Pattern invalidSourceKeyPattern = Pattern.compile(".*[\\||\\\\|;|%|\\*|=|\\[|\\]].*");
-	
-	/**
-	 * @see pcgen.persistence.lst.LstToken#getTokenName()
-	 */
+
 	@Override
 	public String getTokenName()
 	{
 		return "NEWKEY";
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see pcgen.persistence.lst.MigrationLstToken#parse(pcgen.core.system.MigrationRule, java.lang.String,
-	 * java.lang.String)
-	 */
 	@Override
-	public boolean parse(MigrationRule migrationRule, String value,
-		String gameModeName)
+	public boolean parse(MigrationRule migrationRule, String value, String gameModeName)
 	{
 		if (StringUtils.isBlank(value))
 		{
-			Logging.log(Logging.LST_ERROR, "Invalid empty " + getTokenName() + " value."); 
+			Logging.log(Logging.LST_ERROR, "Invalid empty " + getTokenName() + " value.");
 			return false;
 		}
 		Pattern validationPattern =
-				migrationRule.getObjectType() == ObjectType.SOURCE
-					? invalidSourceKeyPattern : invalidKeyPattern;
+				migrationRule.getObjectType() == ObjectType.SOURCE ? invalidSourceKeyPattern : invalidKeyPattern;
 		if (validationPattern.matcher(value).matches())
 		{
-			Logging.log(Logging.LST_ERROR, "Invalid characters in value '"
-				+ value + "' of " + getTokenName() + Constants.COLON + value);
+			Logging.log(Logging.LST_ERROR,
+				"Invalid characters in value '" + value + "' of " + getTokenName() + Constants.COLON + value);
 			return false;
 		}
 		migrationRule.setNewKey(value);

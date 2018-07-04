@@ -131,7 +131,8 @@ public class DataLoadTest implements PCGenTaskListener
 	}
 
 	/**
-	 * Test the load of the current source. This will check for any load errors or warnings but ignores deprecation warnings.  
+	 * Test the load of the current source.
+	 * This will check for any load errors or warnings but ignores deprecation warnings.
 	 */
 	@Test
 	public void testLoadSources()
@@ -143,6 +144,10 @@ public class DataLoadTest implements PCGenTaskListener
 		errors = new ArrayList<>();
 		loader.addPCGenTaskListener(this);
 		loader.execute();
+		GameMode selectedGame = SystemCollections
+			.getGameModeNamed(sourceSelection.getGameMode().get().getName());
+		selectedGame.clearLoadContext();
+		loader = null;
 
 		List<String> errorList = new ArrayList<>();
 		List<String> warningList = new ArrayList<>();

@@ -18,7 +18,6 @@
 package pcgen.core.npcgen;
 
 import pcgen.base.util.WeightedCollection;
-import pcgen.cdom.base.Constants;
 import pcgen.core.Globals;
 import pcgen.core.Race;
 import pcgen.util.Logging;
@@ -30,41 +29,42 @@ import pcgen.util.Logging;
 public class RaceGeneratorOption extends GeneratorOption
 {
 	private WeightedCollection<Race> theChoices = null;
-	
+
 	/**
 	 * @see pcgen.core.npcgen.GeneratorOption#addChoice(int, java.lang.String)
 	 */
 	@Override
 	public void addChoice(final int aWeight, final String aValue)
 	{
-		if ( theChoices == null )
+		if (theChoices == null)
 		{
 			theChoices = new WeightedCollection<>();
 		}
-		
-		if ( aValue.equals("*") ) //$NON-NLS-1$
+
+		if (aValue.equals("*")) //$NON-NLS-1$
 		{
-			for ( final Race race : Globals.getContext().getReferenceContext().getConstructedCDOMObjects(Race.class) )
+			for (final Race race : Globals.getContext().getReferenceContext().getConstructedCDOMObjects(Race.class))
 			{
-				if ( ! theChoices.contains(race) )
+				if (!theChoices.contains(race))
 				{
 					theChoices.add(race, aWeight);
 				}
 			}
 			return;
 		}
-		if ( aValue.startsWith("TYPE") ) //$NON-NLS-1$
+		if (aValue.startsWith("TYPE")) //$NON-NLS-1$
 		{
-			for ( final Race race : Globals.getContext().getReferenceContext().getConstructedCDOMObjects(Race.class) )
+			for (final Race race : Globals.getContext().getReferenceContext().getConstructedCDOMObjects(Race.class))
 			{
-				if (race.isType(aValue.substring(5)) && !race.getDisplayName().equals(Constants.NONESELECTED))
+				if (race.isType(aValue.substring(5)) && !race.isUnselected())
 				{
 					theChoices.add(race, aWeight);
 				}
 			}
 			return;
 		}
-		final Race race = Globals.getContext().getReferenceContext().silentlyGetConstructedCDOMObject(Race.class, aValue);
+		final Race race =
+				Globals.getContext().getReferenceContext().silentlyGetConstructedCDOMObject(Race.class, aValue);
 		if (race == null)
 		{
 			Logging.errorPrintLocalised("NPCGen.Options.RaceNotFound", aValue); //$NON-NLS-1$

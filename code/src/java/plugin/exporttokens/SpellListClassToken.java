@@ -44,21 +44,14 @@ public class SpellListClassToken extends SpellListToken
 	/** Token name */
 	public static final String TOKENNAME = "SPELLLISTCLASS";
 
-	/**
-	 * @see pcgen.io.exporttoken.Token#getTokenName()
-	 */
 	@Override
 	public String getTokenName()
 	{
 		return TOKENNAME;
 	}
 
-	/**
-	 * @see pcgen.io.exporttoken.Token#getToken(java.lang.String, pcgen.core.PlayerCharacter, pcgen.io.ExportHandler)
-	 */
 	@Override
-	public String getToken(String tokenSource, PlayerCharacter pc,
-		ExportHandler eh)
+	public String getToken(String tokenSource, PlayerCharacter pc, ExportHandler eh)
 	{
 		int i;
 		StringBuilder retValue = new StringBuilder();
@@ -89,20 +82,18 @@ public class SpellListClassToken extends SpellListToken
 				}
 				else if (tokenSource.endsWith(".CONCENTRATION"))
 				{
-					if (SettingsHandler.getGame().getSpellBaseConcentration() != "")
+					if (SettingsHandler.getGame().getSpellBaseConcentration().length() > 0)
 					{
 						Spell sp = new Spell();
-						CharacterSpell cs = new CharacterSpell(aClass, sp); 
-						int concentration = pc.getConcentration(sp, cs, aClass, 0, 0, aClass);	
+						CharacterSpell cs = new CharacterSpell(aClass, sp);
+						int concentration = pc.getConcentration(sp, cs, aClass, 0, 0, aClass);
 						retValue.append(Delta.toString(concentration));
 					}
 				}
 				else if (tokenSource.endsWith(".LEVEL"))
 				{
-					retValue
-						.append(String.valueOf(pc.getDisplay().getLevel(aClass)
-							+ (int) pc.getTotalBonusTo("PCLEVEL", aClass
-								.getKeyName())));
+					retValue.append(String.valueOf(
+						pc.getDisplay().getLevel(aClass) + (int) pc.getTotalBonusTo("PCLEVEL", aClass.getKeyName())));
 				}
 				else
 				{

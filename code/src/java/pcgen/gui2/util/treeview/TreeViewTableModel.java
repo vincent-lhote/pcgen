@@ -29,10 +29,10 @@ import java.util.Vector;
 
 import javax.swing.JTree;
 
-import pcgen.facade.util.event.ListEvent;
-import pcgen.facade.util.event.ListListener;
 import pcgen.facade.util.ListFacade;
 import pcgen.facade.util.ListFacades;
+import pcgen.facade.util.event.ListEvent;
+import pcgen.facade.util.event.ListListener;
 import pcgen.gui2.util.table.Row;
 import pcgen.gui2.util.treetable.AbstractTreeTableModel;
 import pcgen.gui2.util.treetable.SortableTreeTableModel;
@@ -42,9 +42,7 @@ import pcgen.util.CollectionMaps;
 import pcgen.util.ListMap;
 import pcgen.util.Logging;
 
-
-public class TreeViewTableModel<E> extends AbstractTreeTableModel
-		implements SortableTreeTableModel
+public class TreeViewTableModel<E> extends AbstractTreeTableModel implements SortableTreeTableModel
 {
 
 	private final ListListener<E> listListener = new ListListener<E>()
@@ -72,7 +70,6 @@ public class TreeViewTableModel<E> extends AbstractTreeTableModel
 		@Override
 		public void elementModified(ListEvent<E> e)
 		{
-//			refreshElement(e.getElement());
 		}
 
 	};
@@ -129,8 +126,6 @@ public class TreeViewTableModel<E> extends AbstractTreeTableModel
 
 	public void refreshData()
 	{
-//		dataElements.clear();
-//		dataElements.addAll(ListFacades.wrap(model));
 	}
 
 	public final void setDataModel(ListFacade<E> model)
@@ -196,19 +191,6 @@ public class TreeViewTableModel<E> extends AbstractTreeTableModel
 			}
 		}
 	}
-
-//	private void refreshElement(E elem)
-//	{
-//		if (dataElements.contains(elem) && selectedView != null)
-//		{
-//			TreeViewNode rootNode = (TreeViewNode) getRoot();
-//			for (TreeViewPath<? super E> path : selectedView.getPaths(elem))
-//			{
-//				rootNode.removeTreeViewPath(path);
-//				rootNode.insertTreeViewPath(path);
-//			}
-//		}
-//	}
 
 	public final TreeView<? super E> getSelectedTreeView()
 	{
@@ -279,8 +261,7 @@ public class TreeViewTableModel<E> extends AbstractTreeTableModel
 		reload();
 	}
 
-	private final class TreeViewNode extends JTree.DynamicUtilTreeNode
-			implements SortableTreeTableNode
+	private final class TreeViewNode extends JTree.DynamicUtilTreeNode implements SortableTreeTableNode
 	{
 
 		private final int level;
@@ -290,8 +271,7 @@ public class TreeViewTableModel<E> extends AbstractTreeTableModel
 			this(0, null, paths);
 		}
 
-		private TreeViewNode(int level, Object name,
-				Vector<TreeViewPath<? super E>> paths)
+		private TreeViewNode(int level, Object name, Vector<TreeViewPath<? super E>> paths)
 		{
 			super(name, paths);
 			this.level = level;
@@ -311,9 +291,8 @@ public class TreeViewTableModel<E> extends AbstractTreeTableModel
 			loadedChildren = true;
 			if (childValue != null)
 			{
-				ListMap<Object, TreeViewPath<? super E>, Vector<TreeViewPath<? super E>>> vectorMap = CollectionMaps.createListMap(
-						HashMap.class,
-						Vector.class);
+				ListMap<Object, TreeViewPath<? super E>, Vector<TreeViewPath<? super E>>> vectorMap =
+						CollectionMaps.createListMap(HashMap.class, Vector.class);
 				Vector<TreeViewPath<? super E>> vector = (Vector<TreeViewPath<? super E>>) childValue;
 				for (TreeViewPath<? super E> path : vector)
 				{
@@ -327,7 +306,6 @@ public class TreeViewTableModel<E> extends AbstractTreeTableModel
 				{
 					vector = vectorMap.get(key);
 					TreeViewNode child;
-//					if (vector.size() == 1 && vector.firstElement().getPathCount() <= level + 1)
 					if (vector.size() == 1 && vector.firstElement().getPathCount() == level + 1)
 					{
 						child = new TreeViewNode(level + 1, key, null);
@@ -343,7 +321,8 @@ public class TreeViewTableModel<E> extends AbstractTreeTableModel
 					}
 					else
 					{
-						int index = Collections.binarySearch(children, child, mostRecentComparator);
+						Vector nonGenericChildren = children;
+						int index = Collections.binarySearch(nonGenericChildren, child, mostRecentComparator);
 						if (index < 0)
 						{
 							insert(child, -(index + 1));
@@ -397,7 +376,7 @@ public class TreeViewTableModel<E> extends AbstractTreeTableModel
 
 		public void insertTreeViewPath(TreeViewPath<? super E> path)
 		{
-//			Logging.errorPrint("adding: "+path);
+			//			Logging.errorPrint("adding: "+path);
 			if (!loadedChildren)
 			{
 				Vector<TreeViewPath<? super E>> vector = (Vector<TreeViewPath<? super E>>) childValue;
@@ -406,8 +385,8 @@ public class TreeViewTableModel<E> extends AbstractTreeTableModel
 			}
 			if (level >= path.getPathCount())
 			{
-				Logging.errorPrint("Ignoring attempt to add child at level "
-						+ level + " which is beyond end of path " + path);
+				Logging.errorPrint(
+					"Ignoring attempt to add child at level " + level + " which is beyond end of path " + path);
 				return;
 			}
 			Object levelObject = path.getPathComponent(level);
@@ -440,7 +419,8 @@ public class TreeViewTableModel<E> extends AbstractTreeTableModel
 				insertNodeInto(newchild, this, getChildCount());
 				return;
 			}
-			int index = Collections.binarySearch(children, newchild, mostRecentComparator);
+			Vector nonGenericChildren = children;
+			int index = Collections.binarySearch(nonGenericChildren, newchild, mostRecentComparator);
 			if (index >= 0)
 			{
 				TreeViewNode child = (TreeViewNode) getChildAt(index);
@@ -495,7 +475,8 @@ public class TreeViewTableModel<E> extends AbstractTreeTableModel
 			}
 			if (children != null)
 			{
-				children.sort(comparator);
+				Vector nonGenericChildren = children;
+				nonGenericChildren.sort(comparator);
 				for (Object obj : children)
 				{
 					TreeViewNode child = (TreeViewNode) obj;

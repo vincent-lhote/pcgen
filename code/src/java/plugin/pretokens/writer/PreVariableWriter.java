@@ -30,42 +30,24 @@ import pcgen.persistence.lst.output.prereq.PrerequisiteWriterInterface;
 /**
  * Writes out PREVAR token
  */
-public class PreVariableWriter extends AbstractPrerequisiteWriter implements
-		PrerequisiteWriterInterface
+public class PreVariableWriter extends AbstractPrerequisiteWriter implements PrerequisiteWriterInterface
 {
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see pcgen.persistence.lst.output.prereq.PrerequisiteWriterInterface#kindHandled()
-	 */
-    @Override
+	@Override
 	public String kindHandled()
 	{
 		return "var";
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see pcgen.persistence.lst.output.prereq.PrerequisiteWriterInterface#operatorsHandled()
-	 */
-    @Override
+	@Override
 	public PrerequisiteOperator[] operatorsHandled()
 	{
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see pcgen.persistence.lst.output.prereq.PrerequisiteWriterInterface#write(java.io.Writer,
-	 *      pcgen.core.prereq.Prerequisite)
-	 */
-    @Override
-	public void write(Writer writer, Prerequisite prereq)
-			throws PersistenceLayerException
+	@Override
+	public void write(Writer writer, Prerequisite prereq) throws PersistenceLayerException
 	{
 		try
 		{
@@ -92,8 +74,7 @@ public class PreVariableWriter extends AbstractPrerequisiteWriter implements
 	}
 
 	@Override
-	public boolean specialCase(Writer writer, Prerequisite prereq)
-			throws IOException
+	public boolean specialCase(Writer writer, Prerequisite prereq) throws IOException
 	{
 		if (prereq.getKind() != null)
 		{

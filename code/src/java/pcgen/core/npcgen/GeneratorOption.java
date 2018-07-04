@@ -33,14 +33,6 @@ public abstract class GeneratorOption
 	private String theName = Constants.EMPTY_STRING;
 
 	/**
-	 * Default constructor.
-	 */
-	public GeneratorOption()
-	{
-		// Do nothing
-	}
-
-	/**
 	 * Sets the display name for this option.
 	 * 
 	 * @param aName The display name
@@ -75,7 +67,7 @@ public abstract class GeneratorOption
 	 * @param aWeight The weight to assign this choice.
 	 * @param aChoice The String key for this choice.
 	 */
-	public abstract void addChoice( final int aWeight, final String aChoice );
+	public abstract void addChoice(final int aWeight, final String aChoice);
 
 	/**
 	 * Gets a <tt>WeightedCollection</tt> of choices for this option.

@@ -20,18 +20,30 @@ package pcgen.core;
 
 import java.net.URI;
 
-import pcgen.cdom.base.Loadable;
-import pcgen.system.LanguageBundle;
-
 import org.apache.commons.lang3.StringUtils;
+
+import pcgen.cdom.base.Loadable;
+import pcgen.cdom.base.SortKeyRequired;
+import pcgen.system.LanguageBundle;
 
 /**
  * The Paper information for output sheets
  */
-public final class PaperInfo implements Loadable
+public final class PaperInfo implements Loadable, SortKeyRequired
 {
+	/**
+	 * The source URI of this PaperInfo.
+	 */
 	private URI sourceURI;
+
+	/**
+	 * The name of this PaperInfo
+	 */
 	private String infoName;
+
+	/**
+	 * The sort key of this PaperInfo, to indicate which items should appear first.
+	 */
 	private String sortKey;
 
 	/** Array of 6 paper information variables to keep hold of */
@@ -103,50 +115,44 @@ public final class PaperInfo implements Loadable
 		return true;
 	}
 
-    @Override
+	@Override
 	public URI getSourceURI()
 	{
 		return sourceURI;
 	}
 
-    @Override
+	@Override
 	public void setSourceURI(URI source)
 	{
 		sourceURI = source;
 	}
 
-    @Override
+	@Override
 	public void setName(String name)
 	{
 		infoName = name;
 		paperInfo[0] = name;
 	}
 
-    @Override
+	@Override
 	public String getDisplayName()
 	{
 		return infoName;
 	}
 
-    @Override
+	@Override
 	public String getKeyName()
 	{
 		return getDisplayName();
 	}
 
-    @Override
-	public String getLSTformat()
-	{
-		return getDisplayName();
-	}
-
-    @Override
+	@Override
 	public boolean isInternal()
 	{
 		return false;
 	}
 
-    @Override
+	@Override
 	public boolean isType(String type)
 	{
 		return false;
@@ -161,6 +167,7 @@ public final class PaperInfo implements Loadable
 		sortKey = value;
 	}
 
+	@Override
 	public String getSortKey()
 	{
 		return sortKey;

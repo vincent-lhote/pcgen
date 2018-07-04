@@ -36,11 +36,9 @@ import pcgen.system.LanguageBundle;
 public class PreFactTester extends AbstractPrerequisiteTest implements PrerequisiteTest
 {
 
-	/**
-	 * @see pcgen.core.prereq.PrerequisiteTest#passes(pcgen.core.PlayerCharacter)
-	 */
 	@Override
-	public int passes(final Prerequisite prereq, final PlayerCharacter aPC, CDOMObject source) throws PrerequisiteException
+	public int passes(final Prerequisite prereq, final PlayerCharacter aPC, CDOMObject source)
+		throws PrerequisiteException
 	{
 		final int number;
 		try
@@ -49,15 +47,13 @@ public class PreFactTester extends AbstractPrerequisiteTest implements Prerequis
 		}
 		catch (NumberFormatException exceptn)
 		{
-			throw new PrerequisiteException(LanguageBundle.getFormattedString(
-				"PreFact.error", prereq.toString())); //$NON-NLS-1$
+			throw new PrerequisiteException(
+				LanguageBundle.getFormattedString("PreFact.error", prereq.toString())); //$NON-NLS-1$
 		}
 
 		String location = prereq.getCategoryName();
-		String[] locationElements  = location.split("\\.");
-		Iterable<Reducible> objModel =
-				(Iterable<Reducible>) OutputDB.getIterable(aPC.getCharID(),
-					locationElements);
+		String[] locationElements = location.split("\\.");
+		Iterable<Reducible> objModel = (Iterable<Reducible>) OutputDB.getIterable(aPC.getCharID(), locationElements);
 		if (objModel == null)
 		{
 			throw new PrerequisiteException("Output System does not have model for: " + location);
@@ -85,15 +81,12 @@ public class PreFactTester extends AbstractPrerequisiteTest implements Prerequis
 	 * Get the type of prerequisite handled by this token.
 	 * @return the type of prerequisite handled by this token.
 	 */
-    @Override
+	@Override
 	public String kindHandled()
 	{
 		return "FACT"; //$NON-NLS-1$
 	}
 
-	/**
-	 * @see pcgen.core.prereq.PrerequisiteTest#toHtmlString(pcgen.core.prereq.Prerequisite)
-	 */
 	@Override
 	public String toHtmlString(final Prerequisite prereq)
 	{
@@ -103,10 +96,8 @@ public class PreFactTester extends AbstractPrerequisiteTest implements Prerequis
 			return prereq.getKey();
 		}
 
-		final String foo = LanguageBundle.getFormattedString(
-				"PreFact.toHtml", //$NON-NLS-1$
-				prereq.getOperator().toDisplayString(),
-				prereq.getOperand(), prereq.getKey());
+		final String foo = LanguageBundle.getFormattedString("PreFact.toHtml", //$NON-NLS-1$
+			prereq.getOperator().toDisplayString(), prereq.getOperand(), prereq.getKey());
 		return foo;
 	}
 

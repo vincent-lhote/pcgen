@@ -18,7 +18,9 @@
 package pcgen.base.util;
 
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+
 import org.junit.Test;
 
 import pcgen.cdom.base.FormulaFactory;
@@ -26,6 +28,7 @@ import pcgen.cdom.base.FormulaFactory;
 public class NamedFormulaTest
 {
 
+	@SuppressWarnings("unused")
 	@Test
 	public void testNullConstructor()
 	{

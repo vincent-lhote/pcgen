@@ -47,32 +47,44 @@ public class WeightedCollectionTest
 	private WeightedCollection<Integer> wc;
 
 	@Before
-	public void setUp() {
+	public void setUp()
+	{
 		wc = new WeightedCollection<>();
 	}
 
+	@SuppressWarnings("unused")
 	@Test
-	public void testBadIntConstructor() {
-		try {
+	public void testBadIntConstructor()
+	{
+		try
+		{
 			new WeightedCollection<Integer>(-5);
 			fail();
-		} catch (IllegalArgumentException iae) {
+		}
+		catch (IllegalArgumentException iae)
+		{
 			// OK
 		}
 	}
 
+	@SuppressWarnings("unused")
 	@Test
-	public void testBadCollectionConstructor() {
-		try {
-            new WeightedCollection<>((Collection<Integer>) null);
+	public void testBadCollectionConstructor()
+	{
+		try
+		{
+			new WeightedCollection<>((Collection<Integer>) null);
 			fail();
-		} catch (NullPointerException | IllegalArgumentException npe) {
+		}
+		catch (NullPointerException | IllegalArgumentException npe)
+		{
 			// OK
 		}
 	}
 
 	@Test
-	public void testCollectionConstructorSemantics() {
+	public void testCollectionConstructorSemantics()
+	{
 		Collection<Integer> c = new ArrayList<>();
 		assertTrue(c.add(I1));
 		assertTrue(c.add(I2));
@@ -86,7 +98,8 @@ public class WeightedCollectionTest
 	}
 
 	@Test
-	public void testSize() {
+	public void testSize()
+	{
 		assertTrue(wc.add(I1));
 		assertEquals(1, wc.size());
 		assertTrue(wc.add(I1));
@@ -114,37 +127,48 @@ public class WeightedCollectionTest
 	}
 
 	@Test
-	public void testBadAddNegative() {
-		try {
+	public void testBadAddNegative()
+	{
+		try
+		{
 			wc.add(4, -3);
 			fail();
-		} catch (IllegalArgumentException iae) {
+		}
+		catch (IllegalArgumentException iae)
+		{
 			// OK
 		}
 	}
 
 	@Test
-	public void testBadAddZero() {
+	public void testBadAddZero()
+	{
 		assertFalse(wc.add(4, 0));
 	}
 
 	@Test
-	public void testBadAddAllNegative() {
-		try {
+	public void testBadAddAllNegative()
+	{
+		try
+		{
 			wc.addAll(Arrays.asList(3, 4, 5), -3);
 			fail();
-		} catch (IllegalArgumentException iae) {
+		}
+		catch (IllegalArgumentException iae)
+		{
 			// OK
 		}
 	}
 
 	@Test
-	public void testBadAddAllZero() {
+	public void testBadAddAllZero()
+	{
 		assertFalse(wc.addAll(Arrays.asList(3, 4, 5), 0));
 	}
 
 	@Test
-	public void testSimple() {
+	public void testSimple()
+	{
 		assertTrue(wc.isEmpty());
 		assertFalse(wc.contains(I1));
 		assertTrue(wc.add(I1));
@@ -206,13 +230,15 @@ public class WeightedCollectionTest
 	}
 
 	@Test
-	public void testBadEquals() {
-		assertFalse(wc.equals(null));
+	public void testBadEquals()
+	{
+		assertNotNull(wc);
 		assertFalse(wc.equals(1));
 	}
 
 	@Test
-	public void testEquals() {
+	public void testEquals()
+	{
 		assertTrue(wc.add(2, 5));
 		assertTrue(wc.add(1, 2));
 		WeightedCollection<Integer> wc2 = new WeightedCollection<>(15);
@@ -246,7 +272,8 @@ public class WeightedCollectionTest
 	}
 
 	@Test
-	public void testToString() {
+	public void testToString()
+	{
 		assertEquals("WeightedCollection: []", wc.toString());
 		assertTrue(wc.add(1));
 		assertEquals("WeightedCollection: [1 (1)]", wc.toString());
@@ -257,7 +284,8 @@ public class WeightedCollectionTest
 	}
 
 	@Test
-	public void testUnweightedHasNextIterator() {
+	public void testUnweightedHasNextIterator()
+	{
 		Iterator<Integer> it = wc.unweightedIterator();
 		assertNotNull(it);
 		assertFalse(it.hasNext());
@@ -286,10 +314,13 @@ public class WeightedCollectionTest
 		Object it4 = it.next();
 		assertNull(it4);
 		assertFalse(it.hasNext());
-		try {
+		try
+		{
 			it.next();
 			fail();
-		} catch (NoSuchElementException e) {
+		}
+		catch (NoSuchElementException e)
+		{
 			// OK
 		}
 		assertEquals(5, wc.size());
@@ -297,13 +328,17 @@ public class WeightedCollectionTest
 	}
 
 	@Test
-	public void testUnweightedNextIterator() {
+	public void testUnweightedNextIterator()
+	{
 		Iterator<Integer> it = wc.unweightedIterator();
 		assertNotNull(it);
-		try {
+		try
+		{
 			it.next();
 			fail();
-		} catch (NoSuchElementException e) {
+		}
+		catch (NoSuchElementException e)
+		{
 			// OK
 		}
 		assertTrue(wc.add(I1));
@@ -326,10 +361,13 @@ public class WeightedCollectionTest
 		assertEquals(I3, it3);
 		Object it4 = it.next();
 		assertNull(it4);
-		try {
+		try
+		{
 			it.next();
 			fail();
-		} catch (NoSuchElementException e) {
+		}
+		catch (NoSuchElementException e)
+		{
 			// OK
 		}
 		assertEquals(5, wc.size());
@@ -337,7 +375,8 @@ public class WeightedCollectionTest
 	}
 
 	@Test
-	public void testWeightedHasNextIterator() {
+	public void testWeightedHasNextIterator()
+	{
 		Iterator<Integer> it = wc.iterator();
 		assertNotNull(it);
 		assertFalse(it.hasNext());
@@ -373,22 +412,29 @@ public class WeightedCollectionTest
 		Object it7 = it.next();
 		assertNull(it7);
 		assertFalse(it.hasNext());
-		try {
+		try
+		{
 			it.next();
 			fail();
-		} catch (NoSuchElementException e) {
+		}
+		catch (NoSuchElementException e)
+		{
 			// OK
 		}
 	}
 
 	@Test
-	public void testWeightedNextIterator() {
+	public void testWeightedNextIterator()
+	{
 		Iterator<Integer> it = wc.iterator();
 		assertNotNull(it);
-		try {
+		try
+		{
 			it.next();
 			fail();
-		} catch (NoSuchElementException e) {
+		}
+		catch (NoSuchElementException e)
+		{
 			// OK
 		}
 		assertTrue(wc.add(I1));
@@ -416,48 +462,64 @@ public class WeightedCollectionTest
 		assertTrue(it.hasNext());
 		it.remove();
 		assertFalse(it.hasNext());
-		try {
+		try
+		{
 			it.next();
 			fail();
-		} catch (NoSuchElementException e) {
+		}
+		catch (NoSuchElementException e)
+		{
 			// OK
 		}
 	}
 
 	@Test
-	public void testBadWeightedRemove() {
+	public void testBadWeightedRemove()
+	{
 		Iterator<Integer> it = wc.iterator();
-		try {
+		try
+		{
 			it.remove();
 			fail();
-		} catch (IllegalStateException | UnsupportedOperationException e) {
+		}
+		catch (IllegalStateException | UnsupportedOperationException e)
+		{
 			// OK
 		}
 	}
 
 	@Test
-	public void testBadUnweightedRemove() {
+	public void testBadUnweightedRemove()
+	{
 		Iterator<Integer> it = wc.unweightedIterator();
-		try {
+		try
+		{
 			it.remove();
 			fail();
-		} catch (IllegalStateException e) {
+		}
+		catch (IllegalStateException e)
+		{
 			// OK
 		}
 	}
 
 	@Test
-	public void testBadGetRandomValue() {
-		try {
+	public void testBadGetRandomValue()
+	{
+		try
+		{
 			wc.getRandomValue();
 			fail();
-		} catch (IndexOutOfBoundsException e) {
+		}
+		catch (IndexOutOfBoundsException e)
+		{
 			// OK
 		}
 	}
 
 	@Test
-	public void testGetRandomValue() {
+	public void testGetRandomValue()
+	{
 		wc.add(1);
 		wc.add(1);
 		Object o = wc.getRandomValue();
@@ -469,7 +531,8 @@ public class WeightedCollectionTest
 	}
 
 	@Test
-	public void testGetWeight() {
+	public void testGetWeight()
+	{
 		assertTrue(wc.isEmpty());
 		assertTrue(wc.add(I1));
 		assertEquals(1, wc.getWeight(I1));
@@ -490,7 +553,8 @@ public class WeightedCollectionTest
 	}
 
 	@Test
-	public void testNullComparatorConstructor() {
+	public void testNullComparatorConstructor()
+	{
 		WeightedCollection<String> swc = new WeightedCollection<>((Comparator<String>) null);
 		String s1 = "asting";
 		String s2 = "aString1";
@@ -560,7 +624,8 @@ public class WeightedCollectionTest
 	}
 
 	@Test
-	public void testInsensitiveComparatorConstructor() {
+	public void testInsensitiveComparatorConstructor()
+	{
 		WeightedCollection<String> swc = new WeightedCollection<>(String.CASE_INSENSITIVE_ORDER);
 		String s1 = "asting";
 		String s2 = "aString1";

@@ -22,12 +22,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
-import pcgen.base.formula.base.LegalScope;
-import pcgen.base.formula.base.ScopeInstance;
-import pcgen.base.formula.base.VarScoped;
-import pcgen.base.formula.inst.SimpleScopeInstance;
+import pcgen.base.formula.inst.NEPFormula;
+import pcgen.base.proxy.DeferredMethodController;
 import pcgen.base.text.ParsingSeparator;
+import pcgen.base.util.FormatManager;
 import pcgen.cdom.base.CDOMObject;
 import pcgen.cdom.base.CDOMReference;
 import pcgen.cdom.base.GroupDefinition;
@@ -37,6 +37,12 @@ import pcgen.cdom.enumeration.DataSetID;
 import pcgen.cdom.facet.DataSetInitializationFacet;
 import pcgen.cdom.facet.FacetInitialization;
 import pcgen.cdom.facet.FacetLibrary;
+import pcgen.cdom.formula.scope.GlobalScope;
+import pcgen.cdom.formula.scope.PCGenScope;
+import pcgen.cdom.grouping.GroupingCollection;
+import pcgen.cdom.grouping.GroupingInfo;
+import pcgen.cdom.grouping.GroupingInfoFactory;
+import pcgen.cdom.grouping.GroupingInfoFactory.GroupingStateException;
 import pcgen.cdom.inst.ObjectCache;
 import pcgen.cdom.reference.ReferenceManufacturer;
 import pcgen.cdom.reference.SelectionCreator;
@@ -57,8 +63,7 @@ import pcgen.util.Logging;
 abstract class LoadContextInst implements LoadContext
 {
 
-	private static final PrerequisiteWriter PREREQ_WRITER =
-			new PrerequisiteWriter();
+	private static final PrerequisiteWriter PREREQ_WRITER = new PrerequisiteWriter();
 
 	private final DataSetID datasetID = DataSetID.getID();
 
@@ -67,7 +72,7 @@ abstract class LoadContextInst implements LoadContext
 	private final AbstractObjectContext obj;
 
 	private final AbstractReferenceContext ref;
-	
+
 	private final VariableContext var;
 
 	private final List<Campaign> campaignList = new ArrayList<>();
@@ -78,13 +83,21 @@ abstract class LoadContextInst implements LoadContext
 
 	private final List<Object> dontForget = new ArrayList<>();
 
+	/**
+	 * The List of CommitTask objects for this LoadContext.
+	 */
+	private final List<DeferredMethodController<?>> commitTasks = new ArrayList<>();
+
 	//Per file
 	private URI sourceURI;
 
 	//Per file
 	private CDOMObject stateful;
-	
-	private ScopeInstance scopeInst = null;
+
+	/**
+	 * The current PCGenScope for this LoadContext.
+	 */
+	private PCGenScope legalScope = null;
 
 	static
 	{
@@ -186,12 +199,17 @@ abstract class LoadContextInst implements LoadContext
 	{
 		return var;
 	}
-	
+
 	@Override
 	public void commit()
 	{
 		getListContext().commit();
 		getObjectContext().commit();
+		for (DeferredMethodController<?> task : commitTasks)
+		{
+			task.run();
+		}
+		commitTasks.clear();
 	}
 
 	@Override
@@ -199,13 +217,13 @@ abstract class LoadContextInst implements LoadContext
 	{
 		getListContext().rollback();
 		getObjectContext().rollback();
+		commitTasks.clear();
 	}
 
 	@Override
 	public void resolveDeferredTokens()
 	{
-		for (DeferredToken<? extends Loadable> token : support.
-				getDeferredTokens())
+		for (DeferredToken<? extends Loadable> token : support.getDeferredTokens())
 		{
 			processRes(token);
 		}
@@ -215,15 +233,13 @@ abstract class LoadContextInst implements LoadContext
 	private <T extends Loadable> void processRes(DeferredToken<T> token)
 	{
 		Class<T> cl = token.getDeferredTokenClass();
-		Collection<? extends ReferenceManufacturer<?>> mfgs = getReferenceContext()
-				.getAllManufacturers();
+		Collection<? extends ReferenceManufacturer<?>> mfgs = getReferenceContext().getAllManufacturers();
 		for (ReferenceManufacturer<?> rm : mfgs)
 		{
 			if (cl.isAssignableFrom(rm.getReferenceClass()))
 			{
 				@SuppressWarnings("unchecked")
-				ReferenceManufacturer<? extends T> trm =
-						(ReferenceManufacturer<? extends T>) rm;
+				ReferenceManufacturer<? extends T> trm = (ReferenceManufacturer<? extends T>) rm;
 				for (T po : trm.getAllObjects())
 				{
 					token.process(this, po);
@@ -239,8 +255,7 @@ abstract class LoadContextInst implements LoadContext
 	@Override
 	public void resolvePostDeferredTokens()
 	{
-		Collection<? extends ReferenceManufacturer<?>> mfgs = getReferenceContext()
-				.getAllManufacturers();
+		Collection<? extends ReferenceManufacturer<?>> mfgs = getReferenceContext().getAllManufacturers();
 		for (PostDeferredToken<? extends Loadable> token : TokenLibrary.getPostDeferredTokens())
 		{
 			processPostRes(token, mfgs);
@@ -248,7 +263,7 @@ abstract class LoadContextInst implements LoadContext
 	}
 
 	private <T extends Loadable> void processPostRes(PostDeferredToken<T> token,
-			Collection<? extends ReferenceManufacturer<?>> mfgs)
+		Collection<? extends ReferenceManufacturer<?>> mfgs)
 	{
 		Class<T> cl = token.getDeferredTokenClass();
 		for (ReferenceManufacturer<?> rm : mfgs)
@@ -256,8 +271,7 @@ abstract class LoadContextInst implements LoadContext
 			if (cl.isAssignableFrom(rm.getReferenceClass()))
 			{
 				@SuppressWarnings("unchecked")
-				ReferenceManufacturer<? extends T> trm =
-						(ReferenceManufacturer<? extends T>) rm;
+				ReferenceManufacturer<? extends T> trm = (ReferenceManufacturer<? extends T>) rm;
 				for (T po : trm.getAllObjects())
 				{
 					this.setSourceURI(po.getSourceURI());
@@ -270,8 +284,7 @@ abstract class LoadContextInst implements LoadContext
 	@Override
 	public void resolvePostValidationTokens()
 	{
-		Collection<? extends ReferenceManufacturer> mfgs = getReferenceContext()
-				.getAllManufacturers();
+		Collection<? extends ReferenceManufacturer<?>> mfgs = getReferenceContext().getAllManufacturers();
 		for (PostValidationToken<? extends Loadable> token : TokenLibrary.getPostValidationTokens())
 		{
 			processPostVal(token, mfgs);
@@ -279,7 +292,7 @@ abstract class LoadContextInst implements LoadContext
 	}
 
 	private <T extends Loadable> void processPostVal(PostValidationToken<T> token,
-			Collection<? extends ReferenceManufacturer> mfgs)
+		Collection<? extends ReferenceManufacturer> mfgs)
 	{
 		Class<T> cl = token.getValidationTokenClass();
 		for (ReferenceManufacturer<? extends T> rm : mfgs)
@@ -293,8 +306,7 @@ abstract class LoadContextInst implements LoadContext
 	}
 
 	@Override
-	public <T extends CDOMObject> PrimitiveCollection<T> getChoiceSet(
-			SelectionCreator<T> sc, String value)
+	public <T extends CDOMObject> PrimitiveCollection<T> getChoiceSet(SelectionCreator<T> sc, String value)
 	{
 		try
 		{
@@ -302,33 +314,30 @@ abstract class LoadContextInst implements LoadContext
 		}
 		catch (ParsingSeparator.GroupingMismatchException e)
 		{
-			Logging.errorPrint("Group Mismatch in getting ChoiceSet: "
-					+ e.getMessage());
+			Logging.errorPrint("Group Mismatch in getting ChoiceSet: " + e.getMessage());
 			return null;
 		}
 	}
 
 	@Override
-	public <T extends CDOMObject> PrimitiveCollection<T> getPrimitiveChoiceFilter(
-			SelectionCreator<T> sc, String key)
+	public <T extends CDOMObject> PrimitiveCollection<T> getPrimitiveChoiceFilter(SelectionCreator<T> sc, String key)
 	{
 		return ChoiceSetLoadUtilities.getPrimitive(this, sc, key);
 	}
 
 	@Override
-	public <T> ParseResult processSubToken(T cdo, String tokenName,
-			String key, String value)
+	public <T> ParseResult processSubToken(T cdo, String tokenName, String key, String value)
 	{
 		return support.processSubToken(this, cdo, tokenName, key, value);
 	}
 
 	@Override
-	public <T extends Loadable> boolean processToken(T derivative,
-			String typeStr, String argument) throws PersistenceLayerException
+	public <T extends Loadable> boolean processToken(T derivative, String typeStr, String argument)
+		throws PersistenceLayerException
 	{
 		return support.processToken(this, derivative, typeStr, argument);
 	}
-	
+
 	@Override
 	public <T extends Loadable> void unconditionallyProcess(T cdo, String key, String value)
 	{
@@ -347,8 +356,7 @@ abstract class LoadContextInst implements LoadContext
 		}
 		catch (PersistenceLayerException e)
 		{
-			Logging.errorPrint("Error in token parse: "
-					+ e.getLocalizedMessage());
+			Logging.errorPrint("Error in token parse: " + e.getLocalizedMessage());
 		}
 	}
 
@@ -367,7 +375,7 @@ abstract class LoadContextInst implements LoadContext
 	}
 
 	@Override
-	public <T> Collection<String> unparse(T cdo)
+	public <T extends Loadable> Collection<String> unparse(T cdo)
 	{
 		return support.unparse(this, cdo);
 	}
@@ -447,8 +455,7 @@ abstract class LoadContextInst implements LoadContext
 		{
 			stateful = new ObjectCache();
 		}
-		return processToken(stateful, s.substring(0, colonLoc).intern(),
-				s.substring(colonLoc + 1).intern());
+		return processToken(stateful, s.substring(0, colonLoc).intern(), s.substring(colonLoc + 1).intern());
 	}
 
 	@Override
@@ -493,7 +500,7 @@ abstract class LoadContextInst implements LoadContext
 	{
 		return ref;
 	}
-	
+
 	@Override
 	public List<Campaign> getLoadedCampaigns()
 	{
@@ -501,11 +508,9 @@ abstract class LoadContextInst implements LoadContext
 	}
 
 	@Override
-	public ReferenceManufacturer<? extends Loadable> getManufacturer(
-		String firstToken)
+	public ReferenceManufacturer<? extends Loadable> getManufacturer(String firstToken)
 	{
-		return ReferenceContextUtilities.getManufacturer(getReferenceContext(),
-			firstToken);
+		return ReferenceContextUtilities.getManufacturer(getReferenceContext(), firstToken);
 	}
 
 	@Override
@@ -529,82 +534,88 @@ abstract class LoadContextInst implements LoadContext
 	}
 
 	@Override
-	public ScopeInstance getActiveScope()
+	public PCGenScope getActiveScope()
 	{
-		if (scopeInst == null)
+		if (legalScope == null)
 		{
-			LegalScope legalScope = var.getScope("Global");
-			scopeInst = new SimpleScopeInstance(null, legalScope,
-				new DummyVarScoped(legalScope));
+			legalScope = var.getScope(GlobalScope.GLOBAL_SCOPE_NAME);
 		}
-		return scopeInst;
+		return legalScope;
 	}
 
 	@Override
 	public LoadContext dropIntoContext(String scope)
 	{
-		LegalScope legalScope = var.getScope(scope);
-		if (legalScope == null)
+		PCGenScope subScope = var.getScope(scope);
+		if (subScope == null)
 		{
-			throw new IllegalArgumentException("LegalVariableScope " + scope
-				+ " does not exist");
+			throw new IllegalArgumentException("LegalVariableScope " + scope + " does not exist");
 		}
-		return dropIntoContext(legalScope);
+		return dropIntoContext(subScope);
 	}
 
-	private LoadContext dropIntoContext(LegalScope lvs)
+	@Override
+	public void addDeferredMethodController(DeferredMethodController<?> commitTask)
 	{
-		LegalScope parent = lvs.getParentScope();
-		if (parent == null)
+		commitTasks.add(commitTask);
+	}
+
+	private LoadContext dropIntoContext(PCGenScope lvs)
+	{
+		Optional<PCGenScope> parent = lvs.getParentScope();
+		if (!parent.isPresent())
 		{
 			//is Global
 			return this;
 		}
-		LoadContext parentLC = dropIntoContext(parent);
-		SimpleScopeInstance localInst = new SimpleScopeInstance(parentLC.getActiveScope(),
-			lvs, new DummyVarScoped(lvs));
-		return new DerivedLoadContext(parentLC, localInst);
+		LoadContext parentLC = dropIntoContext(parent.get());
+		return new DerivedLoadContext(parentLC, lvs);
 	}
 
-	private static class DummyVarScoped implements VarScoped
+	@Override
+	public <T> NEPFormula<T> getValidFormula(FormatManager<T> formatManager, String instructions)
 	{
+		return var.getValidFormula(getActiveScope(), formatManager, instructions);
+	}
 
-		private LegalScope lvs;
-
-		private DummyVarScoped(LegalScope lvs)
+	@Override
+	public <T> GroupingCollection<? extends Loadable> getGrouping(PCGenScope scope, String groupingName)
+	{
+		try
 		{
-			this.lvs = lvs;
+			GroupingInfo<?> info = new GroupingInfoFactory(this).process(scope, groupingName);
+			return ChoiceSetLoadUtilities.getDynamicGroup(this, info);
 		}
-
-		@Override
-		public String getKeyName()
+		catch (GroupingStateException e)
 		{
-			return "Context (during Load)";
-		}
-
-		@Override
-		public String getLocalScopeName()
-		{
-			return lvs.getName();
-		}
-
-		@Override
-		public VarScoped getVariableParent()
-		{
+			Logging.errorPrint("Error in parsing Group: " + e.getMessage());
 			return null;
 		}
-		
 	}
 
+	/**
+	 * A DerivedLoadContext holds an inner scope, but serves the same functions (via
+	 * delegation) as the original parent.
+	 */
 	private class DerivedLoadContext implements LoadContext
 	{
 
+		/**
+		 * The parent LoadContext for this DerivedLoadContext
+		 */
 		private final LoadContext parent;
-		private final ScopeInstance scopeInst;
 
-		public DerivedLoadContext(LoadContext parent, ScopeInstance lvs)
+		/**
+		 * The derived Scope for this DerivedLoadContext
+		 */
+		private final PCGenScope derivedScope;
+
+		/**
+		 * Constructs a new LoadContext derived from the given LoadContext
+		 */
+		public DerivedLoadContext(LoadContext parent, PCGenScope scope)
 		{
-			this.scopeInst = lvs;
+			this.derivedScope = scope;
 			this.parent = parent;
 		}
 
@@ -687,15 +698,14 @@ abstract class LoadContextInst implements LoadContext
 		}
 
 		@Override
-		public <T extends CDOMObject> PrimitiveCollection<T> getChoiceSet(
-			SelectionCreator<T> sc, String value)
+		public <T extends CDOMObject> PrimitiveCollection<T> getChoiceSet(SelectionCreator<T> sc, String value)
 		{
 			return parent.getChoiceSet(sc, value);
 		}
 
 		@Override
-		public <T extends CDOMObject> PrimitiveCollection<T> getPrimitiveChoiceFilter(
-			SelectionCreator<T> sc, String key)
+		public <T extends CDOMObject> PrimitiveCollection<T> getPrimitiveChoiceFilter(SelectionCreator<T> sc,
+			String key)
 		{
 			return parent.getPrimitiveChoiceFilter(sc, key);
 		}
@@ -707,8 +717,7 @@ abstract class LoadContextInst implements LoadContext
 		}
 
 		@Override
-		public ReferenceManufacturer<? extends Loadable> getManufacturer(
-			String firstToken)
+		public ReferenceManufacturer<? extends Loadable> getManufacturer(String firstToken)
 		{
 			return parent.getManufacturer(firstToken);
 		}
@@ -720,15 +729,13 @@ abstract class LoadContextInst implements LoadContext
 		}
 
 		@Override
-		public <T extends CDOMObject> T cloneConstructedCDOMObject(T cdo,
-			String newName)
+		public <T extends CDOMObject> T cloneConstructedCDOMObject(T cdo, String newName)
 		{
 			return parent.cloneConstructedCDOMObject(cdo, newName);
 		}
 
 		@Override
-		public CampaignSourceEntry getCampaignSourceEntry(Campaign source,
-			String value)
+		public CampaignSourceEntry getCampaignSourceEntry(Campaign source, String value)
 		{
 			return parent.getCampaignSourceEntry(source, value);
 		}
@@ -740,8 +747,7 @@ abstract class LoadContextInst implements LoadContext
 		}
 
 		@Override
-		public boolean addStatefulToken(String s)
-			throws PersistenceLayerException
+		public boolean addStatefulToken(String s) throws PersistenceLayerException
 		{
 			return parent.addStatefulToken(s);
 		}
@@ -777,22 +783,20 @@ abstract class LoadContextInst implements LoadContext
 		}
 
 		@Override
-		public <T> ParseResult processSubToken(T cdo, String tokenName,
-			String key, String value)
+		public <T> ParseResult processSubToken(T cdo, String tokenName, String key, String value)
 		{
 			return support.processSubToken(this, cdo, tokenName, key, value);
 		}
 
 		@Override
-		public <T extends Loadable> boolean processToken(T derivative,
-			String typeStr, String argument) throws PersistenceLayerException
+		public <T extends Loadable> boolean processToken(T derivative, String typeStr, String argument)
+			throws PersistenceLayerException
 		{
 			return support.processToken(this, derivative, typeStr, argument);
 		}
 
 		@Override
-		public <T extends Loadable> void unconditionallyProcess(T cdo,
-			String key, String value)
+		public <T extends Loadable> void unconditionallyProcess(T cdo, String key, String value)
 		{
 			parent.unconditionallyProcess(cdo, key, value);
 		}
@@ -804,7 +808,7 @@ abstract class LoadContextInst implements LoadContext
 		}
 
 		@Override
-		public <T> Collection<String> unparse(T cdo)
+		public <T extends Loadable> Collection<String> unparse(T cdo)
 		{
 			return support.unparse(this, cdo);
 		}
@@ -822,36 +826,32 @@ abstract class LoadContextInst implements LoadContext
 		}
 
 		@Override
-		public ScopeInstance getActiveScope()
+		public PCGenScope getActiveScope()
 		{
-			return scopeInst;
+			return derivedScope;
 		}
 
 		@Override
 		public LoadContext dropIntoContext(String scope)
 		{
-			LegalScope toScope = var.getScope(scope);
+			PCGenScope toScope = var.getScope(scope);
 			if (toScope == null)
 			{
-				throw new IllegalArgumentException("LegalVariableScope "
-					+ scope + " does not exist");
+				throw new IllegalArgumentException("LegalVariableScope " + scope + " does not exist");
 			}
-			LegalScope currentScope = scopeInst.getLegalScope();
-			if (currentScope.equals(toScope))
+			if (derivedScope.equals(toScope))
 			{
 				return this;
 			}
-			else if (currentScope.getParentScope().equals(toScope))
+			else if (!toScope.getParentScope().isPresent())
 			{
-				//Jump up from here
+				//No parent is global
 				return parent;
 			}
-			else if (toScope.getParentScope().equals(currentScope))
+			else if (toScope.getParentScope().get().equals(derivedScope))
 			{
 				//Direct drop from this
-				SimpleScopeInstance localInst = new SimpleScopeInstance(scopeInst,
-					toScope, new DummyVarScoped(toScope));
-				return new DerivedLoadContext(this, localInst);
+				return new DerivedLoadContext(this, toScope);
 			}
 			//Random jump to somewhere else...
 			return LoadContextInst.this.dropIntoContext(toScope);
@@ -873,6 +873,24 @@ abstract class LoadContextInst implements LoadContext
 		public void resolvePostValidationTokens()
 		{
 			parent.resolvePostValidationTokens();
+		}
+
+		@Override
+		public <T> NEPFormula<T> getValidFormula(FormatManager<T> formatManager, String instructions)
+		{
+			return parent.getValidFormula(formatManager, instructions);
+		}
+
+		@Override
+		public void addDeferredMethodController(DeferredMethodController<?> controller)
+		{
+			parent.addDeferredMethodController(controller);
+		}
+
+		@Override
+		public <T> GroupingCollection<? extends Loadable> getGrouping(PCGenScope scope, String groupingName)
+		{
+			return parent.getGrouping(scope, groupingName);
 		}
 	}
 }

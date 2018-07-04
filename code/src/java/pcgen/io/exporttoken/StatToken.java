@@ -22,9 +22,11 @@
 package pcgen.io.exporttoken;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.StringTokenizer;
 
+import pcgen.cdom.util.SortKeyComparator;
 import pcgen.core.PCStat;
 import pcgen.core.PlayerCharacter;
 import pcgen.core.SettingsHandler;
@@ -71,8 +73,7 @@ public class StatToken extends Token
 	 * @see pcgen.io.exporttoken.Token#getToken(java.lang.String, pcgen.core.PlayerCharacter, pcgen.io.ExportHandler)
 	 */
 	@Override
-	public String getToken(String tokenSource, PlayerCharacter pc,
-		ExportHandler eh)
+	public String getToken(String tokenSource, PlayerCharacter pc, ExportHandler eh)
 	{
 		String retString = "";
 		StringTokenizer aTok = new StringTokenizer(tokenSource, ".");
@@ -81,7 +82,7 @@ public class StatToken extends Token
 			Logging.errorPrint("Invalid STAT token:" + tokenSource, new Throwable());
 			return "";
 		}
-			
+
 		aTok.nextToken();
 		int indexOfStat;
 		indexOfStat = Integer.parseInt(aTok.nextToken());
@@ -90,6 +91,7 @@ public class StatToken extends Token
 			return "";
 		}
 		List<PCStat> statList = new ArrayList<>(pc.getDisplay().getStatSet());
+		Collections.sort(statList, SortKeyComparator.getInstance());
 		PCStat stat = statList.get(indexOfStat);
 
 		String findType = "STAT";
@@ -114,7 +116,7 @@ public class StatToken extends Token
 			{
 				return stat.getDisplayName();
 			}
-		
+
 			if ("ISNONABILITY".equals(token))
 			{
 				return pc.getDisplay().isNonAbility(stat) ? "Y" : "N";
@@ -176,9 +178,7 @@ public class StatToken extends Token
 			}
 			else
 			{
-				retString =
-						getModToken(pc, stat, useTemp, useEquip,
-							usePost, useLevel, aLevel);
+				retString = getModToken(pc, stat, useTemp, useEquip, usePost, useLevel, aLevel);
 			}
 		}
 		else
@@ -189,26 +189,21 @@ public class StatToken extends Token
 			}
 			else
 			{
-				retString =
-						getStatToken(pc, stat, useTemp, useEquip,
-							usePost, useLevel, aLevel);
+				retString = getStatToken(pc, stat, useTemp, useEquip, usePost, useLevel, aLevel);
 			}
 		}
 
 		return retString;
 	}
 
-	public static String getStatToken(PlayerCharacter pc, PCStat stat,
-		boolean useTemp, boolean useEquip, boolean usePost, boolean useLevel,
-		int aLevel)
+	public static String getStatToken(PlayerCharacter pc, PCStat stat, boolean useTemp, boolean useEquip,
+		boolean usePost, boolean useLevel, int aLevel)
 	{
-		return getStatToken(pc, stat, useTemp, useEquip, usePost, useLevel,
-			aLevel, true);
+		return getStatToken(pc, stat, useTemp, useEquip, usePost, useLevel, aLevel, true);
 	}
 
-	public static String getStatToken(PlayerCharacter pc, PCStat stat,
-		boolean useTemp, boolean useEquip, boolean usePost, boolean useLevel,
-		int aLevel, final boolean checkGameMode)
+	public static String getStatToken(PlayerCharacter pc, PCStat stat, boolean useTemp, boolean useEquip,
+		boolean usePost, boolean useLevel, int aLevel, final boolean checkGameMode)
 	{
 		if (pc.getDisplay().isNonAbility(stat))
 		{
@@ -225,9 +220,7 @@ public class StatToken extends Token
 			}
 			else
 			{
-				aTotal =
-						pc.getPartialStatAtLevel(stat, aLevel,
-							usePost, useTemp, useEquip);
+				aTotal = pc.getPartialStatAtLevel(stat, aLevel, usePost, useTemp, useEquip);
 			}
 		}
 		else if (useEquip && useTemp)
@@ -236,9 +229,7 @@ public class StatToken extends Token
 		}
 		else
 		{
-			aTotal =
-					StatAnalysis.getPartialStatFor(pc, stat, useTemp,
-						useEquip);
+			aTotal = StatAnalysis.getPartialStatFor(pc, stat, useTemp, useEquip);
 		}
 
 		if (checkGameMode)
@@ -248,17 +239,14 @@ public class StatToken extends Token
 		return Integer.toString(aTotal);
 	}
 
-	public static String getModToken(PlayerCharacter pc, PCStat stat,
-		boolean useTemp, boolean useEquip, boolean usePost, boolean useLevel,
-		int aLevel)
+	public static String getModToken(PlayerCharacter pc, PCStat stat, boolean useTemp, boolean useEquip,
+		boolean usePost, boolean useLevel, int aLevel)
 	{
 		if (pc.getDisplay().isNonAbility(stat))
 		{
 			return "+0";
 		}
-		int aTotal =
-				Integer.parseInt(getStatToken(pc, stat, useTemp, useEquip,
-					usePost, useLevel, aLevel, false));
+		int aTotal = Integer.parseInt(getStatToken(pc, stat, useTemp, useEquip, usePost, useLevel, aLevel, false));
 
 		int temp = pc.getModForNumber(aTotal, stat);
 		return Delta.toString(temp);
@@ -284,8 +272,6 @@ public class StatToken extends Token
 
 		return Delta.toString(temp);
 	}
-
-	
 
 	/*
 	 * Wrapper functions for calls with old arguments

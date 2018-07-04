@@ -28,51 +28,42 @@ import pcgen.persistence.PersistenceLayerException;
 import pcgen.persistence.SystemLoader;
 import pcgen.rules.context.LoadContext;
 
-
-public class GenericLoader<T extends CDOMObject> extends
-		LstObjectFileLoader<T>
+public class GenericLoader<T extends CDOMObject> extends LstObjectFileLoader<T>
 {
 	private final Class<T> baseClass;
-	
+
 	public GenericLoader(Class<T> cl)
 	{
 		if (cl == null)
 		{
-			throw new IllegalArgumentException(
-					"Class for GenericLoader cannot be null");
+			throw new IllegalArgumentException("Class for GenericLoader cannot be null");
 		}
 		if (Modifier.isAbstract(cl.getModifiers()))
 		{
-			throw new IllegalArgumentException(
-					"Class for GenericLoader must not be abstract");
+			throw new IllegalArgumentException("Class for GenericLoader must not be abstract");
 		}
 		try
 		{
 			if (!Modifier.isPublic(cl.getConstructor().getModifiers()))
 			{
 				throw new IllegalArgumentException(
-						"Class for GenericLoader must have public zero-argument constructor");
+					"Class for GenericLoader must have public zero-argument constructor");
 			}
 		}
 		catch (SecurityException e)
 		{
-			throw new IllegalArgumentException(
-					"Class for GenericLoader must have public zero-argument constructor");
+			throw new IllegalArgumentException("Class for GenericLoader must have public zero-argument constructor");
 		}
 		catch (NoSuchMethodException e)
 		{
-			throw new IllegalArgumentException(
-					"Class for GenericLoader must have zero-argument constructor");
+			throw new IllegalArgumentException("Class for GenericLoader must have zero-argument constructor");
 		}
 		baseClass = cl;
 	}
 
-	/**
-	 * @see pcgen.persistence.lst.LstObjectFileLoader#parseLine(LoadContext, CDOMObject, String, SourceEntry)
-	 */
 	@Override
-	public final T parseLine(LoadContext context, T object, String lstLine,
-			SourceEntry source) throws PersistenceLayerException
+	public final T parseLine(LoadContext context, T object, String lstLine, SourceEntry source)
+		throws PersistenceLayerException
 	{
 		T po;
 		boolean isnew = false;
@@ -94,8 +85,7 @@ public class GenericLoader<T extends CDOMObject> extends
 			po = object;
 		}
 
-		final StringTokenizer colToken = new StringTokenizer(lstLine,
-				SystemLoader.TAB_DELIM);
+		final StringTokenizer colToken = new StringTokenizer(lstLine, SystemLoader.TAB_DELIM);
 		if (colToken.hasMoreTokens())
 		{
 			po.setName(colToken.nextToken().intern());
@@ -123,17 +113,9 @@ public class GenericLoader<T extends CDOMObject> extends
 		//Nothing by default
 	}
 
-	/**
-	 * Get the object with key aKey
-	 * @param aKey
-	 * 
-	 * @return PObject
-	 * @see pcgen.persistence.lst.LstObjectFileLoader#getObjectKeyed(LoadContext, java.lang.String)
-	 */
 	@Override
 	protected final T getObjectKeyed(LoadContext context, String aKey)
 	{
-		return context.getReferenceContext().silentlyGetConstructedCDOMObject(
-				baseClass, aKey);
+		return context.getReferenceContext().silentlyGetConstructedCDOMObject(baseClass, aKey);
 	}
 }

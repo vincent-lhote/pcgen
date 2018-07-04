@@ -17,8 +17,13 @@
  */
 package pcgen.base.formula;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.fail;
+
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 
 public class SubtractingFormulaTest
@@ -53,7 +58,7 @@ public class SubtractingFormulaTest
 		assertNotSame(f1, f2);
 		assertEquals(f1.hashCode(), f2.hashCode());
 		assertEquals(f1, f2);
-		assertFalse(f1.equals(null));
+		assertNotNull(f1);
 		assertFalse(f1.hashCode() == f3.hashCode());
 		assertFalse(f1.equals(f3));
 		assertFalse(f1.hashCode() == f4.hashCode());

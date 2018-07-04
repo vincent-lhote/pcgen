@@ -34,10 +34,6 @@ import pcgen.core.prereq.PrerequisiteTest;
 public class PreArmorTypeTester extends AbstractDisplayPrereqTest implements PrerequisiteTest
 {
 
-	/**
-	 * @see pcgen.core.prereq.PrerequisiteTest#passes(pcgen.core.PlayerCharacter)
-	 */
-
 	// TODO All the equipment related PRE tag code should be refactored into a
 	// common base class.
 	@Override
@@ -56,8 +52,7 @@ public class PreArmorTypeTester extends AbstractDisplayPrereqTest implements Pre
 				}
 
 				// Match against a TYPE of armour
-				if (desiredType.startsWith(Constants.LST_TYPE_EQUAL)
-					|| desiredType.startsWith(Constants.LST_TYPE_DOT))
+				if (desiredType.startsWith(Constants.LST_TYPE_EQUAL) || desiredType.startsWith(Constants.LST_TYPE_DOT))
 				{
 
 					String stripped = desiredType.substring(Constants.SUBSTRING_LENGTH_FIVE);
@@ -94,9 +89,7 @@ public class PreArmorTypeTester extends AbstractDisplayPrereqTest implements Pre
 						//handle wildcards (always assume they
 						// end the line)
 						final int percentPos = desiredType.indexOf('%');
-						final String substring =
-								desiredType.substring(0, percentPos)
-									.toUpperCase();
+						final String substring = desiredType.substring(0, percentPos).toUpperCase();
 						if (eqName.startsWith(substring))
 						{
 							runningTotal++;
@@ -126,7 +119,7 @@ public class PreArmorTypeTester extends AbstractDisplayPrereqTest implements Pre
 	 * Get the type of prerequisite handled by this token.
 	 * @return the type of prerequisite handled by this token.
 	 */
-    @Override
+	@Override
 	public String kindHandled()
 	{
 		return "ARMORTYPE"; //$NON-NLS-1$

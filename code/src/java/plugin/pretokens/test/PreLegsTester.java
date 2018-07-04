@@ -26,14 +26,9 @@ import pcgen.core.prereq.PrerequisiteException;
 import pcgen.core.prereq.PrerequisiteTest;
 import pcgen.system.LanguageBundle;
 
-
-public class PreLegsTester extends AbstractDisplayPrereqTest implements
-		PrerequisiteTest
+public class PreLegsTester extends AbstractDisplayPrereqTest implements PrerequisiteTest
 {
 
-	/**
-	 * @see pcgen.core.prereq.PrerequisiteTest#passes(pcgen.core.PlayerCharacter)
-	 */
 	@Override
 	public int passes(final Prerequisite prereq, final CharacterDisplay display, CDOMObject source)
 		throws PrerequisiteException
@@ -43,14 +38,12 @@ public class PreLegsTester extends AbstractDisplayPrereqTest implements
 		{
 			final int targetLegs = Integer.parseInt(prereq.getOperand());
 
-			runningTotal =
-					prereq.getOperator().compare(display.getPreFormulaLegs(),
-						targetLegs);
+			runningTotal = prereq.getOperator().compare(display.getPreFormulaLegs(), targetLegs);
 		}
 		catch (NumberFormatException nfe)
 		{
-			throw new PrerequisiteException(LanguageBundle.getFormattedString(
-				"PreLegs.error.bad_operand", prereq.getOperand())); //$NON-NLS-1$
+			throw new PrerequisiteException(
+				LanguageBundle.getFormattedString("PreLegs.error.bad_operand", prereq.getOperand())); //$NON-NLS-1$
 		}
 		return countedTotal(prereq, runningTotal);
 	}
@@ -59,7 +52,7 @@ public class PreLegsTester extends AbstractDisplayPrereqTest implements
 	 * Get the type of prerequisite handled by this token.
 	 * @return the type of prerequisite handled by this token.
 	 */
-    @Override
+	@Override
 	public String kindHandled()
 	{
 		return "LEGS"; //$NON-NLS-1$

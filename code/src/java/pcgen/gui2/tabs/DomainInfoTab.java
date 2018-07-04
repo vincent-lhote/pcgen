@@ -79,7 +79,7 @@ import pcgen.system.LanguageBundle;
 import pcgen.util.enumeration.Tab;
 
 /**
- * This component handles diety and domain selection for a character.
+ * This component handles deity and domain selection for a character.
  */
 @SuppressWarnings("serial")
 public class DomainInfoTab extends FlippingSplitPane implements CharacterInfoTab, TodoHandler
@@ -94,7 +94,6 @@ public class DomainInfoTab extends FlippingSplitPane implements CharacterInfoTab
 	private final InfoPane deityInfo;
 	private final InfoPane domainInfo;
 	private DisplayableFilter<CharacterFacade, DomainFacade> domainFilter;
-	private static final Object COLUMN_ID = new Object();
 	private final FilterButton<Object, DeityFacade> qDeityButton;
 	private final FilterButton<Object, DomainFacade> qDomainButton;
 	private final QualifiedTreeCellRenderer qualifiedRenderer;
@@ -281,7 +280,8 @@ public class DomainInfoTab extends FlippingSplitPane implements CharacterInfoTab
 		}
 
 		@Override
-		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column)
+		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
+			int row, int column)
 		{
 			super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 			if (value instanceof DomainFacade && !character.isQualifiedFor((DomainFacade) value))
@@ -695,14 +695,15 @@ public class DomainInfoTab extends FlippingSplitPane implements CharacterInfoTab
 	private static class DeityTreeViewModel implements TreeViewModel<DeityFacade>, DataView<DeityFacade>
 	{
 
-		private static final ListFacade<TreeView<DeityFacade>> views
-				= new DefaultListFacade<>(Arrays.asList(DeityTreeView.values()));
-		private final List<DefaultDataViewColumn> columns = Arrays.asList(new DefaultDataViewColumn("in_alignLabel", Object.class), //$NON-NLS-1$
-				new DefaultDataViewColumn("in_domains", String.class), //$NON-NLS-1$
-				new DefaultDataViewColumn("in_descrip", String.class), //$NON-NLS-1$
-				new DefaultDataViewColumn("in_pantheon", String.class), //$NON-NLS-1$
-				new DefaultDataViewColumn("in_favoredWeapon", String.class), //$NON-NLS-1$
-				new DefaultDataViewColumn("in_sourceLabel", String.class)); //$NON-NLS-1$
+		private static final ListFacade<TreeView<DeityFacade>> views =
+				new DefaultListFacade<>(Arrays.asList(DeityTreeView.values()));
+		private final List<DefaultDataViewColumn> columns =
+				Arrays.asList(new DefaultDataViewColumn("in_alignLabel", Object.class), //$NON-NLS-1$
+					new DefaultDataViewColumn("in_domains", String.class), //$NON-NLS-1$
+					new DefaultDataViewColumn("in_descrip", String.class), //$NON-NLS-1$
+					new DefaultDataViewColumn("in_pantheon", String.class), //$NON-NLS-1$
+					new DefaultDataViewColumn("in_favoredWeapon", String.class), //$NON-NLS-1$
+					new DefaultDataViewColumn("in_sourceLabel", String.class)); //$NON-NLS-1$
 		private final CharacterFacade character;
 		private final InfoFactory infoFactory;
 
@@ -739,7 +740,8 @@ public class DomainInfoTab extends FlippingSplitPane implements CharacterInfoTab
 		@Override
 		public Object getData(DeityFacade obj, int column)
 		{
-			switch(column){
+			switch (column)
+			{
 				case 0:
 					return obj.getAlignment();
 				case 1:
@@ -771,7 +773,7 @@ public class DomainInfoTab extends FlippingSplitPane implements CharacterInfoTab
 		@Override
 		public String getPrefsKey()
 		{
-			return "DeityTree";  //$NON-NLS-1$
+			return "DeityTree"; //$NON-NLS-1$
 		}
 
 	}
@@ -812,8 +814,7 @@ public class DomainInfoTab extends FlippingSplitPane implements CharacterInfoTab
 					}
 					return paths;
 				case ALIGNMENT_NAME:
-					return Collections.singletonList(new TreeViewPath<>(pobj,
-                            pobj.getAlignment()));
+					return Collections.singletonList(new TreeViewPath<>(pobj, pobj.getAlignment()));
 				case PANTHEON_NAME:
 					for (String pantheon : pobj.getPantheons())
 					{
@@ -821,8 +822,7 @@ public class DomainInfoTab extends FlippingSplitPane implements CharacterInfoTab
 					}
 					return paths;
 				case SOURCE_NAME:
-					return Collections.singletonList(new TreeViewPath<>(pobj,
-                            pobj.getSourceForNodeDisplay()));
+					return Collections.singletonList(new TreeViewPath<>(pobj, pobj.getSourceForNodeDisplay()));
 				default:
 					throw new InternalError();
 			}

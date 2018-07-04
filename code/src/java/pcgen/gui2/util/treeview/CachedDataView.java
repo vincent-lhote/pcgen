@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.WeakHashMap;
 
-
 public abstract class CachedDataView<E> implements DataView<E>
 {
 
@@ -32,43 +31,25 @@ public abstract class CachedDataView<E> implements DataView<E>
 	@Override
 	public final Object getData(E element, int column)
 	{
-		if (shouldCache(column))
+		List<Object> data = dataCache.get(element);
+		if (data == null)
 		{
-			List<Object> data = dataCache.get(element);
-			if (data == null)
+			List<? extends DataViewColumn> columns = getDataColumns();
+			data = new ArrayList<>(columns.size());
+			for (int i = 0; i < columns.size(); i++)
 			{
-				List<? extends DataViewColumn> columns = getDataColumns();
-				data = new ArrayList<>(columns.size());
-				for (int i = 0; i < columns.size(); i++)
-				{
-					if (shouldCache(i))
-					{
-						data.add(getDataInternal(element, i));
-					}
-					else
-					{
-						data.add(null);
-					}
-				}
-				dataCache.put(element, data);
+				data.add(getDataInternal(element, i));
 			}
-			return data.get(column);
+			dataCache.put(element, data);
 		}
-		else
-		{
-			return getDataInternal(element, column);
-		}
+		return data.get(column);
 	}
 
 	protected abstract Object getDataInternal(E element, int column);
-	
+
 	@Override
 	public void setData(Object value, E element, int column)
 	{
 		dataCache.remove(element);
-	}
-
-	protected boolean shouldCache(int column){
-		return true;
 	}
 }

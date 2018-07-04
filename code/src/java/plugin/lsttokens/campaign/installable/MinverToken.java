@@ -32,25 +32,18 @@ import pcgen.util.Logging;
 public class MinverToken implements InstallLstToken
 {
 
-	/**
-	 * @see pcgen.persistence.lst.LstToken#getTokenName()
-	 */
-    @Override
+	@Override
 	public String getTokenName()
 	{
 		return "MINVER";
 	}
 
-	/**
-	 * @see pcgen.persistence.lst.InstallLstToken#parse(pcgen.core.Campaign, java.lang.String, java.net.URI)
-	 */
-    @Override
+	@Override
 	public boolean parse(Campaign campaign, String value, URI sourceUri)
 	{
 		if (!(campaign instanceof InstallableCampaign))
 		{
-			Logging.log(Logging.ERROR, "Campaign " + campaign.getDisplayName()
-				+ " is not an installable campaign.");
+			Logging.log(Logging.ERROR, "Campaign " + campaign.getDisplayName() + " is not an installable campaign.");
 			return false;
 		}
 		InstallableCampaign ic = (InstallableCampaign) campaign;

@@ -60,7 +60,7 @@ public final class AssociationKey<T>
 	/*
 	 * End Load (Context) items
 	 */
-	
+
 	/*
 	 * These items are used by Tokens to store relationship information to specific items.
 	 */
@@ -114,13 +114,18 @@ public final class AssociationKey<T>
 		// Only allow instantiation here
 	}
 
+	/**
+	 * Casts an object with the Generics on this AssociationKey.
+	 * 
+	 * @return An object cast to the Generics on this AssociationKey
+	 */
+	@SuppressWarnings("unchecked")
 	public T cast(Object obj)
 	{
 		return (T) obj;
 	}
 
-	public static <OT> AssociationKey<OT> getKeyFor(Class<OT> assocClass,
-			String assocName)
+	public static <OT> AssociationKey<OT> getKeyFor(Class<OT> assocClass, String assocName)
 	{
 		if (map == null)
 		{
@@ -152,8 +157,7 @@ public final class AssociationKey<T>
 		{
 			int mod = fields[i].getModifiers();
 
-			if (Modifier.isStatic(mod) && Modifier.isFinal(mod)
-					&& Modifier.isPublic(mod))
+			if (Modifier.isStatic(mod) && Modifier.isFinal(mod) && Modifier.isPublic(mod))
 			{
 				try
 				{

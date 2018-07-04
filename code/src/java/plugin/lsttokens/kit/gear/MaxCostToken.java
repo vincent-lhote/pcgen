@@ -27,8 +27,7 @@ import pcgen.rules.persistence.token.ParseResult;
 /**
  * MAXCOST token for KIT Gear
  */
-public class MaxCostToken extends AbstractToken implements
-		CDOMPrimaryToken<KitGear>
+public class MaxCostToken extends AbstractToken implements CDOMPrimaryToken<KitGear>
 {
 	/**
 	 * Gets the name of the tag this class will parse.
@@ -55,16 +54,15 @@ public class MaxCostToken extends AbstractToken implements
 			Integer quan = Integer.valueOf(value);
 			if (quan.intValue() <= 0)
 			{
-				return new ParseResult.Fail(getTokenName() + " expected an integer > 0", context);
+				return new ParseResult.Fail(getTokenName() + " expected an integer > 0");
 			}
 			kitGear.setMaxCost(quan);
 			return ParseResult.SUCCESS;
 		}
 		catch (NumberFormatException nfe)
 		{
-			return new ParseResult.Fail(getTokenName()
-				+ " expected an integer.  Tag must be of the form: "
-				+ getTokenName() + ":<int>", context);
+			return new ParseResult.Fail(
+				getTokenName() + " expected an integer.  Tag must be of the form: " + getTokenName() + ":<int>");
 		}
 	}
 

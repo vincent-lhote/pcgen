@@ -17,14 +17,13 @@
  */
 package pcgen.gui2.facade;
 
+import java.io.File;
+import java.util.Iterator;
+
 import gmgen.plugin.InitHolder;
 import gmgen.plugin.InitHolderList;
 import gmgen.plugin.PcgCombatant;
 import gmgen.pluginmgr.messages.FileMenuSaveMessage;
-
-import java.io.File;
-import java.util.Iterator;
-
 import pcgen.core.Globals;
 import pcgen.core.PlayerCharacter;
 import pcgen.facade.core.CharacterFacade;
@@ -51,7 +50,7 @@ public class GMGenMessageHandler implements PCGenMessageHandler
 
 	private final PCGenFrame delegate;
 	private final PCGenMessageHandler messageHandler;
-	
+
 	/**
 	 * Create a new instance of GMGenMessageHandler
 	 * @param delegate The PCGenFrame instance containing the UI.
@@ -61,8 +60,7 @@ public class GMGenMessageHandler implements PCGenMessageHandler
 		this.delegate = delegate;
 		this.messageHandler = mh;
 	}
-	
-	
+
 	@Override
 	public void handleMessage(PCGenMessage message)
 	{
@@ -95,7 +93,6 @@ public class GMGenMessageHandler implements PCGenMessageHandler
 		}
 	}
 
-
 	private void handleSavePcgMessage(PCGenMessage message)
 	{
 		RequestToSavePlayerCharacterMessage smessage = (RequestToSavePlayerCharacterMessage) message;
@@ -113,26 +110,9 @@ public class GMGenMessageHandler implements PCGenMessageHandler
 
 	private void handleSaveMessage(FileMenuSaveMessage message)
 	{
-//		final int currTab = baseTabbedPane.getSelectedIndex();
-//		if (this.isFocused() && currTab >= FIRST_CHAR_TAB)
-//		{
-//			// seize the focus to cause focus listeners to fire
-//			pcgenMenuBar.saveItem.requestFocus();
-//
-//			final PlayerCharacter aPC = getCurrentPC();
-//
-//			if (aPC == null)
-//			{
-//				return;
-//			}
-//
-//			savePC(aPC, false);
-//			message.veto();
-//		}
 	}
 
-	private void handleInitHolderListSendMessage(
-		TransmitInitiativeValuesBetweenComponentsMessage message)
+	private void handleInitHolderListSendMessage(TransmitInitiativeValuesBetweenComponentsMessage message)
 	{
 		InitHolderList list = message.getInitHolderList();
 
@@ -147,7 +127,7 @@ public class GMGenMessageHandler implements PCGenMessageHandler
 				PlayerCharacter aPC = pcg.getPC();
 				Globals.getPCList().add(aPC);
 				aPC.setDirty(true);
-//				addPCTab(aPC);
+				//				addPCTab(aPC);
 			}
 		}
 	}
@@ -158,17 +138,14 @@ public class GMGenMessageHandler implements PCGenMessageHandler
 
 		if (PCGFile.isPCGenCharacterFile(pcFile))
 		{
-			PlayerCharacter playerCharacter =
-					CharacterManager.openPlayerCharacter(pcFile, delegate,
-						delegate.getLoadedDataSetRef().get(),
-						message.isBlockLoadedMessage());
+			PlayerCharacter playerCharacter = CharacterManager.openPlayerCharacter(pcFile, delegate,
+				delegate.getLoadedDataSetRef().get(), message.isBlockLoadedMessage());
 			message.setPlayerCharacter(playerCharacter);
 			message.consume();
 		}
 		else if (PCGFile.isPCGenPartyFile(pcFile))
 		{
-			CharacterManager.openParty(pcFile, delegate, delegate
-				.getLoadedDataSetRef().get());
+			CharacterManager.openParty(pcFile, delegate, delegate.getLoadedDataSetRef().get());
 		}
 	}
 
@@ -187,38 +164,5 @@ public class GMGenMessageHandler implements PCGenMessageHandler
 
 	private void handleStateChangedMessage()
 	{
-		// Need to fully refresh the currently displayed character
-		
-//		if (this.isFocused() && characterPane != null)
-//		{
-//			PlayerCharacter aPC =
-//					getPCForTabAt(baseTabbedPane.getSelectedIndex());
-//			Globals.setCurrentPC(aPC);
-//			// What could possibly have changed on focus that would
-//			// require a forceUpdate of all the panels?
-//			// JSC -- 03/27/2004
-//			//
-//			// The answer to this question is this: GMGen can update characters, for
-//			// example updating the experience.  This message is only ever really
-//			// called when the user switches from gmgen to pcgen - and it needs to be
-//			// called to ensure that all pcgen screens are updated based on any
-//			// changes to the PlayerCharacter object.  Without this, what the user
-//			// sees on the screen is stale.
-//			// DJ -- 05/23/2004
-//			characterPane
-//				.setPaneForUpdate(characterPane.infoSpecialAbilities());
-//			characterPane.setPaneForUpdate(characterPane.infoSummary());
-//			characterPane.setPaneForUpdate(characterPane.infoRace());
-//			characterPane.setPaneForUpdate(characterPane.infoClasses());
-//			characterPane.setPaneForUpdate(characterPane.infoDomain());
-//			//			characterPane.setPaneForUpdate(characterPane.infoFeats());
-//			characterPane.setPaneForUpdate(characterPane.infoAbilities());
-//			characterPane.setPaneForUpdate(characterPane.infoSkills());
-//			characterPane.setPaneForUpdate(characterPane.infoSpells());
-//			characterPane.setPaneForUpdate(characterPane.infoInventory());
-//			characterPane.setPaneForUpdate(characterPane.infoDesc());
-//			characterPane.refresh();
-//			forceUpdate_PlayerTabs();
-//		}
 	}
 }

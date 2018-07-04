@@ -41,25 +41,17 @@ import pcgen.io.exporttoken.AbilityListToken;
 public class VAbilityListToken extends AbilityListToken
 {
 
-	/**
-	 * @see pcgen.io.exporttoken.Token#getTokenName()
-	 */
 	@Override
 	public String getTokenName()
 	{
 		return "VABILITYLIST"; //$NON-NLS-1$
 	}
 
-	/**
-	 * @see pcgen.io.exporttoken.AbilityListToken#getAbilityList(pcgen.core.PlayerCharacter, pcgen.core.AbilityCategory)
-	 */
 	@Override
-	protected MapToList<Ability, CNAbility> getAbilityList(PlayerCharacter pc,
-		final AbilityCategory aCategory)
+	protected MapToList<Ability, CNAbility> getAbilityList(PlayerCharacter pc, final AbilityCategory aCategory)
 	{
 		final MapToList<Ability, CNAbility> listOfAbilities = new HashMapToList<>();
-		Collection<AbilityCategory> allCats =
-				SettingsHandler.getGame().getAllAbilityCategories();
+		Collection<AbilityCategory> allCats = SettingsHandler.getGame().getAllAbilityCategories();
 		for (AbilityCategory aCat : allCats)
 		{
 			if (AbilityCategory.ANY.equals(aCategory) || aCat.getParentCategory().equals(aCategory))

@@ -20,10 +20,9 @@
  */
 package plugin.initiative.gui;
 
-import gmgen.plugin.Spell;
-
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 
@@ -31,6 +30,7 @@ import javax.swing.JEditorPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
+import gmgen.plugin.Spell;
 import plugin.initiative.SpellModel;
 
 /**
@@ -53,7 +53,7 @@ public class CastSpell extends StartEvent
 	 *@param  modal       is modal?
 	 *@param  initiative  Initiative panel
 	 */
-	public CastSpell(java.awt.Frame parent, boolean modal, Initiative initiative)
+	public CastSpell(Frame parent, boolean modal, Initiative initiative)
 	{
 		super(parent, modal, initiative);
 	}
@@ -68,8 +68,7 @@ public class CastSpell extends StartEvent
 	 *@param  player      player name
 	 *@param  init        player's initiative
 	 */
-	public CastSpell(java.awt.Frame parent, boolean modal,
-		Initiative initiative, String player, int init)
+	public CastSpell(Frame parent, boolean modal, Initiative initiative, String player, int init)
 	{
 		super(parent, modal, initiative, player, init);
 	}
@@ -104,8 +103,7 @@ public class CastSpell extends StartEvent
 		text.append("<b>Desc: </b>" + model.getDesc() + ' ');
 		text.append("</font></body></html>");
 		descText.setText(text.toString());
-		descPanel
-			.setPreferredSize(new Dimension(mainPanel.getWidth() - 16, 75));
+		descPanel.setPreferredSize(new Dimension(mainPanel.getWidth() - 16, 75));
 		descPanel.setMaximumSize(new Dimension(mainPanel.getWidth() - 16, 75));
 		descPanel.setMinimumSize(new Dimension(mainPanel.getWidth() - 16, 75));
 		pack();
@@ -122,14 +120,13 @@ public class CastSpell extends StartEvent
 		tName.setText(spellName);
 	}
 
-    @Override
+	@Override
 	protected void save()
 	{
-		initiative.initList.add(new Spell(tName.getText(), tPlayer.getText(),
-			tEffect.getText(), ((Integer) lDuration.getValue()).intValue(),
-			((Integer) lInit.getValue()).intValue(), cbAlert.isSelected()));
-		initiative.writeToCombatTabWithRound(tPlayer.getText() + " Cast "
-			+ tName.getText());
+		initiative.initList.add(new Spell(tName.getText(), tPlayer.getText(), tEffect.getText(),
+			((Integer) lDuration.getValue()).intValue(), ((Integer) lInit.getValue()).intValue(),
+			cbAlert.isSelected()));
+		initiative.writeToCombatTabWithRound(tPlayer.getText() + " Cast " + tName.getText());
 		initiative.refreshTable();
 		initiative.grabFocus();
 		initiative.focusNextInit();
@@ -141,7 +138,7 @@ public class CastSpell extends StartEvent
 	 *
 	 * <p>Initializes the components.</p>
 	 */
-    @Override
+	@Override
 	protected void initComponents()
 	{
 		sTitle = "Cast Spell";
@@ -164,7 +161,7 @@ public class CastSpell extends StartEvent
 
 		descPanel = new JPanel(new BorderLayout());
 
-		gridBagConstraints = new java.awt.GridBagConstraints();
+		gridBagConstraints = new GridBagConstraints();
 		gridBagConstraints.gridx = 0;
 		gridBagConstraints.gridy = gridBagRow;
 		gridBagConstraints.gridwidth = 3;

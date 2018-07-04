@@ -15,13 +15,13 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
- package plugin.encounter;
+package plugin.encounter;
 
 import javax.swing.DefaultListModel;
 
 import pcgen.core.Globals;
 import pcgen.core.Race;
-
+import pcgen.core.analysis.RaceUtilities;
 
 public class RaceModel extends DefaultListModel
 {
@@ -44,7 +44,7 @@ public class RaceModel extends DefaultListModel
 			if (!contains(race.toString()))
 			{
 				this.addElement(race.toString());
-				this.removeElement(Globals.s_EMPTYRACE.toString());
+				this.removeElement(RaceUtilities.getUnselectedRace().toString());
 			}
 		}
 	}

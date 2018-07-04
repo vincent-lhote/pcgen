@@ -17,7 +17,9 @@
  */
 package pcgen.persistence.lst;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.net.URI;
 import java.util.List;
@@ -43,7 +45,7 @@ public class CampaignSourceEntryTest
 	}
 	
 	/**
-	 * Test method for {@link pcgen.persistence.lst.CampaignSourceEntry#parseSuffix(java.lang.String)}.
+	 * Test method for {@link pcgen.persistence.lst.CampaignSourceEntry#parseSuffix(String, URI, String)}
 	 */
 	@Test
 	public void testParseSuffix()
@@ -106,7 +108,7 @@ public class CampaignSourceEntryTest
 	}
 
 	/**
-	 * Test method for {@link pcgen.persistence.lst.CampaignSourceEntry#parseSuffix(java.lang.String)}.
+	 * Test method for {@link pcgen.persistence.lst.CampaignSourceEntry#parseSuffix(String, URI, String)}
 	 */
 	@Test
 	public void testParseSuffixInvalid()
@@ -136,7 +138,7 @@ public class CampaignSourceEntryTest
 	}
 	
 	/**
-	 * Test method for {@link pcgen.persistence.lst.CampaignSourceEntry#parseSuffix(java.lang.String)}.
+	 * Test method for {@link pcgen.persistence.lst.CampaignSourceEntry#parseSuffix(String, URI, String)}
 	 */
 	@Test
 	public void testParseSuffixInlineBracket()

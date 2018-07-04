@@ -23,7 +23,7 @@ Elemental Proofing (Cold)					TYPE:Goods.Alchemical.Consumable			COST:100	WT:1		
 Elemental Proofing (Electricity)				TYPE:Goods.Alchemical.Consumable			COST:100	WT:1			SOURCEPAGE:p.26
 Elemental Proofing (Fire)					TYPE:Goods.Alchemical.Consumable			COST:100	WT:1			SOURCEPAGE:p.26
 Smoke Cover								TYPE:Goods.Alchemical.Consumable			COST:75	WT:10			SOURCEPAGE:p.26
-Spotlight								TYPE:Goods.Tools.Lightsource				COST:75	WT:18			SOURCEPAGE:p.27
+Spotlight								TYPE:Goods.Tools.Light Source				COST:75	WT:18			SOURCEPAGE:p.27
 Wind Platform							TYPE:Goods.Tools						COST:5000	WT:1600		SOURCEPAGE:p.27
 Wing Hobble								TYPE:Goods.Tools						COST:75	WT:20			SOURCEPAGE:p.27
 
@@ -47,8 +47,8 @@ Incense of Dulled Senses					TYPE:Magic.Wondrous.Consumable			COST:1500	WT:0			S
 Perilous Gloves							TYPE:Magic.Wondrous.Glove				COST:10000	WT:1			SOURCEPAGE:p.31
 Ring of Fear Reflection						TYPE:Magic.Ring						COST:48000	WT:0			SOURCEPAGE:p.31
 Scaled Sash								TYPE:Magic.Wondrous.Shirt				COST:73000	WT:1			SOURCEPAGE:p.31
-Staff of Hunting							TYPE:Magic.Staff						COST:51000	WT:5			SOURCEPAGE:p.31			BASEITEM:Staff		EQMOD:CHARGED_STAFF|CHARGES[10]
-Staff of Internal Assault					TYPE:Magic.Staff						COST:20800	WT:5			SOURCEPAGE:p.31			BASEITEM:Staff		EQMOD:CHARGED_STAFF|CHARGES[10]
+Staff of Hunting							TYPE:Magic.Staff						COST:51000	WT:5			SOURCEPAGE:p.31			BASEITEM:Staff		EQMOD:Special Ability ~ Staff Charges|CHARGES[10]
+Staff of Internal Assault					TYPE:Magic.Staff						COST:20800	WT:5			SOURCEPAGE:p.31			BASEITEM:Staff		EQMOD:Special Ability ~ Staff Charges|CHARGES[10]
 
 # ==============================
 # New Artifacts

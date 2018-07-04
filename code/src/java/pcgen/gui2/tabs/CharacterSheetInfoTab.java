@@ -39,11 +39,11 @@ import pcgen.facade.core.CharacterFacade;
 import pcgen.facade.core.EquipmentSetFacade;
 import pcgen.facade.core.GameModeFacade;
 import pcgen.facade.core.TempBonusFacade;
+import pcgen.facade.util.ListFacades;
 import pcgen.facade.util.event.ListEvent;
 import pcgen.facade.util.event.ListListener;
 import pcgen.facade.util.event.ReferenceEvent;
 import pcgen.facade.util.event.ReferenceListener;
-import pcgen.facade.util.ListFacades;
 import pcgen.gui2.csheet.CharacterSheetPanel;
 import pcgen.gui2.filter.Filter;
 import pcgen.gui2.filter.FilteredListFacadeTableModel;
@@ -86,7 +86,7 @@ public class CharacterSheetInfoTab extends FlippingSplitPane implements Characte
 	{
 		super("CharSheet");
 		this.csheet = new CharacterSheetPanel();
-		this.sheetBox = new JComboBox();
+		this.sheetBox = new JComboBox<>();
 		this.equipSetTable = TableUtils.createDefaultTable();
 		this.equipSetRowTable = TableUtils.createDefaultTable();
 		this.tempBonusTable = TableUtils.createDefaultTable();
@@ -100,7 +100,8 @@ public class CharacterSheetInfoTab extends FlippingSplitPane implements Characte
 		{
 
 			@Override
-			public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus)
+			public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected,
+				boolean cellHasFocus)
 			{
 				if (value instanceof File)
 				{
@@ -192,12 +193,11 @@ public class CharacterSheetInfoTab extends FlippingSplitPane implements Characte
 			if (sheetDir.exists() && sheetDir.isDirectory())
 			{
 				File[] files = sheetDir.listFiles(pathname -> pathname.isFile() && !pathname.isHidden());
-				Arrays.sort(files, (f1, f2) ->
-				{
+				Arrays.sort(files, (f1, f2) -> {
 					// TODO I18N Use a Collator
 					return f1.toString().compareToIgnoreCase(f2.toString());
 				});
-				model = new DefaultComboBoxModel(files);
+				model = new DefaultComboBoxModel<>(files);
 
 				File file = null;
 				String previewSheet = character.getPreviewSheetRef().toString();
@@ -221,7 +221,7 @@ public class CharacterSheetInfoTab extends FlippingSplitPane implements Characte
 			}
 			else
 			{
-				model = new DefaultComboBoxModel();
+				model = new DefaultComboBoxModel<>();
 			}
 			model.addListDataListener(this);
 		}
@@ -250,7 +250,6 @@ public class CharacterSheetInfoTab extends FlippingSplitPane implements Characte
 	{
 
 		private final CharacterFacade character;
-		private String sheetDir;
 
 		public CSheetHandler(CharacterFacade character)
 		{
@@ -260,49 +259,10 @@ public class CharacterSheetInfoTab extends FlippingSplitPane implements Characte
 		public void install()
 		{
 			csheet.setCharacter(character);
-
-//			character.getAgeCategoryRef().addReferenceListener(this);
-//			character.getAgeRef().addReferenceListener(this);
-//			character.getAlignmentRef().addReferenceListener(this);
-//			character.getCarriedWeightRef().addReferenceListener(this);
-//			character.getDeityRef().addReferenceListener(this);
-//			character.getGenderRef().addReferenceListener(this);
-//			character.getHandedRef().addReferenceListener(this);
-//			character.getLoadRef().addReferenceListener(this);
-//			character.getNameRef().addReferenceListener(this);
-//			character.getPlayersNameRef().addReferenceListener(this);
-//			character.getRaceRef().addReferenceListener(this);
-//			character.getStatTotalTextRef().addReferenceListener(this);
-//			character.getTotalHPRef().addReferenceListener(this);
-//			character.getXPRef().addReferenceListener(this);
-//
-//			character.getDomains().addListListener(this);
-//			character.getLanguages().addListListener(this);
-//			character.getTempBonuses().addListListener(this);
-//			character.getTemplates().addListListener(this);
 		}
 
 		public void uninstall()
 		{
-//			character.getAgeCategoryRef().removeReferenceListener(this);
-//			character.getAgeRef().removeReferenceListener(this);
-//			character.getAlignmentRef().removeReferenceListener(this);
-//			character.getCarriedWeightRef().removeReferenceListener(this);
-//			character.getDeityRef().removeReferenceListener(this);
-//			character.getGenderRef().removeReferenceListener(this);
-//			character.getHandedRef().removeReferenceListener(this);
-//			character.getLoadRef().removeReferenceListener(this);
-//			character.getNameRef().removeReferenceListener(this);
-//			character.getPlayersNameRef().removeReferenceListener(this);
-//			character.getRaceRef().removeReferenceListener(this);
-//			character.getStatTotalTextRef().removeReferenceListener(this);
-//			character.getTotalHPRef().removeReferenceListener(this);
-//			character.getXPRef().removeReferenceListener(this);
-//
-//			character.getDomains().removeListListener(this);
-//			character.getLanguages().removeListListener(this);
-//			character.getTempBonuses().removeListListener(this);
-//			character.getTemplates().removeListListener(this);
 		}
 
 		@Override

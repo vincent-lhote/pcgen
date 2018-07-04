@@ -18,6 +18,8 @@
  */
 package plugin.pretokens.test;
 
+import java.util.List;
+
 import pcgen.cdom.base.CDOMObject;
 import pcgen.core.PlayerCharacter;
 import pcgen.core.prereq.AbstractPrerequisiteTest;
@@ -26,18 +28,12 @@ import pcgen.core.prereq.PrerequisiteTest;
 import pcgen.core.spell.Spell;
 import pcgen.system.LanguageBundle;
 
-import java.util.List;
-
 /**
  * Prerequisite tester, tests for the presence of a school of spellcasting.
  */
-public class PreSpellSchoolTester extends AbstractPrerequisiteTest implements
-		PrerequisiteTest
+public class PreSpellSchoolTester extends AbstractPrerequisiteTest implements PrerequisiteTest
 {
 
-	/**
-	 * @see pcgen.core.prereq.PrerequisiteTest#passes(pcgen.core.PlayerCharacter)
-	 */
 	@Override
 	public int passes(final Prerequisite prereq, final PlayerCharacter character, CDOMObject source)
 	{
@@ -45,11 +41,9 @@ public class PreSpellSchoolTester extends AbstractPrerequisiteTest implements
 		final int requiredLevel = Integer.parseInt(prereq.getOperand());
 
 		final List<Spell> aArrayList =
-				character.aggregateSpellList(
-					school, "A", "No-Match", requiredLevel, 20); //$NON-NLS-1$ //$NON-NLS-2$
+				character.aggregateSpellList(school, "A", "No-Match", requiredLevel, 20); //$NON-NLS-1$ //$NON-NLS-2$
 
-		final int runningTotal =
-				prereq.getOperator().compare(aArrayList.size(), 1);
+		final int runningTotal = prereq.getOperator().compare(aArrayList.size(), 1);
 		return countedTotal(prereq, runningTotal);
 	}
 
@@ -57,22 +51,17 @@ public class PreSpellSchoolTester extends AbstractPrerequisiteTest implements
 	 * Get the type of prerequisite handled by this token.
 	 * @return the type of prerequisite handled by this token.
 	 */
-    @Override
+	@Override
 	public String kindHandled()
 	{
 		return "SPELLSCHOOL"; //$NON-NLS-1$
 	}
 
-	/**
-	 * @see pcgen.core.prereq.PrerequisiteTest#toHtmlString(pcgen.core.prereq.Prerequisite)
-	 */
 	@Override
 	public String toHtmlString(final Prerequisite prereq)
 	{
 		final Object[] args =
-				new Object[]{prereq.getOperator().toDisplayString(),
-					"1", prereq.getOperand(), prereq.getKey()};
-		return LanguageBundle
-			.getFormattedString("PreSpellSchool.toHtml", args); //$NON-NLS-1$
+				new Object[]{prereq.getOperator().toDisplayString(), "1", prereq.getOperand(), prereq.getKey()};
+		return LanguageBundle.getFormattedString("PreSpellSchool.toHtml", args); //$NON-NLS-1$
 	}
 }

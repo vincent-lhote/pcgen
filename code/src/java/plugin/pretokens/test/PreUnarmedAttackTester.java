@@ -27,14 +27,9 @@ import pcgen.core.prereq.Prerequisite;
 import pcgen.core.prereq.PrerequisiteTest;
 import pcgen.system.LanguageBundle;
 
-
-public class PreUnarmedAttackTester extends AbstractPrerequisiteTest implements
-		PrerequisiteTest
+public class PreUnarmedAttackTester extends AbstractPrerequisiteTest implements PrerequisiteTest
 {
 
-	/**
-	 * @see pcgen.core.prereq.PrerequisiteTest#passes(pcgen.core.PlayerCharacter)
-	 */
 	@Override
 	public int passes(final Prerequisite prereq, final PlayerCharacter character, CDOMObject source)
 	{
@@ -46,8 +41,7 @@ public class PreUnarmedAttackTester extends AbstractPrerequisiteTest implements
 		}
 
 		final int requiredValue = Integer.parseInt(prereq.getOperand());
-		final int runningTotal =
-				prereq.getOperator().compare(att, requiredValue);
+		final int runningTotal = prereq.getOperator().compare(att, requiredValue);
 		return countedTotal(prereq, runningTotal);
 	}
 
@@ -55,21 +49,18 @@ public class PreUnarmedAttackTester extends AbstractPrerequisiteTest implements
 	 * Get the type of prerequisite handled by this token.
 	 * @return the type of prerequisite handled by this token.
 	 */
-    @Override
+	@Override
 	public String kindHandled()
 	{
 		return "UATT"; //$NON-NLS-1$
 	}
 
-	/**
-	 * @see pcgen.core.prereq.PrerequisiteTest#toHtmlString(pcgen.core.prereq.Prerequisite)
-	 */
 	@Override
 	public String toHtmlString(final Prerequisite prereq)
 	{
-		return LanguageBundle
-			.getFormattedString(
-				"PreUnarmedAttack.toHtml", prereq.getOperator().toString(), prereq.getOperand()); //$NON-NLS-1$
+		return LanguageBundle.getFormattedString(
+			"PreUnarmedAttack.toHtml", prereq.getOperator().toString(), //$NON-NLS-1$
+			prereq.getOperand());
 	}
 
 }

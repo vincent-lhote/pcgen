@@ -15,23 +15,23 @@
  */
 package pcgen.core.utils;
 
-import pcgen.util.Logging;
+import java.io.BufferedWriter;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Properties;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
-import java.io.*;
-import java.util.*;
+import pcgen.util.Logging;
 
 /**
  * An subclass of Properties whose output is sorted
  */
 public class SortedProperties extends Properties
 {
-	/**
-	 * Constructor
-	 */
-	public SortedProperties()
-	{
-		super();
-	}
 
 	/**
 	 * Store properties
@@ -82,10 +82,7 @@ public class SortedProperties extends Properties
 			{
 				if (Logging.isDebugMode())
 				{
-					Logging
-						.debugPrint(
-							"Caught exception trying to close writer in SortedProperties.mystore",
-							iox);
+					Logging.debugPrint("Caught exception trying to close writer in SortedProperties.mystore", iox);
 				}
 
 				// ignore
@@ -127,5 +124,5 @@ public class SortedProperties extends Properties
 		key = key.replaceAll("=", "\\\\=");
 		return key;
 	}
-	
+
 }

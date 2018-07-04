@@ -19,21 +19,18 @@
 package plugin.lsttokens.kit;
 
 import pcgen.cdom.base.CDOMReference;
-import pcgen.cdom.base.Constants;
 import pcgen.cdom.reference.CDOMSingleRef;
 import pcgen.core.Race;
 import pcgen.core.kit.KitRace;
 import pcgen.rules.context.LoadContext;
 import pcgen.rules.persistence.token.AbstractNonEmptyToken;
 import pcgen.rules.persistence.token.CDOMPrimaryToken;
-import pcgen.rules.persistence.token.ComplexParseResult;
 import pcgen.rules.persistence.token.ParseResult;
 
 /**
  * Handles the RACE tag as well as Common tags on the RACE line.
  */
-public class RaceToken extends AbstractNonEmptyToken<KitRace> implements
-		CDOMPrimaryToken<KitRace>
+public class RaceToken extends AbstractNonEmptyToken<KitRace> implements CDOMPrimaryToken<KitRace>
 {
 	private static final Class<Race> RACE_CLASS = Race.class;
 
@@ -57,15 +54,7 @@ public class RaceToken extends AbstractNonEmptyToken<KitRace> implements
 	@Override
 	protected ParseResult parseNonEmptyToken(LoadContext context, KitRace kitRace, String value)
 	{
-		if (Constants.NONESELECTED.equals(value))
-		{
-			ComplexParseResult pr = new ComplexParseResult();
-			pr.addWarningMessage("NONESELECTED is not necessary in KIT RACE: "
-					+ "Token is not processed");
-			return pr;
-		}
-		CDOMSingleRef<Race> ref =
-				context.getReferenceContext().getCDOMReference(RACE_CLASS, value);
+		CDOMSingleRef<Race> ref = context.getReferenceContext().getCDOMReference(RACE_CLASS, value);
 		kitRace.setRace(ref);
 		return ParseResult.SUCCESS;
 	}

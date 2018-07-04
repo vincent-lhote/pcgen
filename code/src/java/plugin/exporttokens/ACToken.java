@@ -28,9 +28,6 @@ import pcgen.io.exporttoken.Token;
  */
 public class ACToken extends Token
 {
-	/**
-	 * @see pcgen.io.exporttoken.Token#getTokenName()
-	 */
 	@Override
 	public String getTokenName()
 	{
@@ -38,8 +35,7 @@ public class ACToken extends Token
 	}
 
 	@Override
-	public String getToken(String tokenSource, PlayerCharacter pc,
-		ExportHandler eh)
+	public String getToken(String tokenSource, PlayerCharacter pc, ExportHandler eh)
 	{
 		String solverValue = pc.getControl("ACVAR" + tokenSource);
 		int intValue;

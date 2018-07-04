@@ -20,6 +20,7 @@ package pcgen.gui2.facade;
 import org.junit.Test;
 
 import pcgen.AbstractCharacterTestCase;
+import pcgen.cdom.base.BasicClassIdentity;
 import pcgen.cdom.base.CDOMReference;
 import pcgen.cdom.enumeration.ListKey;
 import pcgen.cdom.list.CompanionList;
@@ -34,6 +35,7 @@ import pcgen.core.Race;
 import pcgen.core.SettingsHandler;
 import pcgen.core.character.Follower;
 import pcgen.facade.core.CampaignFacade;
+import pcgen.facade.core.CharacterFacade;
 import pcgen.facade.core.DataSetFacade;
 import pcgen.facade.util.DefaultReferenceFacade;
 import pcgen.facade.util.DefaultListFacade;
@@ -64,18 +66,20 @@ public class CompanionSupportFacadeImplTest extends AbstractCharacterTestCase
 		uiDelegate = new MockUIDelegate();
 		todoManager = new TodoManager();
 		ListFacade<CampaignFacade> campaigns = new DefaultListFacade<>();
-		dataSetFacade = new DataSet(Globals.getContext(), SettingsHandler.getGame(), campaigns );
+		dataSetFacade = new DataSet(Globals.getContext(), SettingsHandler.getGame(), campaigns);
 		masterRace = TestHelper.makeRace("Wood Elf");
 		companionRace = TestHelper.makeRace("Weasel");
 
 		CDOMReference<Race> race  = new CDOMDirectSingleRef<>(companionRace);
-		CDOMSingleRef<CompanionList> ref  = new CDOMSimpleSingleRef<>(CompanionList.class, companionList.getKeyName());
+		CDOMSingleRef<CompanionList> ref = new CDOMSimpleSingleRef<>(
+			BasicClassIdentity.getIdentity(CompanionList.class),
+			companionList.getKeyName());
 		FollowerOption option = new FollowerOption(race, ref);
 		masterRace.addToListFor(ListKey.COMPANIONLIST, option);
 	}
 
 	/**
-	 * Test method for {@link pcgen.gui2.facade.CompanionSupportFacadeImpl#addCompanion(pcgen.core.facade.CharacterFacade, java.lang.String)}.
+	 * Test method for {@link pcgen.gui2.facade.CompanionSupportFacadeImpl#addCompanion(CharacterFacade, String)}
 	 */
 	@Test
 	public void testAddCompanion()

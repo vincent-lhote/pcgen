@@ -37,27 +37,19 @@ public class SkillLevelToken extends SkillToken
 	/** token name */
 	public static final String TOKEN_NAME = "SKILLLEVEL";
 
-	/**
-	 * @see pcgen.io.exporttoken.Token#getTokenName()
-	 */
 	@Override
 	public String getTokenName()
 	{
 		return TOKEN_NAME;
 	}
 
-	/**
-	 * @see pcgen.io.exporttoken.Token#getToken(java.lang.String, pcgen.core.PlayerCharacter, pcgen.io.ExportHandler)
-	 */
 	@Override
-	public String getToken(String tokenSource, PlayerCharacter pc,
-		ExportHandler eh)
+	public String getToken(String tokenSource, PlayerCharacter pc, ExportHandler eh)
 	{
 		CharacterDisplay display = pc.getDisplay();
 		SkillDetails details = buildSkillDetails(tokenSource);
 
-		if (details.getPropertyCount() > 0
-			&& "TOTAL".equals(details.getProperty(0)))
+		if (details.getPropertyCount() > 0 && "TOTAL".equals(details.getProperty(0)))
 		{
 			final int aLevelOffset;
 
@@ -65,21 +57,18 @@ public class SkillLevelToken extends SkillToken
 			{
 				aLevelOffset = Integer.parseInt(details.getSkillId()) - 1;
 
-				if ((aLevelOffset >= display.getLevelInfoSize())
-					|| (aLevelOffset < 0))
+				if ((aLevelOffset >= display.getLevelInfoSize()) || (aLevelOffset < 0))
 				{
 					return "0";
 				}
 
-				final PCLevelInfo wLevelInfo =
-						display.getLevelInfo(aLevelOffset);
+				final PCLevelInfo wLevelInfo = display.getLevelInfo(aLevelOffset);
 				final int wOutput = wLevelInfo.getSkillPointsGained(pc);
 				return Integer.toString(wOutput);
 			}
 			catch (NumberFormatException nfe)
 			{
-				Logging.errorPrint("Error replacing SKILLLEVEL." + tokenSource,
-					nfe);
+				Logging.errorPrint("Error replacing SKILLLEVEL." + tokenSource, nfe);
 
 				return "";
 			}

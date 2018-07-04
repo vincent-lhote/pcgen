@@ -2,9 +2,9 @@ package pcgen.core;
 
 import java.util.Random;
 import java.util.stream.IntStream;
+
 import junit.framework.TestCase;
 import pcgen.base.util.RandomUtil;
-import pcgen.core.RollingMethods;
 
 /**
  * The Class <code>RollingMethodsTest</code> check that the Rollingmethods class is functioning 
@@ -28,7 +28,7 @@ public class RollingMethodsTest extends TestCase
 		RandomUtil.setRandomGenerator(random);
 
 		random.setSeed(seed);
-		int [] rolls = IntStream.generate(() -> RollingMethods.roll(sides)).limit(times).sorted().toArray();
+		int[] rolls = IntStream.generate(() -> RollingMethods.roll(sides)).limit(times).sorted().toArray();
 
 		// Make sure the raw dice roll is in the correct range
 		assertTrue(IntStream.of(rolls).min().getAsInt() > 0);
@@ -50,10 +50,10 @@ public class RollingMethodsTest extends TestCase
 		final Random random = new Random(seed);
 		RandomUtil.setRandomGenerator(random);
 
-                final int[] keepArr = IntStream.rangeClosed(times-keep, keep).toArray();
+		final int[] keepArr = IntStream.rangeClosed(times - keep, keep).toArray();
 
 		random.setSeed(seed);
-		int [] rolls = IntStream.generate(() -> RollingMethods.roll(sides)).limit(times).sorted().toArray();
+		int[] rolls = IntStream.generate(() -> RollingMethods.roll(sides)).limit(times).sorted().toArray();
 
 		// compute the sum of all the rolls
 		final int sum = IntStream.of(rolls).sum();
@@ -84,10 +84,9 @@ public class RollingMethodsTest extends TestCase
 		final Random random = new Random(seed);
 		RandomUtil.setRandomGenerator(random);
 
-                final int[] keepArr = IntStream.rangeClosed(times-keep, keep).toArray();
-
 		random.setSeed(seed);
-		int [] rolls = IntStream.generate(() -> RollingMethods.roll(sides-reroll)+reroll).limit(times).sorted().toArray();
+		int[] rolls =
+				IntStream.generate(() -> RollingMethods.roll(sides - reroll) + reroll).limit(times).sorted().toArray();
 
 		// compute the sum of all the rolls
 		final int sum = IntStream.of(rolls).sum();

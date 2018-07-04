@@ -47,16 +47,6 @@ public class FactSetLstTest extends AbstractGlobalTokenTestCase
 	{
 		TokenRegistration.clearTokens();
 		super.setUp();
-		FactSetDefinition fd = new FactSetDefinition();
-		fd.setName("DEITY.Possibility");
-		fd.setFactSetName("Possibility");
-		fd.setUsableLocation(Domain.class);
-		fd.setFormatManager(new StringManager());
-		fd.setVisibility(Visibility.HIDDEN);
-		primaryContext.getReferenceContext().importObject(fd);
-		secondaryContext.getReferenceContext().importObject(fd);
-		SourceFileLoader.processFactDefinitions(primaryContext);
-		SourceFileLoader.processFactDefinitions(secondaryContext);
 	}
 
 	@Override
@@ -179,6 +169,22 @@ public class FactSetLstTest extends AbstractGlobalTokenTestCase
 	@Override
 	protected ConsolidationRule getConsolidationRule()
 	{
-		return strings -> new String[] { "Possibility|TestWP1|TestWP2" };
+		return strings -> new String[]{"Possibility|TestWP1|TestWP2"};
 	}
+
+	@Override
+	protected void additionalSetup(LoadContext context)
+	{
+		super.additionalSetup(context);
+		FactSetDefinition fd = new FactSetDefinition();
+		fd.setName("DEITY.Possibility");
+		fd.setFactSetName("Possibility");
+		fd.setUsableLocation(Domain.class);
+		fd.setFormatManager(new StringManager());
+		fd.setVisibility(Visibility.HIDDEN);
+		context.getReferenceContext().importObject(fd);
+		SourceFileLoader.processFactDefinitions(context);
+	}
+	
+	
 }

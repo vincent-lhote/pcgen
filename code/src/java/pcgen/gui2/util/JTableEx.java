@@ -78,8 +78,7 @@ public class JTableEx extends JTable
 		this(tm, tcm, null);
 	}
 
-	public JTableEx(TableModel tm, TableColumnModel tcm,
-			ListSelectionModel lsm)
+	public JTableEx(TableModel tm, TableColumnModel tcm, ListSelectionModel lsm)
 	{
 		super(tm, tcm, lsm);
 		setFillsViewportHeight(true);
@@ -113,7 +112,7 @@ public class JTableEx extends JTable
 		ActionEvent e = null;
 		// Guaranteed to return a non-null array
 		Object[] listeners = listenerList.getListenerList();
-        // Process the listeners last to first, notifying
+		// Process the listeners last to first, notifying
 		// those that are interested in this event
 		for (int i = listeners.length - 2; i >= 0; i -= 2)
 		{
@@ -135,11 +134,11 @@ public class JTableEx extends JTable
 		listenerList.add(ActionListener.class, listener);
 	}
 
-    public void removeActionListener(ActionListener listener)
-    {
-        listenerList.remove(ActionListener.class, listener);
-    }
-	
+	public void removeActionListener(ActionListener listener)
+	{
+		listenerList.remove(ActionListener.class, listener);
+	}
+
 	@Override
 	public boolean getAutoCreateRowSorter()
 	{
@@ -160,16 +159,15 @@ public class JTableEx extends JTable
 			}
 			else
 			{
-				setRowSorter(new TableRowSorter(model));
+				setRowSorter(new TableRowSorter<>(model));
 			}
 		}
-		firePropertyChange("autoCreateRowSorter", oldValue,
-				autoCreateRowSorter);
+		firePropertyChange("autoCreateRowSorter", oldValue, autoCreateRowSorter);
 	}
 
 	public void sortModel()
 	{
-		RowSorter rowSorter = getRowSorter();
+		RowSorter<?> rowSorter = getRowSorter();
 		if (rowSorter != null)
 		{
 			rowSorter.setSortKeys(getRowSorter().getSortKeys());
@@ -205,7 +203,7 @@ public class JTableEx extends JTable
 				}
 				else
 				{
-					super.setRowSorter(new TableRowSorter(dataModel));
+					super.setRowSorter(new TableRowSorter<>(dataModel));
 				}
 			}
 		}
@@ -219,8 +217,7 @@ public class JTableEx extends JTable
 	 **/
 	public void setColAlign(int col, int alignment)
 	{
-		getColumnModel().getColumn(col).setCellRenderer(
-				new TableCellUtilities.AlignRenderer(alignment));
+		getColumnModel().getColumn(col).setCellRenderer(new TableCellUtilities.AlignRenderer(alignment));
 	}
 
 }

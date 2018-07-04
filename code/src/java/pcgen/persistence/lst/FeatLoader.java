@@ -26,30 +26,29 @@ import pcgen.core.Ability;
 import pcgen.core.AbilityCategory;
 import pcgen.persistence.PersistenceLayerException;
 import pcgen.persistence.SystemLoader;
+import pcgen.rules.context.AbstractReferenceContext;
 import pcgen.rules.context.LoadContext;
 import pcgen.util.Logging;
-
 
 public final class FeatLoader extends AbilityLoader
 {
 	private boolean defaultFeatsLoaded = false;
 
-	/**
-	 * @see pcgen.persistence.lst.LstObjectFileLoader#parseLine(LoadContext, CDOMObject, String, SourceEntry)
-	 */
 	@Override
-	public Ability parseLine(LoadContext context, Ability aFeat,
-		String lstLine, SourceEntry source) throws PersistenceLayerException
+	public Ability parseLine(LoadContext context, Ability aFeat, String lstLine, SourceEntry source)
+		throws PersistenceLayerException
 	{
 		Ability feat = aFeat;
 
+		AbstractReferenceContext referenceContext = context.getReferenceContext();
+		AbilityCategory featCategory = referenceContext.get(AbilityCategory.class, "FEAT");
 		if (feat == null)
 		{
 			feat = new Ability();
 			int tabLoc = lstLine.indexOf(SystemLoader.TAB_DELIM);
 			String name = tabLoc == -1 ? lstLine : lstLine.substring(0, tabLoc);
 			feat.setName(name.intern());
-			feat.setCDOMCategory(AbilityCategory.FEAT);
+			feat.setCDOMCategory(featCategory);
 			context.addStatefulInformation(feat);
 			context.getReferenceContext().importObject(feat);
 		}
@@ -61,9 +60,6 @@ public final class FeatLoader extends AbilityLoader
 		return super.parseLine(context, feat, lstLine, source);
 	}
 
-	/**
-	 * @see pcgen.persistence.lst.LstObjectFileLoader#loadLstFile(LoadContext, CampaignSourceEntry)
-	 */
 	@Override
 	protected void loadLstFile(LoadContext context, CampaignSourceEntry sourceEntry)
 	{
@@ -82,8 +78,10 @@ public final class FeatLoader extends AbilityLoader
 	 */
 	private void loadDefaultFeats(LoadContext context, CampaignSourceEntry firstSource)
 	{
-		Ability wpFeat = context.getReferenceContext().silentlyGetConstructedCDOMObject(Ability.class,
-				AbilityCategory.FEAT, Constants.INTERNAL_WEAPON_PROF);
+		AbstractReferenceContext referenceContext = context.getReferenceContext();
+		AbilityCategory featCategory = referenceContext.get(AbilityCategory.class, "FEAT");
+		Ability wpFeat =
+				referenceContext.getManufacturerId(featCategory).getActiveObject(Constants.INTERNAL_WEAPON_PROF);
 		if (wpFeat == null)
 		{
 
@@ -92,41 +90,34 @@ public final class FeatLoader extends AbilityLoader
 			 * Weapon Proficiency feat, but it does not allow multiples (either all or
 			 * nothing).  So monk class weapons will get dumped into this bucket.  */
 
-			String aLine =
-					Constants.INTERNAL_WEAPON_PROF
-					+ "\tOUTPUTNAME:Weapon Proficiency\tTYPE:General"
-					+ "\tVISIBLE:NO\tMULT:YES\tSTACK:YES\tCHOOSE:NOCHOICE"
-					+ "\tDESC:You attack with this specific weapon normally,"
-					+ " non-proficiency incurs a -4 to hit penalty."
-					+ "\tSOURCELONG:PCGen Internal";
+			String aLine = Constants.INTERNAL_WEAPON_PROF + "\tOUTPUTNAME:Weapon Proficiency\tTYPE:General"
+				+ "\tVISIBLE:NO\tMULT:YES\tSTACK:YES\tCHOOSE:NOCHOICE"
+				+ "\tDESC:You attack with this specific weapon normally,"
+				+ " non-proficiency incurs a -4 to hit penalty." + "\tSOURCELONG:PCGen Internal";
 			try
 			{
 				parseLine(context, null, aLine, firstSource);
 			}
 			catch (PersistenceLayerException ple)
 			{
-				Logging
-					.errorPrint("Unable to parse the internal default feats '"
-						+ aLine + "': " + ple.getMessage());
+				Logging.errorPrint("Unable to parse the internal default feats '" + aLine + "': " + ple.getMessage());
 			}
 			defaultFeatsLoaded = true;
 		}
 	}
 
-	/**
-	 * @see pcgen.persistence.lst.LstObjectFileLoader#getObjectKeyed(LoadContext, java.lang.String)
-	 */
 	@Override
 	protected Ability getObjectKeyed(LoadContext context, final String aKey)
 	{
-		return context.getReferenceContext().silentlyGetConstructedCDOMObject(Ability.class,
-				AbilityCategory.FEAT, aKey);
+		AbstractReferenceContext referenceContext = context.getReferenceContext();
+		AbilityCategory featCategory = referenceContext.get(AbilityCategory.class, "FEAT");
+		return referenceContext.getManufacturerId(featCategory).getActiveObject(aKey);
 	}
-	
+
 	@Override
 	protected Ability getMatchingObject(LoadContext context, CDOMObject key)
 	{
 		return getObjectKeyed(context, key.getKeyName());
 	}
-	
+
 }

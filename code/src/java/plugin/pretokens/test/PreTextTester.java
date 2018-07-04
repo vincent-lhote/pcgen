@@ -32,9 +32,6 @@ import pcgen.system.LanguageBundle;
 public class PreTextTester extends AbstractDisplayPrereqTest implements PrerequisiteTest
 {
 
-	/**
-	 * @see pcgen.core.prereq.PrerequisiteTest#passes(pcgen.core.PlayerCharacter)
-	 */
 	@Override
 	public int passes(final Prerequisite prereq, final CharacterDisplay display, CDOMObject source)
 	{
@@ -53,26 +50,23 @@ public class PreTextTester extends AbstractDisplayPrereqTest implements Prerequi
 	 * Get the type of prerequisite handled by this token.
 	 * @return the type of prerequisite handled by this token.
 	 */
-    @Override
+	@Override
 	public String kindHandled()
 	{
 		return "TEXT"; //$NON-NLS-1$
 	}
 
-
 	/**
-     * Convert PreReq to an HTML string
-     * 
-     * @param prereq
-     * @return html String representation of the PreReq 
+	 * Convert PreReq to an HTML string
+	 * 
+	 * @param prereq
+	 * @return html String representation of the PreReq 
 	 */
-    @Override
-    public String toHtmlString(final Prerequisite prereq)
+	@Override
+	public String toHtmlString(final Prerequisite prereq)
 	{
-		return LanguageBundle.getFormattedString(
-			    "AbstractPrerequisiteTest.toHtml",
-				prereq.getOperator().toDisplayString(), "",
-				"", prereq.getKey());
+		return LanguageBundle.getFormattedString("AbstractPrerequisiteTest.toHtml",
+			prereq.getOperator().toDisplayString(), "", "", prereq.getKey());
 	}
 
 }

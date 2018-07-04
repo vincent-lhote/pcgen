@@ -32,9 +32,6 @@ public class SpellFailureToken extends Token
 {
 	public static final String TOKENNAME = "SPELLFAILURE";
 
-	/**
-	 * @see pcgen.io.exporttoken.Token#getTokenName()
-	 */
 	@Override
 	public String getTokenName()
 	{
@@ -42,21 +39,15 @@ public class SpellFailureToken extends Token
 	}
 
 	//TODO: Rip the processing of this token out of PlayerCharacter
-	/**
-	 * @see pcgen.io.exporttoken.Token#getToken(java.lang.String, pcgen.core.PlayerCharacter, pcgen.io.ExportHandler)
-	 */
 	@Override
-	public String getToken(String tokenSource, PlayerCharacter pc,
-		ExportHandler eh)
+	public String getToken(String tokenSource, PlayerCharacter pc, ExportHandler eh)
 	{
 		return Integer.toString(getSpellFailure(pc));
 	}
 
 	private int getSpellFailure(PlayerCharacter pc)
 	{
-		String spellFailVar =
-				ControlUtilities.getControlToken(Globals.getContext(),
-					CControl.PCSPELLFAILURE);
+		String spellFailVar = ControlUtilities.getControlToken(Globals.getContext(), CControl.PCSPELLFAILURE);
 		if (spellFailVar == null)
 		{
 			int bonus = 0;

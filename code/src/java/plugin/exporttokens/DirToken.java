@@ -40,21 +40,14 @@ import pcgen.util.Logging;
  */
 public class DirToken extends AbstractExportToken
 {
-	/**
-	 * @see pcgen.io.exporttoken.Token#getTokenName()
-	 */
 	@Override
 	public String getTokenName()
 	{
 		return "DIR";
 	}
 
-	/**
-	 * @see pcgen.io.exporttoken.Token#getToken(java.lang.String, pcgen.core.PlayerCharacter, pcgen.io.ExportHandler)
-	 */
 	@Override
-	public String getToken(String tokenSource, CharacterDisplay display,
-		ExportHandler eh)
+	public String getToken(String tokenSource, CharacterDisplay display, ExportHandler eh)
 	{
 		String retString = "";
 		StringTokenizer aTok = new StringTokenizer(tokenSource, ".");
@@ -111,8 +104,7 @@ public class DirToken extends AbstractExportToken
 	 */
 	public static String getPCGenToken()
 	{
-		return new File(ConfigurationSettings.getSystemsDir())
-			.getAbsolutePath();
+		return new File(ConfigurationSettings.getSystemsDir()).getAbsolutePath();
 	}
 
 	/**
@@ -139,7 +131,6 @@ public class DirToken extends AbstractExportToken
 	 */
 	public static String getTemplatesToken()
 	{
-		return new File(ConfigurationSettings.getOutputSheetsDir())
-			.getAbsolutePath();
+		return new File(ConfigurationSettings.getOutputSheetsDir()).getAbsolutePath();
 	}
 }

@@ -17,6 +17,9 @@
  */
 package pcgen.rules.persistence.token;
 
+import static pcgen.rules.persistence.token.ParseResult.generateText;
+
+import java.net.URI;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
@@ -29,8 +32,7 @@ import pcgen.util.Logging;
  */
 public class ComplexParseResult implements ParseResult
 {
-	private final List<QueuedMessage> queuedMessages =
-            new LinkedList<>();
+	private final List<QueuedMessage> queuedMessages = new LinkedList<>();
 
 	public ComplexParseResult()
 	{
@@ -52,15 +54,15 @@ public class ComplexParseResult implements ParseResult
 		addParseMessage(Logging.LST_ERROR, msg);
 	}
 
-    public void addWarningMessage(String msg)
-    {
-        addParseMessage(Logging.LST_WARNING, msg);
-    }
+	public void addWarningMessage(String msg)
+	{
+		addParseMessage(Logging.LST_WARNING, msg);
+	}
 
-    public void addInfoMessage(String msg)
-    {
-        addParseMessage(Logging.LST_INFO, msg);
-    }
+	public void addInfoMessage(String msg)
+	{
+		addParseMessage(Logging.LST_INFO, msg);
+	}
 
 	protected void addParseMessage(Level lvl, String msg)
 	{
@@ -76,20 +78,20 @@ public class ComplexParseResult implements ParseResult
 	}
 
 	@Override
-	public void printMessages()
+	public void printMessages(URI uri)
 	{
 		for (QueuedMessage msg : queuedMessages)
 		{
-			Logging.log(msg.level, msg.message, msg.stackTrace);
+			Logging.log(msg.level, generateText(msg, uri), msg.stackTrace);
 		}
 	}
 
 	@Override
-	public void addMessagesToLog()
+	public void addMessagesToLog(URI uri)
 	{
 		for (QueuedMessage msg : queuedMessages)
 		{
-			Logging.addParseMessage(msg.level, msg.message, msg.stackTrace);
+			Logging.addParseMessage(msg.level, generateText(msg, uri), msg.stackTrace);
 		}
 	}
 

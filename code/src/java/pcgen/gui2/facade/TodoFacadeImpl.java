@@ -35,7 +35,7 @@ public class TodoFacadeImpl implements TodoFacade
 	private final String messageKey;
 	private final int order;
 	private String subTabName;
-	
+
 	/**
 	 * Create a new todo task.
 	 * @param tab The tab on which the task exists
@@ -49,7 +49,7 @@ public class TodoFacadeImpl implements TodoFacade
 		this.messageKey = messageKey;
 		this.order = order;
 	}
-	
+
 	/**
 	 * Create a new todo task.
 	 * @param tab The tab on which the task exists
@@ -66,9 +66,9 @@ public class TodoFacadeImpl implements TodoFacade
 		this.subTabName = subTabName;
 		this.order = order;
 	}
-	
+
 	/**
-	 * @see pcgen.core.facade.TodoFacade#getFieldName()
+	 * @see pcgen.facade.core.TodoFacade#getFieldName()
 	 */
 	@Override
 	public String getFieldName()
@@ -77,7 +77,7 @@ public class TodoFacadeImpl implements TodoFacade
 	}
 
 	/**
-	 * @see pcgen.core.facade.TodoFacade#getMessage()
+	 * @see pcgen.facade.core.TodoFacade#getMessageKey()
 	 */
 	@Override
 	public String getMessageKey()
@@ -86,7 +86,7 @@ public class TodoFacadeImpl implements TodoFacade
 	}
 
 	/**
-	 * @see pcgen.core.facade.TodoFacade#getTabName()
+	 * @see pcgen.facade.core.TodoFacade#getTab()
 	 */
 	@Override
 	public Tab getTab()
@@ -100,35 +100,35 @@ public class TodoFacadeImpl implements TodoFacade
 	@Override
 	public int compareTo(TodoFacade that)
 	{
-	    final int BEFORE = -1;
-	    final int EQUAL = 0;
-	    final int AFTER = 1;
+		final int BEFORE = -1;
+		final int EQUAL = 0;
+		final int AFTER = 1;
 
-	    // quick check for the same object
-	    if ( this == that )
-	    {
-	    	return EQUAL;
-	    }
+		// quick check for the same object
+		if (this == that)
+		{
+			return EQUAL;
+		}
 
-	    // Sort first by tab 
-	    if (this.tab != that.getTab())
-	    {
-	    	return this.tab.compareTo(that.getTab());
-	    }
-	    
-	    // Then sort by the order
-	    if (that instanceof TodoFacadeImpl)
-	    {
+		// Sort first by tab 
+		if (this.tab != that.getTab())
+		{
+			return this.tab.compareTo(that.getTab());
+		}
+
+		// Then sort by the order
+		if (that instanceof TodoFacadeImpl)
+		{
 			if (this.order > ((TodoFacadeImpl) that).order)
-		    {
-		    	return AFTER;
-		    }
+			{
+				return AFTER;
+			}
 			if (this.order < ((TodoFacadeImpl) that).order)
-		    {
-		    	return BEFORE;
-		    }
+			{
+				return BEFORE;
+			}
 			return this.fieldName.compareTo(((TodoFacadeImpl) that).fieldName);
-	    }
+		}
 
 		return EQUAL;
 	}
@@ -138,5 +138,5 @@ public class TodoFacadeImpl implements TodoFacade
 	{
 		return subTabName;
 	}
-	
+
 }

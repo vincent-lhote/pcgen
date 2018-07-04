@@ -38,21 +38,14 @@ public class LevelToken extends Token
 	/** Token name */
 	public static final String TOKENNAME = "LEVEL";
 
-	/**
-	 * @see pcgen.io.exporttoken.Token#getTokenName()
-	 */
 	@Override
 	public String getTokenName()
 	{
 		return TOKENNAME;
 	}
 
-	/**
-	 * @see pcgen.io.exporttoken.Token#getToken(java.lang.String, pcgen.core.PlayerCharacter, pcgen.io.ExportHandler)
-	 */
 	@Override
-	public String getToken(String tokenSource, PlayerCharacter pc,
-		ExportHandler eh)
+	public String getToken(String tokenSource, PlayerCharacter pc, ExportHandler eh)
 	{
 		String retString = "";
 		StringTokenizer aTok = new StringTokenizer(tokenSource, ".");
@@ -65,7 +58,7 @@ public class LevelToken extends Token
 			level = Integer.parseInt(aTok.nextToken());
 		}
 
-		if (level < 1 || level >  pc.getDisplay().getLevelInfoSize())
+		if (level < 1 || level > pc.getDisplay().getLevelInfoSize())
 		{
 			//TODO Error?
 			return "";
@@ -112,7 +105,8 @@ public class LevelToken extends Token
 		PCClass aClass = pc.getClassKeyed(classKeyName);
 		if (aClass == null)
 		{
-			aClass = Globals.getContext().getReferenceContext().silentlyGetConstructedCDOMObject(PCClass.class, classKeyName);
+			aClass = Globals.getContext().getReferenceContext().silentlyGetConstructedCDOMObject(PCClass.class,
+				classKeyName);
 			if (aClass != null)
 			{
 				CDOMSingleRef<PCClass> exc = aClass.get(ObjectKey.EX_CLASS);

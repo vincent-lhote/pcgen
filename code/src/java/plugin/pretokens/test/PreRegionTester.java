@@ -28,13 +28,11 @@ import pcgen.core.prereq.PrerequisiteOperator;
 import pcgen.core.prereq.PrerequisiteTest;
 import pcgen.system.LanguageBundle;
 
-
 public class PreRegionTester extends AbstractDisplayPrereqTest implements PrerequisiteTest
 {
 
 	@Override
-	public int passes(Prerequisite prereq, Equipment equipment,
-		CharacterDisplay display) throws PrerequisiteException
+	public int passes(Prerequisite prereq, Equipment equipment, CharacterDisplay display) throws PrerequisiteException
 	{
 		if (display == null)
 		{
@@ -43,9 +41,6 @@ public class PreRegionTester extends AbstractDisplayPrereqTest implements Prereq
 		return passes(prereq, display, equipment);
 	}
 
-	/**
-	 * @see pcgen.core.prereq.PrerequisiteTest#passes(pcgen.core.PlayerCharacter)
-	 */
 	@Override
 	public int passes(final Prerequisite prereq, final CharacterDisplay display, CDOMObject source)
 		throws PrerequisiteException
@@ -67,8 +62,9 @@ public class PreRegionTester extends AbstractDisplayPrereqTest implements Prereq
 		}
 		else
 		{
-			throw new PrerequisiteException(LanguageBundle.getFormattedString(
-				"PreRegion.error.invalid_comparator", prereq.toString())); //$NON-NLS-1$
+			throw new PrerequisiteException(
+				LanguageBundle.getFormattedString(
+					"PreRegion.error.invalid_comparator", prereq.toString())); //$NON-NLS-1$
 		}
 
 		return countedTotal(prereq, runningTotal);
@@ -78,7 +74,7 @@ public class PreRegionTester extends AbstractDisplayPrereqTest implements Prereq
 	 * Get the type of prerequisite handled by this token.
 	 * @return the type of prerequisite handled by this token.
 	 */
-    @Override
+	@Override
 	public String kindHandled()
 	{
 		return "REGION"; //$NON-NLS-1$

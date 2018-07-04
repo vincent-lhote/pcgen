@@ -53,10 +53,11 @@ import pcgen.core.bonus.BonusObj;
 import pcgen.core.character.EquipSet;
 import pcgen.rules.context.LoadContext;
 import pcgen.util.TestHelper;
+import plugin.lsttokens.testsupport.BuildUtilities;
 
 /**
  * <code>SkillTokenTest</code> contains tests to verify that the
- * SKILL token and its subtokens are working correctly.
+ * SKILL token and its sub tokens are working correctly.
  */
 
 @SuppressWarnings("nls")
@@ -263,39 +264,39 @@ public class ExportHandlerTest extends AbstractCharacterTestCase
 		PlayerCharacter pc = getCharacter();
 		Ability dummyFeat1 = new Ability();
 		dummyFeat1.setName("1");
-		dummyFeat1.setCDOMCategory(AbilityCategory.FEAT);
+		dummyFeat1.setCDOMCategory(BuildUtilities.getFeatCat());
 		
 		Ability dummyFeat2 = new Ability();
 		dummyFeat2.setName("2");
-		dummyFeat2.setCDOMCategory(AbilityCategory.FEAT);
+		dummyFeat2.setCDOMCategory(BuildUtilities.getFeatCat());
 		
 		Ability dummyFeat3 = new Ability();
 		dummyFeat3.setName("3");
-		dummyFeat3.setCDOMCategory(AbilityCategory.FEAT);
+		dummyFeat3.setCDOMCategory(BuildUtilities.getFeatCat());
 		
 		Ability dummyFeat4 = new Ability();
 		dummyFeat4.setName("4");
-		dummyFeat4.setCDOMCategory(AbilityCategory.FEAT);
+		dummyFeat4.setCDOMCategory(BuildUtilities.getFeatCat());
 		
 		Ability dummyFeat5 = new Ability();
 		dummyFeat5.setName("5");
-		dummyFeat5.setCDOMCategory(AbilityCategory.FEAT);
+		dummyFeat5.setCDOMCategory(BuildUtilities.getFeatCat());
 		
 		Ability dummyFeat6 = new Ability();
 		dummyFeat6.setName("6");
-		dummyFeat6.setCDOMCategory(AbilityCategory.FEAT);
+		dummyFeat6.setCDOMCategory(BuildUtilities.getFeatCat());
 		
 		Ability dummyFeat7 = new Ability();
 		dummyFeat7.setName("7");
-		dummyFeat7.setCDOMCategory(AbilityCategory.FEAT);	
+		dummyFeat7.setCDOMCategory(BuildUtilities.getFeatCat());	
 		
-		addAbility(AbilityCategory.FEAT, dummyFeat1);
-		addAbility(AbilityCategory.FEAT, dummyFeat2);
-		addAbility(AbilityCategory.FEAT, dummyFeat3);
-		addAbility(AbilityCategory.FEAT, dummyFeat4);
-		addAbility(AbilityCategory.FEAT, dummyFeat5);
-		addAbility(AbilityCategory.FEAT, dummyFeat6);
-		addAbility(AbilityCategory.FEAT, dummyFeat7);
+		addAbility(BuildUtilities.getFeatCat(), dummyFeat1);
+		addAbility(BuildUtilities.getFeatCat(), dummyFeat2);
+		addAbility(BuildUtilities.getFeatCat(), dummyFeat3);
+		addAbility(BuildUtilities.getFeatCat(), dummyFeat4);
+		addAbility(BuildUtilities.getFeatCat(), dummyFeat5);
+		addAbility(BuildUtilities.getFeatCat(), dummyFeat6);
+		addAbility(BuildUtilities.getFeatCat(), dummyFeat7);
 		
 		assertEquals("Test for evaluates correctly", "----------------",
 			evaluateToken(
@@ -304,16 +305,16 @@ public class ExportHandlerTest extends AbstractCharacterTestCase
 			evaluateToken(
 				"FOR.1,((24-STRLEN[SKILL.0])),24, ,NONE,NONE,1", pc));
 		
-		String tok = "DFOR." +
-		"0" +
-		",${((count(\"ABILITIES\";\"CATEGORY=FEAT\")+1)/2)}" +
-		",1" +
-		",${(count(\"ABILITIES\";\"CATEGORY=FEAT\")+1)}" +
-		",${((count(\"ABILITIES\";\"CATEGORY=FEAT\")+1)/2)}" +
-		", \\FEAT.%.NAME\\ " +
-		",[" +
-		",]" +
-		",0";
+		String tok = "DFOR."
+			+ "0"
+			+ ",${((count(\"ABILITIES\";\"CATEGORY=FEAT\")+1)/2)}"
+			+ ",1"
+			+ ",${(count(\"ABILITIES\";\"CATEGORY=FEAT\")+1)}"
+			+ ",${((count(\"ABILITIES\";\"CATEGORY=FEAT\")+1)/2)}"
+			+ ", \\FEAT.%.NAME\\ "
+			+ ",["
+			+ ",]"
+			+ ",0";
 		
 		
 		//Logging.errorPrint( "DFOR Test: " + evaluateToken(tok, pc));
@@ -324,8 +325,8 @@ public class ExportHandlerTest extends AbstractCharacterTestCase
 		// will assume that x is a well formed type of value.  This was to get around 
 		// the problems with DFOR not taking ((count("ABILITIES";"CATEGORY=FEAT")+1)
 		// since it could not figure out how to parse it to send to the right place.
-		assertEquals("Test for DFOR ","[ 1  5 ][ 2  6 ][ 3  7 ][ 4   ]", 
-				evaluateToken(tok, pc)	);
+		assertEquals("Test for DFOR ", "[ 1  5 ][ 2  6 ][ 3  7 ][ 4   ]", 
+			evaluateToken(tok, pc));
 					
 	}
 	
@@ -351,7 +352,7 @@ public class ExportHandlerTest extends AbstractCharacterTestCase
 		LoadContext context = Globals.getContext();
 		Ability dummyFeat = new Ability();
 		dummyFeat.setName("DummyFeat");
-		dummyFeat.setCDOMCategory(AbilityCategory.FEAT);
+		dummyFeat.setCDOMCategory(BuildUtilities.getFeatCat());
 		final PlayerCharacter pc = getCharacter();
 
 		// Create a variable
@@ -361,7 +362,7 @@ public class ExportHandlerTest extends AbstractCharacterTestCase
 		// Create a bonus to it
 		Ability dummyFeat2 = new Ability();
 		dummyFeat2.setName("DummyFeat2");
-		dummyFeat2.setCDOMCategory(AbilityCategory.FEAT);
+		dummyFeat2.setCDOMCategory(BuildUtilities.getFeatCat());
 		final BonusObj aBonus = Bonus.newBonus(context, "VAR|NegLevels|7");
 		
 		if (aBonus != null)
@@ -381,8 +382,8 @@ public class ExportHandlerTest extends AbstractCharacterTestCase
 		dummyFeat4.setName("DummyFeat4");
 		dummyFeat4.setCDOMCategory(cat2);
 		
-		addAbility(AbilityCategory.FEAT, dummyFeat);
-		addAbility(AbilityCategory.FEAT, dummyFeat2);
+		addAbility(BuildUtilities.getFeatCat(), dummyFeat);
+		addAbility(BuildUtilities.getFeatCat(), dummyFeat2);
 		addAbility(cat, dummyFeat3);
 		addAbility(cat2, dummyFeat4);
 		
@@ -391,7 +392,7 @@ public class ExportHandlerTest extends AbstractCharacterTestCase
 		assertEquals("Signed output", "+7", evaluateToken(
 			"VAR.NegLevels.INTVAL.SIGN", pc));
 	
-		String tok ="";
+		String tok = "";
 	
 		tok = "count(\"ABILITIES\", \"CATEGORY=Maneuver\")";		
 		// if this evaluates math wise, the values should be string "1.0"
@@ -400,7 +401,7 @@ public class ExportHandlerTest extends AbstractCharacterTestCase
 		tok = "VAR.count(\"ABILITIES\", \"CATEGORY=Maneuver\")";		
 		assertTrue("Token: |" + tok + "| == 1.0: ",  evaluateToken(tok, pc).equals("1.0"));
 	
-		tok ="COUNT[\"ABILITIES\", \"CATEGORY=Maneuver\"]";		
+		tok = "COUNT[\"ABILITIES\", \"CATEGORY=Maneuver\"]";		
 		assertFalse("Token: |" + tok + "| != 1.0: ",  evaluateToken(tok, pc).equals("1.0"));
 		
 		tok = "count(\"ABILITIES\", \"CATEGORY=Maneuver(Special)\")";
@@ -424,18 +425,18 @@ public class ExportHandlerTest extends AbstractCharacterTestCase
 	public void testPartyFor() throws IOException
 	{
 		String outputToken =
-				"   <combatants>\n"
-					+ "|FOR.0,50,1,\n"
-					+ "	<name>\\\\%.NAME\\\\</name>\n"
-					+ "	<skills>\\\\%.FOR.0,COUNT[SKILLS],1,\\SKILL.%\\: \\SKILL.%.TOTAL.SIGN\\, ,; ,1\\\\</skills>\n"
-					+ ",<combatant>,</combatant>,1|\n" + "   </combatants>";
+		"   <combatants>\n"
+		+ "|FOR.0,50,1,\n"
+		+ "	<name>\\\\%.NAME\\\\</name>\n"
+		+ "	<skills>\\\\%.FOR.0,COUNT[SKILLS],1,\\SKILL.%\\: \\SKILL.%.TOTAL.SIGN\\, ,; ,1\\\\</skills>\n"
+		+ ",<combatant>,</combatant>,1|\n" + "   </combatants>";
 		List<PlayerCharacter> pcs = new ArrayList<>();
 		pcs.add(getCharacter());
 		String result = evaluatePartyToken(outputToken, pcs).trim();
-		assertEquals(
-			"Party skills output",
-			"<combatants>" + System.getProperty("line.separator") + 
-			"<combatant>	<name></name>	<skills> Balance: +9;  KNOWLEDGE (ARCANA): +11;  KNOWLEDGE (RELIGION): +8;  Tumble: +10; </skills></combatant>   </combatants>",
+		assertEquals("Party skills output", "<combatants>"
+			+ System.getProperty("line.separator")
+			+ "<combatant>	<name></name>	<skills> Balance: +9;  KNOWLEDGE (ARCANA): +11;  "
+			+ "KNOWLEDGE (RELIGION): +8;  Tumble: +10; </skills></combatant>   </combatants>",
 			result);
 	}
 	
@@ -456,17 +457,17 @@ public class ExportHandlerTest extends AbstractCharacterTestCase
 	private String evaluatePartyToken(String token, List<PlayerCharacter> pcs)
 		throws IOException
 	{
-        // Create temp file.
-        File temp = File.createTempFile("testTemplate", ".txt");
-    
-        // Delete temp file when program exits.
-        temp.deleteOnExit();
-    
-        // Write to temp file
-        BufferedWriter out = new BufferedWriter(new FileWriter(temp));
-        out.write(token);
-        out.close();
-		
+		// Create temp file.
+		File temp = File.createTempFile("testTemplate", ".txt");
+
+		// Delete temp file when program exits.
+		temp.deleteOnExit();
+
+		// Write to temp file
+		BufferedWriter out = new BufferedWriter(new FileWriter(temp));
+		out.write(token);
+		out.close();
+
 		StringWriter retWriter = new StringWriter();
 		BufferedWriter bufWriter = new BufferedWriter(retWriter);
 		ExportHandler export = new ExportHandler(temp);

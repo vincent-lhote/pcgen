@@ -20,12 +20,13 @@
 package pcgen.gui2.tools;
 
 import java.io.IOException;
-import pcgen.util.Logging;
 
 import javax.swing.JEditorPane;
 import javax.swing.JOptionPane;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
+
+import pcgen.util.Logging;
 
 /**
  * This makes URLs load in a browser when clicked.
@@ -41,26 +42,18 @@ public final class Hyperactive implements HyperlinkListener
 		{
 			final JEditorPane pane = (JEditorPane) e.getSource();
 
-//			if (e instanceof HTMLFrameHyperlinkEvent)
-//			{
-//				final HTMLFrameHyperlinkEvent evt = (HTMLFrameHyperlinkEvent) e;
-//				final HTMLDocument doc = (HTMLDocument) pane.getDocument();
-//				doc.processHTMLFrameHyperlinkEvent(evt);
-//			}
-//			else
-//			{
 			try
 			{
 				Utility.viewInBrowser(e.getURL());
 			}
 			catch (IOException t)
 			{
-				JOptionPane.showMessageDialog(pane, "<html>An error occurred while opening your browser.<br>" +
-						"Please check PCGen's browser settings.</html>", "Could not open browser", JOptionPane.ERROR_MESSAGE);
-				Logging.errorPrint(
-						"Exception in Hyperactive::hyperlinkUpdate", t);
+				JOptionPane.showMessageDialog(pane,
+					"<html>An error occurred while opening your browser.<br>"
+						+ "Please check PCGen's browser settings.</html>",
+					"Could not open browser", JOptionPane.ERROR_MESSAGE);
+				Logging.errorPrint("Exception in Hyperactive::hyperlinkUpdate", t);
 			}
-//			}
 		}
 	}
 

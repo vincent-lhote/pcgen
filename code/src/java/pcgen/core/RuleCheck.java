@@ -25,31 +25,31 @@ public final class RuleCheck implements Loadable
 	private String ruleName;
 	private String ruleKey;
 	private String ruleDescription = "";
- 	private String parm = "";
- 	private String var = "";
+	private String parm = "";
+	private String var = "";
 	private CDOMSingleRef<RuleCheck> excludeKey;
 	private boolean isEnabledByDefault = false;
 	private URI sourceURI;
 
-    @Override
+	@Override
 	public URI getSourceURI()
 	{
 		return sourceURI;
 	}
 
-    @Override
+	@Override
 	public void setSourceURI(URI source)
 	{
 		sourceURI = source;
 	}
 
-    @Override
+	@Override
 	public boolean isInternal()
 	{
 		return false;
 	}
 
-    @Override
+	@Override
 	public boolean isType(String type)
 	{
 		return false;
@@ -95,16 +95,10 @@ public final class RuleCheck implements Loadable
 	 * 
 	 * @return key
 	 */
-    @Override
+	@Override
 	public String getKeyName()
 	{
 		return ruleKey;
-	}
-
-    @Override
-	public String getLSTformat()
-	{
-		return getKeyName();
 	}
 
 	/**
@@ -113,7 +107,7 @@ public final class RuleCheck implements Loadable
 	 * @param name
 	 *            set name to
 	 */
-    @Override
+	@Override
 	public void setName(String name)
 	{
 		ruleName = name;
@@ -124,7 +118,7 @@ public final class RuleCheck implements Loadable
 		}
 	}
 
-    @Override
+	@Override
 	public String getDisplayName()
 	{
 		return ruleName;

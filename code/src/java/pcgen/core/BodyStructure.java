@@ -106,7 +106,7 @@ public class BodyStructure implements BodyStructureFacade
 			slots.add(slot);
 		}
 	}
-	
+
 	/**
 	 * @return A read-only list of EquipSlots that are contained by this BodyStructure.
 	 */
@@ -114,10 +114,7 @@ public class BodyStructure implements BodyStructureFacade
 	{
 		return Collections.unmodifiableList(slots);
 	}
-	
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
+
 	@Override
 	public String toString()
 	{

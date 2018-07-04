@@ -66,8 +66,7 @@ public class ConcretePrereqObject implements Cloneable, PrereqObject
 		 * 5.14 - to be changed once 5.14 code is gone and this can be changed
 		 * to return Collection or Set (or perhaps ListSet?)
 		 */
-		return Collections.unmodifiableList(new ArrayList<>(
-                thePrereqs));
+		return Collections.unmodifiableList(new ArrayList<>(thePrereqs));
 	}
 
 	/**
@@ -244,8 +243,7 @@ public class ConcretePrereqObject implements Cloneable, PrereqObject
 		{
 			return false;
 		}
-		List<Prerequisite> removed = new ArrayList<>(
-                thePrereqs);
+		List<Prerequisite> removed = new ArrayList<>(thePrereqs);
 		removed.removeAll(otherPRL);
 		return removed.isEmpty();
 	}
@@ -260,7 +258,18 @@ public class ConcretePrereqObject implements Cloneable, PrereqObject
 	 */
 	public boolean qualifies(final PlayerCharacter aPC, Object owner)
 	{
-		return !hasPrerequisites()
-				|| PrereqHandler.passesAll(getPrerequisiteList(), aPC, owner);
+		return !hasPrerequisites() || PrereqHandler.passesAll(this, aPC, owner);
+	}
+
+	@Override
+	public boolean isAvailable(PlayerCharacter aPC)
+	{
+		return true;
+	}
+
+	@Override
+	public boolean isActive(PlayerCharacter aPC)
+	{
+		return true;
 	}
 }

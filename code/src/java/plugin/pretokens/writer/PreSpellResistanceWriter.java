@@ -18,49 +18,38 @@
  */
 package plugin.pretokens.writer;
 
+import java.io.IOException;
+import java.io.Writer;
+
 import pcgen.core.prereq.Prerequisite;
 import pcgen.core.prereq.PrerequisiteOperator;
 import pcgen.persistence.PersistenceLayerException;
 import pcgen.persistence.lst.output.prereq.AbstractPrerequisiteWriter;
 import pcgen.persistence.lst.output.prereq.PrerequisiteWriterInterface;
 
-import java.io.IOException;
-import java.io.Writer;
-
-public class PreSpellResistanceWriter extends AbstractPrerequisiteWriter
-		implements PrerequisiteWriterInterface
+public class PreSpellResistanceWriter extends AbstractPrerequisiteWriter implements PrerequisiteWriterInterface
 {
 
-	/**
-	 * @see pcgen.persistence.lst.output.prereq.PrerequisiteWriterInterface#kindHandled()
-	 */
-    @Override
+	@Override
 	public String kindHandled()
 	{
 		return "SR";
 	}
 
-	/**
-	 * @see pcgen.persistence.lst.output.prereq.PrerequisiteWriterInterface#operatorsHandled()
-	 */
-    @Override
+	@Override
 	public PrerequisiteOperator[] operatorsHandled()
 	{
 		return null;
 	}
 
-	/**
-	 * @see pcgen.persistence.lst.output.prereq.PrerequisiteWriterInterface#write(java.io.Writer, pcgen.core.prereq.Prerequisite)
-	 */
-    @Override
-	public void write(Writer writer, Prerequisite prereq)
-		throws PersistenceLayerException
+	@Override
+	public void write(Writer writer, Prerequisite prereq) throws PersistenceLayerException
 	{
 		try
 		{
 			writer.write("PRESR");
 			writer.write(prereq.getOperator().toString().toUpperCase());
-			writer.write(':' + (prereq.isOverrideQualify() ? "Q:":""));
+			writer.write(':' + (prereq.isOverrideQualify() ? "Q:" : ""));
 			writer.write(prereq.getOperand());
 		}
 		catch (IOException e)

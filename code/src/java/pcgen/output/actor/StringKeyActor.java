@@ -17,13 +17,13 @@
  */
 package pcgen.output.actor;
 
+import freemarker.template.TemplateModel;
+import freemarker.template.TemplateModelException;
 import pcgen.cdom.base.CDOMObject;
 import pcgen.cdom.enumeration.CharID;
 import pcgen.cdom.enumeration.StringKey;
 import pcgen.output.base.OutputActor;
 import pcgen.output.base.SimpleWrapperLibrary;
-import freemarker.template.TemplateModel;
-import freemarker.template.TemplateModelException;
 
 /**
  * A StringKeyActor is designed to process an interpolation and convert that
@@ -52,13 +52,8 @@ public class StringKeyActor implements OutputActor<CDOMObject>
 		this.sk = sk;
 	}
 
-	/**
-	 * @see pcgen.output.base.OutputActor#process(pcgen.cdom.enumeration.CharID,
-	 *      java.lang.Object)
-	 */
 	@Override
-	public TemplateModel process(CharID id, CDOMObject d)
-		throws TemplateModelException
+	public TemplateModel process(CharID id, CDOMObject d) throws TemplateModelException
 	{
 		return SimpleWrapperLibrary.wrap(d.getSafe(sk));
 	}

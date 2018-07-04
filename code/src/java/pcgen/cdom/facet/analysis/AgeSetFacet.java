@@ -38,8 +38,8 @@ import pcgen.output.publish.OutputDB;
  * AgeSetFacet stores the AgeSet for the Player Character.
  * 
  */
-public class AgeSetFacet extends AbstractItemFacet<CharID, AgeSet> implements
-		DataFacetChangeListener<CharID, Object>, ItemFacet<CharID, AgeSet>
+public class AgeSetFacet extends AbstractItemFacet<CharID, AgeSet>
+		implements DataFacetChangeListener<CharID, Object>, ItemFacet<CharID, AgeSet>
 {
 	private AgeFacet ageFacet;
 
@@ -60,8 +60,6 @@ public class AgeSetFacet extends AbstractItemFacet<CharID, AgeSet> implements
 	 * @param dfce
 	 *            The DataFacetChangeEvent containing the information about the
 	 *            change
-	 * 
-	 * @see pcgen.cdom.facet.event.DataFacetChangeListener#dataAdded(pcgen.cdom.facet.event.DataFacetChangeEvent)
 	 */
 	@Override
 	public void dataAdded(DataFacetChangeEvent<CharID, Object> dfce)
@@ -90,8 +88,7 @@ public class AgeSetFacet extends AbstractItemFacet<CharID, AgeSet> implements
 	private void update(CharID id)
 	{
 		Region region = Region.getConstant(regionFacet.getRegion(id));
-		AgeSet ageSet =
-				bioSetFacet.get(id).getAgeSet(region, getAgeSetIndex(id));
+		AgeSet ageSet = bioSetFacet.get(id).getAgeSet(region, getAgeSetIndex(id));
 		if (ageSet == null)
 		{
 			remove(id);
@@ -113,8 +110,6 @@ public class AgeSetFacet extends AbstractItemFacet<CharID, AgeSet> implements
 	 * @param dfce
 	 *            The DataFacetChangeEvent containing the information about the
 	 *            change
-	 * 
-	 * @see pcgen.cdom.facet.event.DataFacetChangeListener#dataRemoved(pcgen.cdom.facet.event.DataFacetChangeEvent)
 	 */
 	@Override
 	public void dataRemoved(DataFacetChangeEvent<CharID, Object> dfce)
@@ -141,8 +136,7 @@ public class AgeSetFacet extends AbstractItemFacet<CharID, AgeSet> implements
 		String region = regionFacet.getRegion(id);
 		Race race = raceFacet.get(id);
 		String raceName = race == null ? "" : race.getKeyName().trim();
-		List<String> values =
-				bioSet.getValueInMaps(region, raceName, "BASEAGE");
+		List<String> values = bioSet.getValueInMaps(region, raceName, "BASEAGE");
 		if (values == null)
 		{
 			return 0;

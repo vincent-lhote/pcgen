@@ -44,12 +44,8 @@ public class ACCheckToken extends Token
 		return TOKENNAME;
 	}
 
-	/**
-	 * @see pcgen.io.exporttoken.Token#getToken(java.lang.String, pcgen.core.PlayerCharacter, pcgen.io.ExportHandler)
-	 */
 	@Override
-	public String getToken(String tokenSource, PlayerCharacter pc,
-		ExportHandler eh)
+	public String getToken(String tokenSource, PlayerCharacter pc, ExportHandler eh)
 	{
 		return Delta.toString(getACCheckToken(tokenSource, pc));
 	}
@@ -63,9 +59,7 @@ public class ACCheckToken extends Token
 	 */
 	public static int getACCheckToken(String tokenSource, PlayerCharacter pc)
 	{
-		String acCheckVar =
-				ControlUtilities.getControlToken(Globals.getContext(),
-					CControl.PCACCHECK);
+		String acCheckVar = ControlUtilities.getControlToken(Globals.getContext(), CControl.PCACCHECK);
 		if (acCheckVar == null)
 		{
 			return pc.processOldAcCheck();

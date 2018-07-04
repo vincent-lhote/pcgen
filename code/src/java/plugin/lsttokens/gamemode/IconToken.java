@@ -35,36 +35,28 @@ import pcgen.util.Logging;
 public class IconToken implements EquipIconLstToken
 {
 
-	/**
-	 * @see pcgen.persistence.lst.LstToken#getTokenName()
-	 */
-    @Override
+	@Override
 	public String getTokenName()
 	{
 		return "ICON";
 	}
 
-	/**
-	 * @see pcgen.persistence.lst.GameModeLstToken#parse(pcgen.core.GameMode, java.lang.String, java.net.URI)
-	 */
-    @Override
+	@Override
 	public boolean parse(GameMode gameMode, String value, URI source)
 	{
 		final StringTokenizer aTok = new StringTokenizer(value, Constants.PIPE, false);
 
 		if (aTok.countTokens() < 2)
 		{
-			Logging.log(Logging.LST_ERROR, getTokenName()
-				+ " expecting '|', format is: "
-				+ "EquipType|IconPath was: " + value);
+			Logging.log(Logging.LST_ERROR,
+				getTokenName() + " expecting '|', format is: " + "EquipType|IconPath was: " + value);
 			return false;
 		}
 
 		if (aTok.countTokens() > 3)
 		{
-			Logging.log(Logging.LST_ERROR, getTokenName()
-				+ " too many '|', format is: "
-				+ "EquipType|IconPath|Priority was: " + value);
+			Logging.log(Logging.LST_ERROR,
+				getTokenName() + " too many '|', format is: " + "EquipType|IconPath|Priority was: " + value);
 			return false;
 		}
 
@@ -80,14 +72,13 @@ public class IconToken implements EquipIconLstToken
 			}
 			catch (NumberFormatException ex)
 			{
-				Logging.log(Logging.LST_ERROR, getTokenName()
-					+ " expected an integer priority .  Found: "
-					+ priorityToken + " in " + value);
+				Logging.log(Logging.LST_ERROR,
+					getTokenName() + " expected an integer priority .  Found: " + priorityToken + " in " + value);
 				return false;
 			}
-			
+
 		}
-		
+
 		gameMode.setEquipTypeIcon(equipType.intern(), iconPath.intern(), priority);
 		return true;
 	}

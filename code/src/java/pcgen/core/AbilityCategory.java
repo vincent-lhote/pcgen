@@ -30,20 +30,21 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import pcgen.base.formula.Formula;
+import pcgen.cdom.base.BasicClassIdentity;
 import pcgen.cdom.base.Category;
 import pcgen.cdom.base.ChooseInformation;
+import pcgen.cdom.base.ClassIdentity;
 import pcgen.cdom.base.FormulaFactory;
 import pcgen.cdom.base.Loadable;
 import pcgen.cdom.enumeration.DisplayLocation;
 import pcgen.cdom.enumeration.ObjectKey;
 import pcgen.cdom.enumeration.Type;
 import pcgen.cdom.reference.CDOMAllRef;
-import pcgen.cdom.reference.CDOMCategorizedSingleRef;
 import pcgen.cdom.reference.CDOMDirectSingleRef;
 import pcgen.cdom.reference.CDOMGroupRef;
+import pcgen.cdom.reference.CDOMSimpleSingleRef;
 import pcgen.cdom.reference.CDOMSingleRef;
 import pcgen.cdom.reference.CDOMTypeRef;
-import pcgen.cdom.reference.CategorizedCreator;
 import pcgen.cdom.reference.ManufacturableFactory;
 import pcgen.cdom.reference.ReferenceManufacturer;
 import pcgen.cdom.reference.UnconstructedValidator;
@@ -66,9 +67,12 @@ import pcgen.util.enumeration.Visibility;
  * 
  * 
  */
-public class AbilityCategory implements Category<Ability>, Loadable,
-		ManufacturableFactory<Ability>, CategorizedCreator<Ability>, AbilityCategoryFacade
+public class AbilityCategory
+		implements Category<Ability>, Loadable, ManufacturableFactory<Ability>, AbilityCategoryFacade
 {
+	private static final ClassIdentity<AbilityCategory> IDENTITY =
+			BasicClassIdentity.getIdentity(AbilityCategory.class);
+
 	private URI sourceURI;
 
 	private String keyName;
@@ -92,7 +96,7 @@ public class AbilityCategory implements Category<Ability>, Loadable,
 	public static final AbilityCategory FEAT = new AbilityCategory("FEAT", "in_feat"); //$NON-NLS-1$ //$NON-NLS-2$
 	public static final AbilityCategory LANGBONUS = new AbilityCategory("*LANGBONUS"); //$NON-NLS-1$
 	public static final AbilityCategory ANY = new AbilityCategory("ANY"); //$NON-NLS-1$
-	
+
 	static
 	{
 		FEAT.pluralName = LanguageBundle.getString("in_feats"); //$NON-NLS-1$
@@ -115,7 +119,7 @@ public class AbilityCategory implements Category<Ability>, Loadable,
 		//Self until proven otherwise
 		parentCategory = CDOMDirectSingleRef.getRef(this);
 	}
-	
+
 	/**
 	 * Update this ability category using the values from the supplied 
 	 * ability category. 
@@ -145,7 +149,7 @@ public class AbilityCategory implements Category<Ability>, Loadable,
 		isPoolFractional = srcCat.isPoolFractional;
 		isInternal = srcCat.isInternal;
 	}
-	
+
 	/**
 	 * Constructor takes a key name and display name for the category.
 	 * 
@@ -187,8 +191,7 @@ public class AbilityCategory implements Category<Ability>, Loadable,
 		{
 			if (!category.getLSTformat(false).equals(this.getKeyName()))
 			{
-				throw new IllegalArgumentException(
-						"Cannot set CATEGORY on an internal AbilityCategory");
+				throw new IllegalArgumentException("Cannot set CATEGORY on an internal AbilityCategory");
 			}
 		}
 		else
@@ -196,7 +199,7 @@ public class AbilityCategory implements Category<Ability>, Loadable,
 			parentCategory = category;
 		}
 	}
-	
+
 	/**
 	 * Gets the parent AbilityCategory this category is part of.
 	 * 
@@ -220,7 +223,7 @@ public class AbilityCategory implements Category<Ability>, Loadable,
 		}
 		types.add(type);
 	}
-	
+
 	/**
 	 * Gets the <tt>Set</tt> of all the ability types to be included in this
 	 * category.
@@ -235,7 +238,7 @@ public class AbilityCategory implements Category<Ability>, Loadable,
 		}
 		return Collections.unmodifiableSet(types);
 	}
-	
+
 	/**
 	 * Should all ability types be included in this category?
 	 * @return true if all types should be included, 
@@ -261,7 +264,7 @@ public class AbilityCategory implements Category<Ability>, Loadable,
 	 */
 	public void addAbilityKey(CDOMSingleRef<Ability> key)
 	{
-		if ( containedAbilities == null )
+		if (containedAbilities == null)
 		{
 			containedAbilities = new HashSet<>();
 		}
@@ -278,7 +281,7 @@ public class AbilityCategory implements Category<Ability>, Loadable,
 	{
 		return poolFormula;
 	}
-	
+
 	/**
 	 * Sets the formula to use to calculate the base pool size for this category
 	 * of ability.
@@ -289,7 +292,7 @@ public class AbilityCategory implements Category<Ability>, Loadable,
 	{
 		poolFormula = formula;
 	}
-	
+
 	/**
 	 * Sets the internationalized plural name for this category.
 	 * 
@@ -299,7 +302,7 @@ public class AbilityCategory implements Category<Ability>, Loadable,
 	{
 		pluralName = aName;
 	}
-	
+
 	/**
 	 * Returns an internationalized plural version of the category name.
 	 * 
@@ -362,7 +365,7 @@ public class AbilityCategory implements Category<Ability>, Loadable,
 	{
 		visibility = visible;
 	}
-	
+
 	/**
 	 * Checks if this category of ability should be displayed in the UI.
 	 * 
@@ -372,7 +375,7 @@ public class AbilityCategory implements Category<Ability>, Loadable,
 	{
 		return isVisibleTo(null, v);
 	}
-	
+
 	/**
 	 * Checks if this category of ability should be displayed in the 
 	 * UI for this PC.
@@ -394,14 +397,12 @@ public class AbilityCategory implements Category<Ability>, Loadable,
 			 * the actual behavior aligns with the dictionary definition of the
 			 * word. - thpr Apr 5 '14
 			 */
-			return (pc == null)
-					|| (pc.getTotalAbilityPool(this).floatValue() != 0.0)
-					|| pc.hasAbilityInPool(this);
-					//|| pc.hasAbilityVisibleTo(this, v);
+			return (pc == null) || (pc.getTotalAbilityPool(this).floatValue() != 0.0) || pc.hasAbilityInPool(this);
+			//|| pc.hasAbilityVisibleTo(this, v);
 		}
 		return visibility.isVisibleTo(v);
 	}
-	
+
 	/**
 	 * Sets if abilities in this category should be user-editable
 	 * 
@@ -412,12 +413,13 @@ public class AbilityCategory implements Category<Ability>, Loadable,
 	{
 		isEditable = yesNo;
 	}
-	
+
 	/**
 	 * Checks if this category of abilities is user-editable.
 	 * 
 	 * @return <tt>true</tt> if these abilities are editable.
 	 */
+	@Override
 	public boolean isEditable()
 	{
 		return isEditable;
@@ -432,17 +434,18 @@ public class AbilityCategory implements Category<Ability>, Loadable,
 	{
 		isPoolModifiable = yesNo;
 	}
-	
+
 	/**
 	 * Checks if this category allows user editing of the pool.
 	 * 
 	 * @return <tt>true</tt> to allow user editing.
 	 */
+	@Override
 	public boolean allowPoolMod()
 	{
 		return isPoolModifiable;
 	}
-	
+
 	/**
 	 * Sets if the pool can use fractional amounts.
 	 * 
@@ -452,7 +455,7 @@ public class AbilityCategory implements Category<Ability>, Loadable,
 	{
 		isPoolFractional = yesNo;
 	}
-	
+
 	/**
 	 * Checks if the pool should use whole numbers only.
 	 * 
@@ -462,14 +465,11 @@ public class AbilityCategory implements Category<Ability>, Loadable,
 	{
 		return isPoolFractional;
 	}
-	
+
 	// -------------------------------------------
 	// KeyedObject Support
 	// -------------------------------------------
-	/**
-	 * @see pcgen.cdom.base.Category#getDisplayName()
-	 */
-    @Override
+	@Override
 	public String getDisplayName()
 	{
 		if (displayName.startsWith("in_"))
@@ -487,19 +487,13 @@ public class AbilityCategory implements Category<Ability>, Loadable,
 		return displayName;
 	}
 
-	/**
-	 * @see pcgen.cdom.base.Category#getKeyName()
-	 */
-    @Override
+	@Override
 	public String getKeyName()
 	{
 		return keyName;
 	}
 
-	/**
-	 * @see pcgen.cdom.base.Loadable#setName(java.lang.String)
-	 */
-    @Override
+	@Override
 	public void setName(final String aName)
 	{
 		if ("".equals(keyName))
@@ -509,22 +503,12 @@ public class AbilityCategory implements Category<Ability>, Loadable,
 		displayName = aName;
 	}
 
-	/**
-	 * Returns the display name for this category.
-	 * 
-	 * @see java.lang.Object#toString()
-	 */
 	@Override
 	public String toString()
 	{
 		return getDisplayName();
 	}
 
-	/**
-	 * Generates a hash code using the key, category and types.
-	 * 
-	 * @see java.lang.Object#hashCode()
-	 */
 	@Override
 	public int hashCode()
 	{
@@ -534,9 +518,6 @@ public class AbilityCategory implements Category<Ability>, Loadable,
 		return result;
 	}
 
-	/**
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
 	@Override
 	public boolean equals(Object obj)
 	{
@@ -567,7 +548,7 @@ public class AbilityCategory implements Category<Ability>, Loadable,
 		return true;
 	}
 
-    @Override
+	@Override
 	public Category<Ability> getParentCategory()
 	{
 		return parentCategory.get();
@@ -598,22 +579,16 @@ public class AbilityCategory implements Category<Ability>, Loadable,
 		return visibility;
 	}
 
-    @Override
+	@Override
 	public URI getSourceURI()
 	{
 		return sourceURI;
 	}
 
-    @Override
+	@Override
 	public void setSourceURI(URI source)
 	{
 		sourceURI = source;
-	}
-
-    @Override
-	public String getLSTformat()
-	{
-		return getKeyName();
 	}
 
 	public void setInternal(boolean internal)
@@ -621,38 +596,37 @@ public class AbilityCategory implements Category<Ability>, Loadable,
 		isInternal = internal;
 	}
 
-    @Override
+	@Override
 	public boolean isInternal()
 	{
 		return isInternal;
 	}
 
-    @Override
+	@Override
 	public boolean isType(String type)
 	{
 		return false;
 	}
 
-    @Override
+	@Override
 	public CDOMGroupRef<Ability> getAllReference()
 	{
-		return new CDOMAllRef<>(Ability.class);
+		return new CDOMAllRef<>(this);
 	}
 
-    @Override
+	@Override
 	public CDOMGroupRef<Ability> getTypeReference(String... types)
 	{
-		return new CDOMTypeRef<>(Ability.class, types);
+		return new CDOMTypeRef<>(this, types);
 	}
 
-    @Override
+	@Override
 	public CDOMSingleRef<Ability> getReference(String ident)
 	{
-		return new CDOMCategorizedSingleRef<>(Ability.class, this,
-                ident);
+		return new CDOMSimpleSingleRef<>(this, ident);
 	}
 
-    @Override
+	@Override
 	public Ability newInstance()
 	{
 		Ability a = new Ability();
@@ -660,7 +634,7 @@ public class AbilityCategory implements Category<Ability>, Loadable,
 		return a;
 	}
 
-    @Override
+	@Override
 	public boolean isMember(Ability item)
 	{
 		if (item == null)
@@ -668,36 +642,34 @@ public class AbilityCategory implements Category<Ability>, Loadable,
 			return false;
 		}
 		Category<Ability> itemCategory = item.getCDOMCategory();
-		return this.equals(itemCategory)
-				|| getParentCategory().equals(itemCategory);
+		return this.equals(itemCategory) || getParentCategory().equals(itemCategory);
 	}
 
-    @Override
+	@Override
 	public Class<Ability> getReferenceClass()
 	{
 		return Ability.class;
 	}
 
-    @Override
+	@Override
 	public String getReferenceDescription()
 	{
 		return "Ability Category " + this.getKeyName();
 	}
 
-    @Override
-	public boolean resolve(ReferenceManufacturer<Ability> rm, String name,
-			CDOMSingleRef<Ability> reference, UnconstructedValidator validator)
+	@Override
+	public boolean resolve(ReferenceManufacturer<Ability> rm, String name, CDOMSingleRef<Ability> reference,
+		UnconstructedValidator validator)
 	{
-		if ((containedAbilities != null)
-				&& (containedAbilities.contains(reference)))
+		if ((containedAbilities != null) && (containedAbilities.contains(reference)))
 		{
 			return true;
 		}
 		return doResolve(rm, name, reference, validator);
 	}
 
-	private boolean doResolve(ReferenceManufacturer<Ability> rm, String name,
-			CDOMSingleRef<Ability> reference, UnconstructedValidator validator)
+	private boolean doResolve(ReferenceManufacturer<Ability> rm, String name, CDOMSingleRef<Ability> reference,
+		UnconstructedValidator validator)
 	{
 		boolean returnGood = true;
 		Ability activeObj = rm.getObject(name);
@@ -719,8 +691,7 @@ public class AbilityCategory implements Category<Ability>, Loadable,
 				// Wasn't constructed!
 				if ((name.charAt(0) != '*') && !report(validator, name))
 				{
-					Logging.errorPrint("Unconstructed Reference: "
-							+ getReferenceDescription() + " " + name);
+					Logging.errorPrint("Unconstructed Reference: " + getReferenceDescription() + " " + name);
 					rm.fireUnconstuctedEvent(reference);
 					returnGood = false;
 				}
@@ -736,9 +707,8 @@ public class AbilityCategory implements Category<Ability>, Loadable,
 				}
 				else if (choices.size() > 1)
 				{
-					Logging.errorPrint("Invalid use of multiple items "
-							+ "in parenthesis (comma prohibited) in "
-							+ activeObj + " " + choices.toString());
+					Logging.errorPrint("Invalid use of multiple items " + "in parenthesis (comma prohibited) in "
+						+ activeObj + " " + choices.toString());
 					returnGood = false;
 				}
 			}
@@ -746,8 +716,7 @@ public class AbilityCategory implements Category<Ability>, Loadable,
 		else
 		{
 			reference.addResolution(activeObj);
-			if (reference.requiresTarget()
-					&& activeObj.getSafe(ObjectKey.MULTIPLE_ALLOWED))
+			if (reference.requiresTarget() && activeObj.getSafe(ObjectKey.MULTIPLE_ALLOWED))
 			{
 				ChooseInformation<?> ci = activeObj.get(ObjectKey.CHOOSE_INFO);
 				// Is MULT:YES.... and not CHOOSE:NOCHOICE
@@ -755,13 +724,10 @@ public class AbilityCategory implements Category<Ability>, Loadable,
 				// No error message though, that is caught by MULT token
 				if ((ci != null) && !"No Choice".equals(ci.getName()))
 				{
-					Logging.errorPrint("Invalid use of MULT:YES Ability "
-							+ activeObj
-							+ " where a target [parens] is required");
-					Logging.errorPrint("PLEASE TAKE NOTE: "
-							+ "If usage locations are reported, "
-							+ "not all usages are necessary illegal "
-							+ "(at least one is)");
+					Logging.errorPrint(
+						"Invalid use of MULT:YES Ability " + activeObj + " where a target [parens] is required");
+					Logging.errorPrint("PLEASE TAKE NOTE: " + "If usage locations are reported, "
+						+ "not all usages are necessary illegal " + "(at least one is)");
 					rm.fireUnconstuctedEvent(reference);
 					returnGood = false;
 				}
@@ -772,13 +738,12 @@ public class AbilityCategory implements Category<Ability>, Loadable,
 
 	private boolean report(UnconstructedValidator validator, String key)
 	{
-		return (validator != null)
-				&& validator.allow(getReferenceClass(), this, key);
+		return (validator != null) && validator.allowUnconstructed(getReferenceIdentity(), key);
 	}
 
-    @Override
-	public boolean populate(ReferenceManufacturer<Ability> parentCrm,
-			ReferenceManufacturer<Ability> rm, UnconstructedValidator validator)
+	@Override
+	public boolean populate(ReferenceManufacturer<Ability> parentCrm, ReferenceManufacturer<Ability> rm,
+		UnconstructedValidator validator)
 	{
 		if (parentCrm == null)
 		{
@@ -816,8 +781,7 @@ public class AbilityCategory implements Category<Ability>, Loadable,
 		{
 			for (CDOMSingleRef<Ability> ref : containedAbilities)
 			{
-				boolean res = doResolve(parentCrm, ref.getLSTformat(false), ref,
-						validator);
+				boolean res = doResolve(parentCrm, ref.getLSTformat(false), ref, validator);
 				if (res)
 				{
 					Ability ability = ref.get();
@@ -832,7 +796,7 @@ public class AbilityCategory implements Category<Ability>, Loadable,
 		return returnGood;
 	}
 
-    @Override
+	@Override
 	public ManufacturableFactory<Ability> getParent()
 	{
 		AbilityCategory parent = parentCategory.get();
@@ -843,27 +807,33 @@ public class AbilityCategory implements Category<Ability>, Loadable,
 		return parent;
 	}
 
-    @Override
-	public Category<Ability> getCategory()
-	{
-		return this;
-	}
-
-	/* (non-Javadoc)
-	 * @see pcgen.core.facade.AbilityCategoryFacade#getName()
-	 */
-    @Override
+	@Override
 	public String getName()
 	{
 		return getDisplayName();
 	}
 
-	/* (non-Javadoc)
-	 * @see pcgen.core.facade.AbilityCategoryFacade#getType()
-	 */
-    @Override
+	@Override
 	public String getType()
 	{
 		return String.valueOf(getDisplayLocation());
+	}
+
+	@Override
+	public ClassIdentity<Ability> getReferenceIdentity()
+	{
+		return this;
+	}
+
+	@Override
+	public ClassIdentity<? extends Loadable> getClassIdentity()
+	{
+		return IDENTITY;
+	}
+
+	@Override
+	public String getPersistentFormat()
+	{
+		return "ABILITY=" + getKeyName();
 	}
 }

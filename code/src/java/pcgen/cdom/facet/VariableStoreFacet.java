@@ -27,26 +27,23 @@ import pcgen.cdom.formula.MonitorableVariableStore;
  * new formula system are stored) for each PlayerCharacter (identified by their
  * CharID).
  */
-public class VariableStoreFacet extends
-		AbstractItemFacet<CharID, MonitorableVariableStore>
+public class VariableStoreFacet extends AbstractItemFacet<CharID, MonitorableVariableStore>
 {
 
-	private SolverFactoryFacet solverFactoryFacet;
+	/**
+	 * The global LoadContextFacet used to get VariableIDs
+	 */
+	private final LoadContextFacet loadContextFacet = FacetLibrary.getFacet(LoadContextFacet.class);
 
 	public <T> T getValue(CharID id, VariableID<T> varID)
 	{
 		T value = get(id).get(varID);
 		if (value == null)
 		{
-			return solverFactoryFacet.get(id.getDatasetID()).getDefault(
-				varID.getVariableFormat());
+			return loadContextFacet.get(id.getDatasetID()).get().getVariableContext()
+				.getDefaultValue(varID.getVariableFormat());
 		}
 		return value;
-	}
-
-	public void setSolverFactoryFacet(SolverFactoryFacet solverFactoryFacet)
-	{
-		this.solverFactoryFacet = solverFactoryFacet;
 	}
 
 	@Override

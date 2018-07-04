@@ -30,7 +30,6 @@ import pcgen.cdom.enumeration.ObjectKey;
 import pcgen.cdom.list.DomainList;
 import pcgen.cdom.reference.CDOMDirectSingleRef;
 import pcgen.cdom.reference.CDOMSingleRef;
-import pcgen.facade.core.AlignmentFacade;
 import pcgen.facade.core.DeityFacade;
 
 /**
@@ -61,8 +60,8 @@ public final class Deity extends PObject implements DeityFacade
 		return domains;
 	}
 
-    @Override
-	public AlignmentFacade getAlignment()
+	@Override
+	public PCAlignment getAlignment()
 	{
 		CDOMSingleRef<PCAlignment> ref = get(ObjectKey.ALIGNMENT);
 		if (ref == null)
@@ -72,7 +71,7 @@ public final class Deity extends PObject implements DeityFacade
 		return ref.get();
 	}
 
-    @Override
+	@Override
 	public Collection<String> getPantheons()
 	{
 		Set<String> charDeityPantheon = new TreeSet<>();

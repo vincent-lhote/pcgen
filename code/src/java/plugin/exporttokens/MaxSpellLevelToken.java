@@ -25,7 +25,6 @@ import pcgen.io.ExportHandler;
 import pcgen.io.exporttoken.Token;
 import pcgen.util.Logging;
 
-
 /**
  * Handle the MaxSpellLevel token which outputs the maximum level spell 
  * castable by the character for the specified class. 
@@ -35,30 +34,22 @@ public class MaxSpellLevelToken extends Token
 	/** Token name */
 	public static final String TOKENNAME = "MAXSPELLLEVEL";
 
-	/**
-	 * @see pcgen.io.exporttoken.Token#getTokenName()
-	 */
 	@Override
 	public String getTokenName()
 	{
 		return TOKENNAME;
 	}
 
-	/**
-	 * @see pcgen.io.exporttoken.Token#getToken(java.lang.String, pcgen.core.PlayerCharacter, pcgen.io.ExportHandler)
-	 */
 	@Override
-	public String getToken(String tokenSource, PlayerCharacter pc,
-		ExportHandler eh)
+	public String getToken(String tokenSource, PlayerCharacter pc, ExportHandler eh)
 	{
 		StringBuilder retValue = new StringBuilder();
 		String[] tokens = tokenSource.split("\\.");
 
 		if (tokens.length != 2)
 		{
-			Logging
-				.errorPrint("MAXSPELLLEVEL token must be of the format 'MAXSPELLLEVEL.x' where 'x' is an integer. '"
-					+ tokenSource + "' is not valid");
+			Logging.errorPrint("MAXSPELLLEVEL token must be of the format 'MAXSPELLLEVEL.x' where 'x' is an integer. '"
+				+ tokenSource + "' is not valid");
 			return "";
 		}
 		int classNumber = -1;

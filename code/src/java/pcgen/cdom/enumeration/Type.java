@@ -88,11 +88,10 @@ public final class Type implements TypeSafeConstant, Comparable<Type>
 	public static final Type WAND = getConstant("Wand");
 
 	public static final Type MONSTER = getConstant("Monster");
-	
+
 	public static final Type SHIELD = getConstant("Shield");
 
 	public static final Type ARMOR = getConstant("Armor");
-
 
 	/**
 	 * This is used to provide a unique ordinal to each constant in this class
@@ -187,8 +186,7 @@ public final class Type implements TypeSafeConstant, Comparable<Type>
 		Type type = typeMap.get(name);
 		if (type == null)
 		{
-			throw new IllegalArgumentException(name
-					+ " is not a previously defined Type");
+			throw new IllegalArgumentException(name + " is not a previously defined Type");
 		}
 		return type;
 	}
@@ -222,11 +220,6 @@ public final class Type implements TypeSafeConstant, Comparable<Type>
 		typeMap.clear();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Comparable#compareTo(java.lang.Object)
-	 */
 	@Override
 	public int compareTo(Type type)
 	{

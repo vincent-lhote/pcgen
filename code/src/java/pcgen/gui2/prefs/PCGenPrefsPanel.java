@@ -37,10 +37,10 @@ public abstract class PCGenPrefsPanel extends JPanel
 	public abstract String getTitle();
 
 	/**
-	 * Initialises the panel's values based on the current preferences.
+	 * Initializes the panel's values based on the current preferences.
 	 */
 	public abstract void applyOptionValuesToControls();
-	
+
 	/**
 	 * Updates the current preferences based on the panel's values.
 	 */
@@ -49,7 +49,7 @@ public abstract class PCGenPrefsPanel extends JPanel
 	public void resetOptionValues()
 	{
 	}
-	
+
 	/**
 	 * Identify of the actions the user has taken require a restart to take effect.
 	 * @return true if a restart is needed for the user's changes to take effect.

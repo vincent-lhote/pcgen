@@ -30,21 +30,6 @@ import javax.swing.JTabbedPane;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import pcgen.core.PlayerCharacter;
-import pcgen.core.SettingsHandler;
-import pcgen.gui2.tools.Utility;
-import pcgen.io.PCGFile;
-import pcgen.pluginmgr.InteractivePlugin;
-import pcgen.pluginmgr.PCGenMessage;
-import pcgen.pluginmgr.PCGenMessageHandler;
-import pcgen.pluginmgr.messages.FocusOrStateChangeOccurredMessage;
-import pcgen.pluginmgr.messages.PlayerCharacterWasClosedMessage;
-import pcgen.pluginmgr.messages.PlayerCharacterWasLoadedMessage;
-import pcgen.pluginmgr.messages.RequestOpenPlayerCharacterMessage;
-import pcgen.pluginmgr.messages.RequestToSavePlayerCharacterMessage;
-import pcgen.pluginmgr.messages.TransmitInitiativeValuesBetweenComponentsMessage;
-import pcgen.system.PCGenSettings;
-
 import gmgen.GMGenSystem;
 import gmgen.GMGenSystemView;
 import gmgen.gui.ImagePreview;
@@ -59,6 +44,20 @@ import gmgen.pluginmgr.messages.GMGenBeingClosedMessage;
 import gmgen.pluginmgr.messages.RequestAddPreferencesPanelMessage;
 import gmgen.pluginmgr.messages.RequestAddTabToGMGenMessage;
 import gmgen.util.LogUtilities;
+import pcgen.core.PlayerCharacter;
+import pcgen.core.SettingsHandler;
+import pcgen.gui2.tools.Utility;
+import pcgen.io.PCGFile;
+import pcgen.pluginmgr.InteractivePlugin;
+import pcgen.pluginmgr.PCGenMessage;
+import pcgen.pluginmgr.PCGenMessageHandler;
+import pcgen.pluginmgr.messages.FocusOrStateChangeOccurredMessage;
+import pcgen.pluginmgr.messages.PlayerCharacterWasClosedMessage;
+import pcgen.pluginmgr.messages.PlayerCharacterWasLoadedMessage;
+import pcgen.pluginmgr.messages.RequestOpenPlayerCharacterMessage;
+import pcgen.pluginmgr.messages.RequestToSavePlayerCharacterMessage;
+import pcgen.pluginmgr.messages.TransmitInitiativeValuesBetweenComponentsMessage;
+import pcgen.system.PCGenSettings;
 import plugin.initiative.gui.Initiative;
 import plugin.initiative.gui.PreferencesDamagePanel;
 import plugin.initiative.gui.PreferencesInitiativePanel;
@@ -90,19 +89,18 @@ public class InitiativePlugin implements InteractivePlugin
 	/**
 	 * Starts the plugin, registering itself with the {@code TabAddMessage}.
 	 */
-    @Override
+	@Override
 	public void start(PCGenMessageHandler mh)
 	{
-    	messageHandler = mh;
+		messageHandler = mh;
 		theView = new Initiative();
-		messageHandler.handleMessage(new RequestAddPreferencesPanelMessage(this, name,
-			new PreferencesDamagePanel()));
-		messageHandler.handleMessage(new RequestAddPreferencesPanelMessage(this, name,
-			new PreferencesMassiveDamagePanel()));
-		messageHandler.handleMessage(new RequestAddPreferencesPanelMessage(this, name,
-			new PreferencesInitiativePanel()));
-		messageHandler.handleMessage(new RequestAddPreferencesPanelMessage(this, name,
-			new PreferencesPerformancePanel()));
+		messageHandler.handleMessage(new RequestAddPreferencesPanelMessage(this, name, new PreferencesDamagePanel()));
+		messageHandler
+			.handleMessage(new RequestAddPreferencesPanelMessage(this, name, new PreferencesMassiveDamagePanel()));
+		messageHandler
+			.handleMessage(new RequestAddPreferencesPanelMessage(this, name, new PreferencesInitiativePanel()));
+		messageHandler
+			.handleMessage(new RequestAddPreferencesPanelMessage(this, name, new PreferencesPerformancePanel()));
 
 		theView.setLog(LogUtilities.inst());
 		messageHandler.handleMessage(new RequestAddTabToGMGenMessage(this, name, getView()));
@@ -115,7 +113,7 @@ public class InitiativePlugin implements InteractivePlugin
 		messageHandler = null;
 	}
 
-    @Override
+	@Override
 	public int getPriority()
 	{
 		return SettingsHandler.getGMGenOption(LOG_NAME + ".LoadOrder", 40);
@@ -126,7 +124,7 @@ public class InitiativePlugin implements InteractivePlugin
 	 *
 	 * @return name
 	 */
-    @Override
+	@Override
 	public String getPluginName()
 	{
 		return name;
@@ -147,8 +145,7 @@ public class InitiativePlugin implements InteractivePlugin
 	 */
 	public void fileOpen()
 	{
-		JFileChooser chooser =
-				ImagePreview.decorateWithImagePreview(new JFileChooser());
+		JFileChooser chooser = ImagePreview.decorateWithImagePreview(new JFileChooser());
 		File defaultFile = new File(PCGenSettings.getPcgDir());
 
 		if (defaultFile.exists())
@@ -161,8 +158,7 @@ public class InitiativePlugin implements InteractivePlugin
 		String[] init = {"gmi", "init"};
 		FileFilter ff = new FileNameExtensionFilter("Initiative Export", init);
 		chooser.addChoosableFileFilter(ff);
-		chooser
-			.addChoosableFileFilter(new FileNameExtensionFilter("PCGen File", pcgs));
+		chooser.addChoosableFileFilter(new FileNameExtensionFilter("PCGen File", pcgs));
 		chooser.removeChoosableFileFilter(chooser.getAcceptAllFileFilter());
 		chooser.setFileFilter(ff);
 		chooser.setMultiSelectionEnabled(true);
@@ -179,16 +175,11 @@ public class InitiativePlugin implements InteractivePlugin
 			{
 				if (PCGFile.isPCGenCharacterOrPartyFile(pcFile))
 				{
-					messageHandler.handleMessage(new RequestOpenPlayerCharacterMessage(
-							this,
-							pcFile,
-							false
-					));
+					messageHandler.handleMessage(new RequestOpenPlayerCharacterMessage(this, pcFile, false));
 
 					//loadPCG(pcFiles[i]);
 				}
-				else if (pcFile.toString().endsWith(".init")
-						|| pcFile.toString().endsWith(".gmi"))
+				else if (pcFile.toString().endsWith(".init") || pcFile.toString().endsWith(".gmi"))
 				{
 					loadINIT(pcFile);
 				}
@@ -240,8 +231,7 @@ public class InitiativePlugin implements InteractivePlugin
 	 *
 	 * @param message
 	 */
-	private void handleInitHolderListSendMessage(
-			TransmitInitiativeValuesBetweenComponentsMessage message)
+	private void handleInitHolderListSendMessage(TransmitInitiativeValuesBetweenComponentsMessage message)
 	{
 		if (message.getSource() != this)
 		{
@@ -264,7 +254,7 @@ public class InitiativePlugin implements InteractivePlugin
 	 * @param message
 	 *          the source of the event from the system
 	 */
-    @Override
+	@Override
 	public void handleMessage(PCGenMessage message)
 	{
 		if (message instanceof FileMenuOpenMessage)
@@ -323,28 +313,26 @@ public class InitiativePlugin implements InteractivePlugin
 	 */
 	private void handlePCLoadedMessage(PlayerCharacterWasLoadedMessage message)
 	{
-			PlayerCharacter pc = message.getPc();
-			String type = "PC";
-			String player = pc.getDisplay().getPlayersName();
+		PlayerCharacter pc = message.getPc();
+		String type = "PC";
+		String player = pc.getDisplay().getPlayersName();
 
-			//Based on the Player's name, auto set the combatant's type
-			if (player.equalsIgnoreCase("Ally"))
-			{
-				type = "Ally";
-			}
-			else if (player.equalsIgnoreCase("GM")
-				|| player.equalsIgnoreCase("DM")
-				|| player.equalsIgnoreCase("Enemy"))
-			{
-				type = "Enemy";
-			}
-			else if (player.equals("-"))
-			{
-				type = "-";
-			}
+		//Based on the Player's name, auto set the combatant's type
+		if (player.equalsIgnoreCase("Ally"))
+		{
+			type = "Ally";
+		}
+		else if (player.equalsIgnoreCase("GM") || player.equalsIgnoreCase("DM") || player.equalsIgnoreCase("Enemy"))
+		{
+			type = "Enemy";
+		}
+		else if (player.equals("-"))
+		{
+			type = "-";
+		}
 
-			theView.addPcgCombatant(pc, type);
-			theView.refreshTable();
+		theView.addPcgCombatant(pc, type);
+		theView.refreshTable();
 	}
 
 	/**
@@ -403,8 +391,7 @@ public class InitiativePlugin implements InteractivePlugin
 				GMGenSystem.inst.saveFileItem.setEnabled(true);
 			}
 			theView.refreshTable();
-			if (SettingsHandler.getGMGenOption(InitiativePlugin.LOG_NAME
-				+ ".refreshOnStateChange", true))
+			if (SettingsHandler.getGMGenOption(InitiativePlugin.LOG_NAME + ".refreshOnStateChange", true))
 			{
 				theView.refreshTabs();
 			}
@@ -488,6 +475,7 @@ public class InitiativePlugin implements InteractivePlugin
 	 *
 	 *@return    The data directory name
 	 */
+	@Override
 	public File getDataDirectory()
 	{
 		return new File(SettingsHandler.getGmgenPluginDir(), name);

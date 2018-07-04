@@ -38,12 +38,19 @@ public class NegateFilterConverter<B, R> implements Converter<B, R>
 		converter = conv;
 	}
 
+	@SuppressWarnings("rawtypes")
 	private static final PrimitiveFilter PREVENT = (pc, obj) -> false;
+
+	@SuppressWarnings("unchecked")
+	private static final <T> PrimitiveFilter<T> getPrevent()
+	{
+		return PREVENT;
+	}
 
 	@Override
 	public Collection<? extends R> convert(ObjectContainer<B> orig)
 	{
-		return converter.convert(orig, PREVENT);
+		return converter.convert(orig, getPrevent());
 	}
 
 	@Override
@@ -61,8 +68,7 @@ public class NegateFilterConverter<B, R> implements Converter<B, R>
 		{
 			if (fil == null)
 			{
-				throw new IllegalArgumentException(
-						"PrimitiveFilter cannot be null");
+				throw new IllegalArgumentException("PrimitiveFilter cannot be null");
 			}
 			filter = fil;
 		}
@@ -94,6 +100,6 @@ public class NegateFilterConverter<B, R> implements Converter<B, R>
 	public boolean equals(Object obj)
 	{
 		return (obj instanceof NegateFilterConverter)
-				&& ((NegateFilterConverter<?, ?>) obj).converter.equals(converter);
+			&& ((NegateFilterConverter<?, ?>) obj).converter.equals(converter);
 	}
 }

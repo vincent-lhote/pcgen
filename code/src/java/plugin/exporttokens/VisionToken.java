@@ -34,21 +34,14 @@ import pcgen.io.exporttoken.AbstractExportToken;
  */
 public class VisionToken extends AbstractExportToken
 {
-	/**
-	 * @see pcgen.io.exporttoken.Token#getTokenName()
-	 */
 	@Override
 	public String getTokenName()
 	{
 		return "VISION";
 	}
 
-	/**
-	 * @see pcgen.io.exporttoken.AbstractExportToken#getToken(java.lang.String, pcgen.core.display.CharacterDisplay, pcgen.io.ExportHandler)
-	 */
 	@Override
-	public String getToken(String tokenSource, CharacterDisplay display,
-		ExportHandler eh)
+	public String getToken(String tokenSource, CharacterDisplay display, ExportHandler eh)
 	{
 		StringTokenizer aTok = new StringTokenizer(tokenSource, ".");
 		aTok.nextToken();
@@ -80,9 +73,7 @@ public class VisionToken extends AbstractExportToken
 			return "";
 		}
 
-		List<Vision> subList =
-				visionList.subList(Math.max(startIndex, 0), Math.min(
-					visionIndex, visionList.size()));
+		List<Vision> subList = visionList.subList(Math.max(startIndex, 0), Math.min(visionIndex, visionList.size()));
 
 		StringBuilder result = new StringBuilder();
 		for (Vision vision : subList)
@@ -106,7 +97,7 @@ public class VisionToken extends AbstractExportToken
 				result.append(')');
 			}
 		}
-		
+
 		return result.toString();
 	}
 }

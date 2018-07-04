@@ -24,22 +24,16 @@ import pcgen.core.prereq.AbstractPrerequisiteTest;
 import pcgen.core.prereq.Prerequisite;
 import pcgen.core.prereq.PrerequisiteTest;
 
-
-public class PreSpellResistanceTester extends AbstractPrerequisiteTest
-		implements PrerequisiteTest
+public class PreSpellResistanceTester extends AbstractPrerequisiteTest implements PrerequisiteTest
 {
 
-	/**
-	 * @see pcgen.core.prereq.PrerequisiteTest#passes(pcgen.core.PlayerCharacter)
-	 */
 	@Override
 	public int passes(final Prerequisite prereq, final PlayerCharacter character, CDOMObject source)
 	{
 		final int requiredSR = Integer.parseInt(prereq.getOperand());
 		final int characterSR = character.calcSR(false);
 
-		final int runningTotal =
-				prereq.getOperator().compare(characterSR, requiredSR);
+		final int runningTotal = prereq.getOperator().compare(characterSR, requiredSR);
 		return countedTotal(prereq, runningTotal);
 	}
 
@@ -47,7 +41,7 @@ public class PreSpellResistanceTester extends AbstractPrerequisiteTest
 	 * Get the type of prerequisite handled by this token.
 	 * @return the type of prerequisite handled by this token.
 	 */
-    @Override
+	@Override
 	public String kindHandled()
 	{
 		return "SR"; //$NON-NLS-1$

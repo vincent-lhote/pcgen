@@ -18,7 +18,15 @@
 package pcgen.gui2.facade;
 
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
 import java.net.URI;
+
+import org.junit.Before;
+import org.junit.Test;
 
 import pcgen.AbstractJunit4CharacterTestCase;
 import pcgen.cdom.enumeration.ObjectKey;
@@ -33,15 +41,13 @@ import pcgen.core.SettingsHandler;
 import pcgen.core.Skill;
 import pcgen.core.XPTable;
 import pcgen.core.pclevelinfo.PCLevelInfo;
+import pcgen.facade.core.CharacterLevelFacade;
 import pcgen.facade.core.DataSetFacade;
+import pcgen.facade.core.SkillFacade;
 import pcgen.facade.core.UIDelegate;
 import pcgen.persistence.lst.CampaignSourceEntry;
 import pcgen.rules.context.LoadContext;
 import pcgen.util.TestHelper;
-
-import org.junit.Before;
-import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
  * CharacterLevelsFacadeImplTest checks that CharacterLevelsFacadeImpl is working ok.
@@ -107,9 +113,11 @@ public class CharacterLevelsFacadeImplTest extends AbstractJunit4CharacterTestCa
 	}
 
 	/**
-	 * Test method for {@link pcgen.gui2.facade.CharacterLevelsFacadeImpl#findNextLevelForSkill(pcgen.core.facade.SkillFacade, pcgen.core.facade.CharacterLevelFacade, float)}
-	 * to check level selection where class and cross-class skills cost the 
-	 * same for all classes.
+	 * Test method for
+	 * {@link CharacterLevelsFacadeImpl#findNextLevelForSkill(SkillFacade, CharacterLevelFacade, float)}
+	 * 
+	 * to check level selection where class and cross-class skills cost the same for
+	 * all classes.
 	 */
 	@Test
 	public void testFindNextLevelForSkillAllSameCost()
@@ -214,7 +222,8 @@ public class CharacterLevelsFacadeImplTest extends AbstractJunit4CharacterTestCa
 		assertEquals(
 			"Level for 1 rank umd - scan from lvl 1 as higher all spent for non prohibited class",
 			charLvlsFI.getElementAt(0),
-			charLvlsFI.findNextLevelForSkill(CharacterLevelsFacadeImplTest.umdSkill, charLvlsFI.getElementAt(17), 1.0f));
+			charLvlsFI.findNextLevelForSkill(CharacterLevelsFacadeImplTest.umdSkill, charLvlsFI.getElementAt(17),
+				1.0f));
 		// 6. Advise that the skill cannot be advanced.
 		assertNull("Level for rank 21 spellcraft - cannot be advanced",
 				charLvlsFI.findNextLevelForSkill(CharacterLevelsFacadeImplTest.spellcraftSkill,
@@ -222,7 +231,8 @@ public class CharacterLevelsFacadeImplTest extends AbstractJunit4CharacterTestCa
 	}
 
 	/**
-	 * Test method for {@link pcgen.gui2.facade.CharacterLevelsFacadeImpl#findNextLevelForSkill(pcgen.core.facade.SkillFacade, pcgen.core.facade.CharacterLevelFacade, float)}
+	 * Test method for 
+	 * {@link CharacterLevelsFacadeImpl#findNextLevelForSkill(SkillFacade, CharacterLevelFacade, float)}
 	 * to check level selection where cross-class skills cost 2 points and class 
 	 * skills cost only 1. 
 	 */
@@ -329,9 +339,10 @@ public class CharacterLevelsFacadeImplTest extends AbstractJunit4CharacterTestCa
 	}
 
 	/**
-	 * Test method for {@link pcgen.gui2.facade.CharacterLevelsFacadeImpl#findNextLevelForSkill(pcgen.core.facade.SkillFacade, pcgen.core.facade.CharacterLevelFacade, float)}
-	 * to check level selection where cross-class skills cost 2 points and class 
-	 * skills cost only 1. 
+	 * Test method for
+	 * {@link CharacterLevelsFacadeImpl#findNextLevelForSkill(SkillFacade, CharacterLevelFacade, float)}
+	 * to check level selection where cross-class skills cost 2 points and class
+	 * skills cost only 1.
 	 */
 	@Test
 	public void testFindNextLevelForSkill35eMultiClass()
@@ -371,9 +382,10 @@ public class CharacterLevelsFacadeImplTest extends AbstractJunit4CharacterTestCa
 	}
 
 	/**
-	 * Test method for {@link pcgen.gui2.facade.CharacterLevelsFacadeImpl#findNextLevelForSkill(pcgen.core.facade.SkillFacade, pcgen.core.facade.CharacterLevelFacade, float)}
-	 * to check level selection for removing a skill rank where class and cross-class skills cost the 
-	 * same for all classes.
+	 * Test method for
+	 * {@link CharacterLevelsFacadeImpl#findNextLevelForSkill(SkillFacade, CharacterLevelFacade, float)}
+	 * to check level selection for removing a skill rank where class and
+	 * cross-class skills cost the same for all classes.
 	 */
 	@Test
 	public void testFindNextLevelForSkillAllSameCostRemove()

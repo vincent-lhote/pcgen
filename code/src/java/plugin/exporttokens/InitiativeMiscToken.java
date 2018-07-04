@@ -34,9 +34,6 @@ public class InitiativeMiscToken extends Token
 	/** Token Name */
 	public static final String TOKENNAME = "INITIATIVEMISC";
 
-	/**
-	 * @see pcgen.io.exporttoken.Token#getTokenName()
-	 */
 	@Override
 	public String getTokenName()
 	{
@@ -45,12 +42,8 @@ public class InitiativeMiscToken extends Token
 
 	//TODO: Merge InitiativeBonusToken, InitiativeMiscToken and InitiativeModToken
 	//to become INITIATIVE.BONUS, INITAITIVE.MISC & INITIATIVE.MOD
-	/**
-	 * @see pcgen.io.exporttoken.Token#getToken(java.lang.String, pcgen.core.PlayerCharacter, pcgen.io.ExportHandler)
-	 */
 	@Override
-	public String getToken(String tokenSource, PlayerCharacter pc,
-		ExportHandler eh)
+	public String getToken(String tokenSource, PlayerCharacter pc, ExportHandler eh)
 	{
 		return Delta.toString(getInitiativeMiscToken(pc));
 	}
@@ -62,12 +55,10 @@ public class InitiativeMiscToken extends Token
 	 */
 	public static int getInitiativeMiscToken(PlayerCharacter pc)
 	{
-		String initiativeVar = ControlUtilities
-			.getControlToken(Globals.getContext(), CControl.INITIATIVEBONUS);
+		String initiativeVar = ControlUtilities.getControlToken(Globals.getContext(), CControl.INITIATIVEBONUS);
 		if (initiativeVar == null)
 		{
-			return pc.getDisplay().processOldInitiativeMod()
-				- pc.getVariableValue("INITCOMP", "").intValue();
+			return pc.getDisplay().processOldInitiativeMod() - pc.getVariableValue("INITCOMP", "").intValue();
 		}
 		return ((Number) pc.getGlobal(initiativeVar)).intValue();
 	}

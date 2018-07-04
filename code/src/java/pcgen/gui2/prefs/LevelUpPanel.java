@@ -42,24 +42,14 @@ import pcgen.system.PCGenSettings;
 @SuppressWarnings("serial")
 public class LevelUpPanel extends PCGenPrefsPanel
 {
-	private static final String in_levelUp =
-		LanguageBundle.getString("in_Prefs_levelUp");
+	private static final String in_levelUp = LanguageBundle.getString("in_Prefs_levelUp");
 
-//	private static String in_enforceSpending =
-//		LanguageBundle.getString("in_Prefs_enforceSpending");
-//	private static String in_hpWindow =
-//		LanguageBundle.getString("in_Prefs_hpWindow");
-	private static final String in_statWindow =
-		LanguageBundle.getString("in_Prefs_statWindow");
-	private static final String in_warnFirstLevelUp =
-		LanguageBundle.getString("in_Prefs_warnFirstLevelUp");
+	private static final String in_statWindow = LanguageBundle.getString("in_Prefs_statWindow");
+	private static final String in_warnFirstLevelUp = LanguageBundle.getString("in_Prefs_warnFirstLevelUp");
 
-//	private JCheckBox hpDialogShownAtLevelUp = new JCheckBox();
 	private final JCheckBox showWarningAtFirstLevelUp = new JCheckBox();
 	private final JCheckBox statDialogShownAtLevelUp = new JCheckBox();
-//	private JCheckBox enforceSpendingBeforeLevelUp = new JCheckBox();
-	//	private JCheckBox featDialogShownAtLevelUp = new JCheckBox();
-	
+
 	/**
 	 * Instantiates a new leveling up panel.
 	 */
@@ -69,8 +59,7 @@ public class LevelUpPanel extends PCGenPrefsPanel
 		GridBagConstraints c = new GridBagConstraints();
 		JLabel label;
 		Border etched = null;
-		TitledBorder title1 =
-				BorderFactory.createTitledBorder(etched, in_levelUp);
+		TitledBorder title1 = BorderFactory.createTitledBorder(etched, in_levelUp);
 
 		title1.setTitleJustification(TitledBorder.LEFT);
 		this.setBorder(title1);
@@ -81,22 +70,6 @@ public class LevelUpPanel extends PCGenPrefsPanel
 		c.anchor = GridBagConstraints.LINE_START;
 		c.insets = new Insets(2, 2, 2, 2);
 
-//		Utility.buildConstraints(c, 0, 0, 2, 1, 0, 0);
-//		label = new JLabel(in_hpWindow + ": ");
-//		gridbag.setConstraints(label, c);
-//		this.add(label);
-//		Utility.buildConstraints(c, 2, 0, 1, 1, 0, 0);
-//		gridbag.setConstraints(hpDialogShownAtLevelUp, c);
-//		this.add(hpDialogShownAtLevelUp);
-
-		//		Utility.buildConstraints(c, 0, 1, 2, 1, 0, 0);
-		//		label = new JLabel(in_featWindow + ": ");
-		//		gridbag.setConstraints(label, c);
-		//		this.add(label);
-		//		Utility.buildConstraints(c, 2, 1, 1, 1, 0, 0);
-		//		gridbag.setConstraints(featDialogShownAtLevelUp, c);
-		//		this.add(featDialogShownAtLevelUp);
-
 		Utility.buildConstraints(c, 0, 2, 2, 1, 0, 0);
 		statDialogShownAtLevelUp.setText(in_statWindow);
 		gridbag.setConstraints(statDialogShownAtLevelUp, c);
@@ -106,14 +79,6 @@ public class LevelUpPanel extends PCGenPrefsPanel
 		showWarningAtFirstLevelUp.setText(in_warnFirstLevelUp);
 		gridbag.setConstraints(showWarningAtFirstLevelUp, c);
 		this.add(showWarningAtFirstLevelUp);
-
-//		Utility.buildConstraints(c, 0, 4, 2, 1, 0, 0);
-//		label = new JLabel(in_enforceSpending + ": ");
-//		gridbag.setConstraints(label, c);
-//		this.add(label);
-//		Utility.buildConstraints(c, 2, 4, 1, 1, 0, 0);
-//		gridbag.setConstraints(enforceSpendingBeforeLevelUp, c);
-//		this.add(enforceSpendingBeforeLevelUp);
 
 		Utility.buildConstraints(c, 5, 20, 1, 1, 1, 1);
 		c.fill = GridBagConstraints.BOTH;
@@ -130,44 +95,27 @@ public class LevelUpPanel extends PCGenPrefsPanel
 	{
 		return in_levelUp;
 	}
-	
+
 	/**
-	 * @see pcgen.gui2.prefs.PreferencesPanel#applyPreferences()
+	 * @see pcgen.gui2.prefs.PCGenPrefsPanel#setOptionsBasedOnControls()
 	 */
 	@Override
 	public void setOptionsBasedOnControls()
 	{
-//		SettingsHandler.setShowHPDialogAtLevelUp(hpDialogShownAtLevelUp
-//			.isSelected());
-		//SettingsHandler.setShowFeatDialogAtLevelUp(featDialogShownAtLevelUp.isSelected());
-		SettingsHandler.setShowStatDialogAtLevelUp(statDialogShownAtLevelUp
-			.isSelected());
-		PCGenSettings.OPTIONS_CONTEXT.setBoolean(
-			PCGenSettings.OPTION_SHOW_WARNING_AT_FIRST_LEVEL_UP,
+		SettingsHandler.setShowStatDialogAtLevelUp(statDialogShownAtLevelUp.isSelected());
+		PCGenSettings.OPTIONS_CONTEXT.setBoolean(PCGenSettings.OPTION_SHOW_WARNING_AT_FIRST_LEVEL_UP,
 			showWarningAtFirstLevelUp.isSelected());
-//		SettingsHandler.setShowWarningAtFirstLevelUp(showWarningAtFirstLevelUp
-//			.isSelected());
-//		SettingsHandler
-//			.setEnforceSpendingBeforeLevelUp(enforceSpendingBeforeLevelUp
-//				.isSelected());
 	}
 
 	/**
-	 * @see pcgen.gui2.prefs.PreferencesPanel#initPreferences()
+	 * @see pcgen.gui2.prefs.PCGenPrefsPanel#applyOptionValuesToControls()
 	 */
 	@Override
 	public void applyOptionValuesToControls()
 	{
-//		hpDialogShownAtLevelUp.setSelected(SettingsHandler
-//			.getShowHPDialogAtLevelUp());
-		//featDialogShownAtLevelUp.setSelected(SettingsHandler.getShowFeatDialogAtLevelUp());
-		statDialogShownAtLevelUp.setSelected(SettingsHandler
-			.getShowStatDialogAtLevelUp());
-		showWarningAtFirstLevelUp.setSelected(PCGenSettings.OPTIONS_CONTEXT
-			.getBoolean(PCGenSettings.OPTION_SHOW_WARNING_AT_FIRST_LEVEL_UP,
-				true));
-		//		enforceSpendingBeforeLevelUp.setSelected(SettingsHandler
-//			.getEnforceSpendingBeforeLevelUp());
+		statDialogShownAtLevelUp.setSelected(SettingsHandler.getShowStatDialogAtLevelUp());
+		showWarningAtFirstLevelUp.setSelected(
+			PCGenSettings.OPTIONS_CONTEXT.getBoolean(PCGenSettings.OPTION_SHOW_WARNING_AT_FIRST_LEVEL_UP, true));
 	}
 
 }

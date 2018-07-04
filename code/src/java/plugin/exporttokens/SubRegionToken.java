@@ -28,21 +28,14 @@ import pcgen.io.exporttoken.AbstractExportToken;
  */
 public class SubRegionToken extends AbstractExportToken
 {
-	/**
-	 * @see pcgen.io.exporttoken.Token#getTokenName()
-	 */
 	@Override
 	public String getTokenName()
 	{
 		return "SUBREGION";
 	}
 
-	/**
-	 * @see pcgen.io.exporttoken.AbstractExportToken#getToken(java.lang.String, pcgen.core.display.CharacterDisplay, pcgen.io.ExportHandler)
-	 */
 	@Override
-	public String getToken(String tokenSource, CharacterDisplay display,
-		ExportHandler eh)
+	public String getToken(String tokenSource, CharacterDisplay display, ExportHandler eh)
 	{
 		String retString = display.getRegionString();
 		String subRegion = display.getSubRegion();
@@ -50,7 +43,7 @@ public class SubRegionToken extends AbstractExportToken
 		{
 			retString += (" (" + subRegion + ')');
 		}
-		
+
 		return retString;
 	}
 }

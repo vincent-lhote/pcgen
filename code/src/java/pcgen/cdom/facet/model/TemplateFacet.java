@@ -34,8 +34,7 @@ import pcgen.output.publish.OutputDB;
  * to a Player Character.
  */
 public class TemplateFacet extends AbstractSourcedListFacet<CharID, PCTemplate>
-		implements DataFacetChangeListener<CharID, PCTemplate>,
-		SetFacet<CharID, PCTemplate>
+		implements DataFacetChangeListener<CharID, PCTemplate>, SetFacet<CharID, PCTemplate>
 {
 
 	/**
@@ -76,17 +75,13 @@ public class TemplateFacet extends AbstractSourcedListFacet<CharID, PCTemplate>
 		remove(dfce.getCharID(), dfce.getCDOMObject(), dfce.getSource());
 	}
 
-	/**
-	 * This has to be LinkedHashMap since PCTemplates are order sensitive in
-	 * when they are applied to a PC.
-	 * 
-	 * (non-Javadoc)
-	 * 
-	 * @see pcgen.cdom.facet.base.AbstractSourcedListFacet#getComponentMap()
-	 */
 	@Override
 	protected Map<PCTemplate, Set<Object>> getComponentMap()
 	{
+		/*
+		 * This has to be LinkedHashMap since PCTemplates are order sensitive in when they
+		 * are applied to a PC.
+		 */
 		return new LinkedHashMap<>();
 	}
 

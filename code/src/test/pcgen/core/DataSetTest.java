@@ -27,6 +27,7 @@ import pcgen.facade.util.DefaultListFacade;
 import pcgen.facade.util.ListFacade;
 import pcgen.core.prereq.Prerequisite;
 import pcgen.util.TestHelper;
+import plugin.lsttokens.testsupport.BuildUtilities;
 import plugin.pretokens.parser.PreAbilityParser;
 
 /**
@@ -56,9 +57,12 @@ public class DataSetTest extends TestCase
 		DataSet dataset = new DataSet(Globals.getContext(), SettingsHandler.getGame(), new DefaultListFacade<>());
 		ListFacade<BodyStructureFacade> locations = dataset.getEquipmentLocations();
 		assertNotNull("Body Structure should not be null", locations);
-		assertTrue("Expected to find Equipped", checkBodyStructurePresent(locations, Constants.EQUIP_LOCATION_EQUIPPED));
-		assertTrue("Expected to find Carried", checkBodyStructurePresent(locations, Constants.EQUIP_LOCATION_CARRIED));
-		assertTrue("Expected to find Not Carried", checkBodyStructurePresent(locations, Constants.EQUIP_LOCATION_NOTCARRIED));
+		assertTrue("Expected to find Equipped",
+			checkBodyStructurePresent(locations, Constants.EQUIP_LOCATION_EQUIPPED));
+		assertTrue("Expected to find Carried",
+			checkBodyStructurePresent(locations, Constants.EQUIP_LOCATION_CARRIED));
+		assertTrue("Expected to find Not Carried",
+			checkBodyStructurePresent(locations, Constants.EQUIP_LOCATION_NOTCARRIED));
 		assertEquals("Incorrect size of body structures list", 3, locations.getSize());
 	}
 
@@ -96,10 +100,10 @@ public class DataSetTest extends TestCase
 	 */
 	public void testGetPrereqAbilities() throws Exception
 	{
-		Ability acrobatics = TestHelper.makeAbility("Acrobatics", AbilityCategory.FEAT, "general");
-		Ability dodge = TestHelper.makeAbility("Dodge", AbilityCategory.FEAT, "general");
-		Ability mobility = TestHelper.makeAbility("Mobility", AbilityCategory.FEAT, "general");
-		Ability springAttack = TestHelper.makeAbility("Spring Attack", AbilityCategory.FEAT, "general");
+		Ability acrobatics = TestHelper.makeAbility("Acrobatics", BuildUtilities.getFeatCat(), "general");
+		Ability dodge = TestHelper.makeAbility("Dodge", BuildUtilities.getFeatCat(), "general");
+		Ability mobility = TestHelper.makeAbility("Mobility", BuildUtilities.getFeatCat(), "general");
+		Ability springAttack = TestHelper.makeAbility("Spring Attack", BuildUtilities.getFeatCat(), "general");
 		PreAbilityParser parser = new PreAbilityParser();
 		Prerequisite prereq =
 				parser.parse("ability", "1,CATEGORY=FEAT,KEY_Dodge",

@@ -22,7 +22,6 @@ import java.util.regex.Pattern;
 import pcgen.base.formatmanager.FormatManagerFactory;
 import pcgen.base.formatmanager.FormatManagerLibrary;
 import pcgen.base.util.FormatManager;
-import pcgen.base.util.ObjectDatabase;
 
 /**
  * An ColumnFormatFactory builds a FormatManager supporting columns of a
@@ -34,36 +33,33 @@ public class ColumnFormatFactory implements FormatManagerFactory
 	/**
 	 * A pattern to ensure no column subformat.
 	 */
-	private static final Pattern SUB_PATTERN =
-			Pattern.compile(Pattern.quote("COLUMN["), Pattern.CASE_INSENSITIVE);
+	private static final Pattern SUB_PATTERN = Pattern.compile(Pattern.quote("COLUMN["), Pattern.CASE_INSENSITIVE);
 
 	/**
-	 * The ObjectDatabase used by ColumnFormatManager objects built by this
+	 * The FormatManager used by ColumnFormatManager objects built by this
 	 * ColumnFormatFactory.
 	 */
-	private final ObjectDatabase database;
+	private final FormatManager<TableColumn> columnFormat;
 
 	/**
-	 * Constructs a new ColumnFormatFactory with the given ObjectDatabase to be
+	 * Constructs a new ColumnFormatFactory with the given FormatManager to be
 	 * used by ColumnFormatManager objects built by this ColumnFormatFactory.
 	 * 
-	 * @param objDatabase
-	 *            The ObjectDatabase used by ColumnFormatManager objects built
+	 * @param columnFormat
+	 *            The FormatManager used by ColumnFormatManager objects built
 	 *            by this ColumnFormatFactory
 	 */
-	public ColumnFormatFactory(ObjectDatabase objDatabase)
+	public ColumnFormatFactory(FormatManager<TableColumn> columnFormat)
 	{
-		this.database = objDatabase;
+		this.columnFormat = columnFormat;
 	}
 
 	@Override
-	public FormatManager<?> build(String subFormatName,
-		FormatManagerLibrary library)
+	public FormatManager<?> build(String subFormatName, FormatManagerLibrary library)
 	{
 		if (subFormatName == null)
 		{
-			throw new IllegalArgumentException(
-				"Column Format cannot be built from no instructions");
+			throw new IllegalArgumentException("Column Format cannot be built from no instructions");
 		}
 		if (SUB_PATTERN.matcher(subFormatName).find())
 		{
@@ -72,11 +68,15 @@ public class ColumnFormatFactory implements FormatManagerFactory
 			 * ColumnFormatFactory has no way to understand a subcolumn
 			 */
 			throw new IllegalArgumentException(
-				"Column Subformat not supported: " + subFormatName
-					+ " may not contain COLUMN inside COLUMN");
+				"Column Subformat not supported: " + subFormatName + " may not contain COLUMN inside COLUMN");
 		}
-		return new ColumnFormatManager<>(database,
-			library.getFormatManager(subFormatName));
+		FormatManager<?> formatManager = library.getFormatManager(subFormatName);
+		return proc(formatManager);
+	}
+
+	private <T> ColumnFormatManager<T> proc(FormatManager<T> formatManager)
+	{
+		return new ColumnFormatManager<>(columnFormat, formatManager);
 	}
 
 	@Override

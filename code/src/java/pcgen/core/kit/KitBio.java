@@ -20,6 +20,7 @@ package pcgen.core.kit;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
 import pcgen.base.lang.StringUtil;
 import pcgen.cdom.enumeration.Gender;
 import pcgen.cdom.enumeration.NumericPCAttribute;
@@ -112,8 +113,7 @@ public class KitBio extends BaseKit
 	 * @return true if OK
 	 */
 	@Override
-	public boolean testApply(Kit aKit, PlayerCharacter aPC,
-		List<String> warnings)
+	public boolean testApply(Kit aKit, PlayerCharacter aPC, List<String> warnings)
 	{
 		selectedGender = null;
 		if (theGenders != null && !theGenders.isEmpty())
@@ -121,8 +121,7 @@ public class KitBio extends BaseKit
 			if (theGenders.size() > 1)
 			{
 				List<Gender> selList = new ArrayList<>(1);
-				selList = Globals.getChoiceFromList("Choose Gender", theGenders, selList,
-					1, aPC);
+				selList = Globals.getChoiceFromList("Choose Gender", theGenders, selList, 1, aPC);
 				if (selList.size() == 1)
 				{
 					selectedGender = selList.get(0);
@@ -167,8 +166,7 @@ public class KitBio extends BaseKit
 		}
 		if (theGenders.contains(gender))
 		{
-			throw new IllegalArgumentException("Cannot add Gender: " + gender
-				+ " twice");
+			throw new IllegalArgumentException("Cannot add Gender: " + gender + " twice");
 		}
 		theGenders.add(gender);
 	}

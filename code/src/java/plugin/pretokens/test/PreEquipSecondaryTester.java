@@ -26,26 +26,21 @@ import pcgen.core.prereq.Prerequisite;
 import pcgen.core.prereq.PrerequisiteException;
 import pcgen.core.prereq.PrerequisiteTest;
 
-
 public class PreEquipSecondaryTester extends PreEquippedTester implements PrerequisiteTest
 {
 
-	/**
-	 * @see pcgen.core.prereq.PrerequisiteTest#passes(pcgen.core.PlayerCharacter)
-	 */
 	@Override
 	public int passes(final Prerequisite prereq, final PlayerCharacter character, CDOMObject source)
 		throws PrerequisiteException
 	{
-		return passesPreEquipHandleTokens(prereq, character,
-				EquipmentLocation.EQUIPPED_SECONDARY);
+		return passesPreEquipHandleTokens(prereq, character, EquipmentLocation.EQUIPPED_SECONDARY);
 	}
 
 	/**
 	 * Get the type of prerequisite handled by this token.
 	 * @return the type of prerequisite handled by this token.
 	 */
-    @Override
+	@Override
 	public String kindHandled()
 	{
 		return "EQUIPSECONDARY"; //$NON-NLS-1$

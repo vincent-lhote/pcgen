@@ -17,12 +17,12 @@
  */
 package pcgen.output.model;
 
-import pcgen.core.UnitSet;
-import pcgen.output.base.SimpleWrapperLibrary;
 import freemarker.template.TemplateHashModel;
 import freemarker.template.TemplateModel;
 import freemarker.template.TemplateModelException;
 import freemarker.template.TemplateScalarModel;
+import pcgen.core.UnitSet;
+import pcgen.output.base.SimpleWrapperLibrary;
 
 /**
  * An UnitSetModel wraps a UnitSet and serves as a TemplateHashModel for that
@@ -51,9 +51,6 @@ public class UnitSetModel implements TemplateHashModel, TemplateScalarModel
 		this.unitSet = set;
 	}
 
-	/**
-	 * @see freemarker.template.TemplateHashModel#get(java.lang.String)
-	 */
 	@Override
 	public TemplateModel get(String key) throws TemplateModelException
 	{
@@ -72,24 +69,17 @@ public class UnitSetModel implements TemplateHashModel, TemplateScalarModel
 		}
 		else
 		{
-			throw new TemplateModelException(
-				"UnitSet did not have output of type " + key);
+			throw new TemplateModelException("UnitSet did not have output of type " + key);
 		}
 		return SimpleWrapperLibrary.wrap(unit);
 	}
 
-	/**
-	 * @see freemarker.template.TemplateHashModel#isEmpty()
-	 */
 	@Override
 	public boolean isEmpty() throws TemplateModelException
 	{
 		return false;
 	}
 
-	/**
-	 * @see freemarker.template.TemplateScalarModel#getAsString()
-	 */
 	@Override
 	public String getAsString() throws TemplateModelException
 	{

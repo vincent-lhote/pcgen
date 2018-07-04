@@ -32,13 +32,13 @@ final class DesktopBrowserLauncher
 {
 
 	private static final Desktop desktop = Desktop.getDesktop();
-	private static final Boolean isBrowseSupported = Desktop.isDesktopSupported()
-			&& desktop.isSupported(Action.BROWSE);
+	private static final Boolean isBrowseSupported = Desktop.isDesktopSupported() && desktop.isSupported(Action.BROWSE);
 
-	private DesktopBrowserLauncher() {}
+	private DesktopBrowserLauncher()
+	{
+	}
 
 	/**
-	 * @return {@code true} if Desktop is supported
 	 * @see Desktop#isDesktopSupported()
 	 * @throws IOException if {@link Desktop} is not supported and throws an exception
 	 */

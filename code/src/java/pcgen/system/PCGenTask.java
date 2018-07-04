@@ -19,9 +19,10 @@
 package pcgen.system;
 
 import java.util.logging.LogRecord;
-import javax.swing.event.EventListenerList;
-import pcgen.util.Logging;
 
+import javax.swing.event.EventListenerList;
+
+import pcgen.util.Logging;
 
 public abstract class PCGenTask
 {

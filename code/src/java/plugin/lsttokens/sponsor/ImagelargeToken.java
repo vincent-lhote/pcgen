@@ -53,8 +53,7 @@ public class ImagelargeToken implements CDOMPrimaryToken<Sponsor>
 		}
 		catch (MalformedURLException e)
 		{
-			return new ParseResult.Fail("Error in " + getTokenName() + ": "
-					+ e.getMessage(), context);
+			return new ParseResult.Fail("Error in " + getTokenName() + ": " + e.getMessage());
 		}
 	}
 

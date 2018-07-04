@@ -33,8 +33,7 @@ import pcgen.core.ArmorProf;
  * ProfProvider objects.
  * 
  */
-public class AutoListArmorProfFacet extends
-		AbstractItemConvertingFacet<ArmorProf, ProfProvider<ArmorProf>>
+public class AutoListArmorProfFacet extends AbstractItemConvertingFacet<ArmorProf, ProfProvider<ArmorProf>>
 		implements PerspectiveLocation
 {
 
@@ -62,9 +61,6 @@ public class AutoListArmorProfFacet extends
 	 *            The ArmorProf that was granted to a Player Character
 	 * @return A new ProfProvider that wraps the given ArmorProf into a
 	 *         ProfProvider
-	 * 
-	 *         (non-Javadoc)
-	 * @see pcgen.cdom.facet.base.AbstractItemConvertingFacet#convert(java.lang.Object)
 	 */
 	@Override
 	protected ProfProvider<ArmorProf> convert(ArmorProf ap)

@@ -29,8 +29,7 @@ import pcgen.facade.core.SizeAdjustmentFacade;
  * {@code SizeAdjustment}.
  *
  */
-public final class SizeAdjustment extends PObject implements
-		SizeAdjustmentFacade, VarScoped
+public final class SizeAdjustment extends PObject implements SizeAdjustmentFacade, VarScoped
 {
 	/**
 	 * Activates (checks PrereqToUse) and returns list of BonusObj's
@@ -48,6 +47,6 @@ public final class SizeAdjustment extends PObject implements
 	@Override
 	public String getLocalScopeName()
 	{
-		return "SIZE";
+		return "PC.SIZE";
 	}
 }

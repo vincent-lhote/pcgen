@@ -44,8 +44,6 @@ import pcgen.rules.persistence.token.ParseResult;
 public class KitFeatToken extends AbstractTokenWithSeparator<KitAbilities>
 		implements CDOMPrimaryToken<KitAbilities>, DeprecatedToken
 {
-	private static final Class<Ability> ABILITY_CLASS = Ability.class;
-
 	/**
 	 * Gets the name of the tag this class will parse.
 	 *
@@ -70,15 +68,13 @@ public class KitFeatToken extends AbstractTokenWithSeparator<KitAbilities>
 	}
 
 	@Override
-	protected ParseResult parseTokenWithSeparator(LoadContext context,
-		KitAbilities kitAbil, String value)
+	protected ParseResult parseTokenWithSeparator(LoadContext context, KitAbilities kitAbil, String value)
 	{
 		StringTokenizer st = new StringTokenizer(value, Constants.PIPE);
 
 		kitAbil.setCategory(CDOMDirectSingleRef.getRef(AbilityCategory.FEAT));
 
-		ReferenceManufacturer<Ability> rm = context.getReferenceContext().getManufacturer(
-				ABILITY_CLASS, AbilityCategory.FEAT);
+		ReferenceManufacturer<Ability> rm = context.getReferenceContext().getManufacturerId(AbilityCategory.FEAT);
 
 		while (st.hasMoreTokens())
 		{
@@ -86,12 +82,9 @@ public class KitFeatToken extends AbstractTokenWithSeparator<KitAbilities>
 
 			if (token.startsWith("CATEGORY="))
 			{
-				return new ParseResult.Fail(
-					"Attempting to change the Category of a Feat to '" + token
-						+ '\'', context);
+				return new ParseResult.Fail("Attempting to change the Category of a Feat to '" + token + '\'');
 			}
-			CDOMReference<Ability> ref =
-					TokenUtilities.getTypeOrPrimitive(rm, token);
+			CDOMReference<Ability> ref = TokenUtilities.getTypeOrPrimitive(rm, token);
 			if (ref == null)
 			{
 				return ParseResult.INTERNAL_ERROR;
@@ -109,8 +102,7 @@ public class KitFeatToken extends AbstractTokenWithSeparator<KitAbilities>
 		{
 			return null;
 		}
-		return new String[]{ReferenceUtilities.joinLstFormat(ref,
-			Constants.PIPE)};
+		return new String[]{ReferenceUtilities.joinLstFormat(ref, Constants.PIPE)};
 	}
 
 	@Override

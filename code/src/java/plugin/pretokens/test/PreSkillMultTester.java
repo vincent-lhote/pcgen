@@ -28,13 +28,9 @@ import pcgen.core.prereq.Prerequisite;
 import pcgen.core.prereq.PrerequisiteTest;
 import pcgen.system.LanguageBundle;
 
-
 public class PreSkillMultTester extends AbstractPrerequisiteTest implements PrerequisiteTest
 {
 
-	/**
-	 * @see pcgen.core.prereq.PrerequisiteTest#passes(pcgen.core.PlayerCharacter)
-	 */
 	@Override
 	public int passes(final Prerequisite prereq, final PlayerCharacter character, CDOMObject source)
 	{
@@ -45,7 +41,8 @@ public class PreSkillMultTester extends AbstractPrerequisiteTest implements Prer
 		String requiredSkillKey = prereq.getKey().toUpperCase();
 
 		final boolean isType =
-				(requiredSkillKey.startsWith("TYPE.") || requiredSkillKey.startsWith("TYPE=")); //$NON-NLS-1$ //$NON-NLS-2$
+				(requiredSkillKey.startsWith("TYPE.") //$NON-NLS-1$
+						|| requiredSkillKey.startsWith("TYPE=")); //$NON-NLS-1$
 		if (isType)
 		{
 			requiredSkillKey = requiredSkillKey.substring(5);
@@ -64,8 +61,7 @@ public class PreSkillMultTester extends AbstractPrerequisiteTest implements Prer
 				{
 					for (Type type : aSkill.getTrueTypeList(false))
 					{
-						if (type.toString().toUpperCase().startsWith(
-							skillKey.substring(0, percentageSignPosition)))
+						if (type.toString().toUpperCase().startsWith(skillKey.substring(0, percentageSignPosition)))
 						{
 							foundMatch = true;
 							break;
@@ -79,10 +75,8 @@ public class PreSkillMultTester extends AbstractPrerequisiteTest implements Prer
 
 				if (foundMatch)
 				{
-					final int result =
-							prereq.getOperator().compare(
-								SkillRankControl.getTotalRank(character, aSkill).intValue(),
-								requiredRanks);
+					final int result = prereq.getOperator()
+						.compare(SkillRankControl.getTotalRank(character, aSkill).intValue(), requiredRanks);
 					if (result == 0)
 					{
 						foundMatch = false;
@@ -93,14 +87,11 @@ public class PreSkillMultTester extends AbstractPrerequisiteTest implements Prer
 					}
 				}
 			}
-			else if (aSkillKey.equals(skillKey)
-				|| ((percentageSignPosition >= 0) && aSkillKey
-					.startsWith(skillKey.substring(0, percentageSignPosition))))
+			else if (aSkillKey.equals(skillKey) || ((percentageSignPosition >= 0)
+				&& aSkillKey.startsWith(skillKey.substring(0, percentageSignPosition))))
 			{
-				final int result =
-						prereq.getOperator().compare(
-							SkillRankControl.getTotalRank(character, aSkill).intValue(),
-							requiredRanks);
+				final int result = prereq.getOperator()
+					.compare(SkillRankControl.getTotalRank(character, aSkill).intValue(), requiredRanks);
 				if (result > 0)
 				{
 					foundMatch = true;
@@ -120,29 +111,24 @@ public class PreSkillMultTester extends AbstractPrerequisiteTest implements Prer
 	 * Get the type of prerequisite handled by this token.
 	 * @return the type of prerequisite handled by this token.
 	 */
-    @Override
+	@Override
 	public String kindHandled()
 	{
 		return "SKILLMULT"; //$NON-NLS-1$
 	}
 
-	/**
-	 * @see pcgen.core.prereq.PrerequisiteTest#toHtmlString(pcgen.core.prereq.Prerequisite)
-	 */
 	@Override
 	public String toHtmlString(final Prerequisite prereq)
 	{
 		String skillName = prereq.getKey();
 		if (prereq.getSubKey() != null && !prereq.getSubKey().equals("")) //$NON-NLS-1$
 		{
-			skillName += " (" + prereq.getSubKey() + ')'; //$NON-NLS-1$ //$NON-NLS-2$
+			skillName += " (" + prereq.getSubKey() + ')'; //$NON-NLS-1$ 
 
 		}
 
-		final String foo =
-				LanguageBundle.getFormattedString("PreSkillMult.toHtml", //$NON-NLS-1$
-						prereq.getOperator().toDisplayString(),
-						prereq.getOperand(), skillName);
+		final String foo = LanguageBundle.getFormattedString("PreSkillMult.toHtml", //$NON-NLS-1$
+			prereq.getOperator().toDisplayString(), prereq.getOperand(), skillName);
 		return foo;
 	}
 

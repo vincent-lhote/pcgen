@@ -31,19 +31,13 @@ import pcgen.util.Logging;
 public class LevelToken implements LevelLstToken
 {
 
-	/**
-	 * @see pcgen.persistence.lst.LstToken#getTokenName()
-	 */
-    @Override
+	@Override
 	public String getTokenName()
 	{
 		return "LEVEL";
 	}
 
-	/**
-	 * @see pcgen.persistence.lst.LevelLstToken#parse(pcgen.core.LevelInfo, java.lang.String)
-	 */
-    @Override
+	@Override
 	public boolean parse(LevelInfo levelInfo, String value)
 	{
 		if (!value.equals("LEVEL"))
@@ -54,8 +48,8 @@ public class LevelToken implements LevelLstToken
 			}
 			catch (NumberFormatException e)
 			{
-				Logging.errorPrint("Invalid " + getTokenName() + " value: '"
-					+ value + "'. Value must be either LEVEL or a number.");
+				Logging.errorPrint(
+					"Invalid " + getTokenName() + " value: '" + value + "'. Value must be either LEVEL or a number.");
 				return false;
 			}
 		}

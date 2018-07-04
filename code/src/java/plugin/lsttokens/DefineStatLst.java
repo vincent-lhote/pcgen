@@ -52,11 +52,11 @@ public class DefineStatLst implements CDOMPrimaryToken<CDOMObject>
 
 	private static final Class<PCStat> PCSTAT_CLASS = PCStat.class;
 
-	public enum DefineStatSubToken 
+	public enum DefineStatSubToken
 	{
 		LOCK, UNLOCK, NONSTAT, STAT, MINVALUE, MAXVALUE;
 	}
-	
+
 	@Override
 	public String getTokenName()
 	{
@@ -64,14 +64,12 @@ public class DefineStatLst implements CDOMPrimaryToken<CDOMObject>
 	}
 
 	@Override
-	public ParseResult parseToken(LoadContext context, CDOMObject obj,
-			String value)
+	public ParseResult parseToken(LoadContext context, CDOMObject obj, String value)
 	{
 		if (obj instanceof Ungranted)
 		{
-			return new ParseResult.Fail("Cannot use " + getTokenName()
-				+ " on an Ungranted object type: "
-				+ obj.getClass().getSimpleName(), context);
+			return new ParseResult.Fail(
+				"Cannot use " + getTokenName() + " on an Ungranted object type: " + obj.getClass().getSimpleName());
 		}
 		ParsingSeparator sep = new ParsingSeparator(value, '|');
 		sep.addGroupingPair('[', ']');
@@ -79,10 +77,10 @@ public class DefineStatLst implements CDOMPrimaryToken<CDOMObject>
 
 		if (!sep.hasNext())
 		{
-			return new ParseResult.Fail(getTokenName() + " may not be empty", context);
+			return new ParseResult.Fail(getTokenName() + " may not be empty");
 		}
 		String firstItem = sep.next();
-		
+
 		DefineStatSubToken subToken;
 		try
 		{
@@ -90,52 +88,45 @@ public class DefineStatLst implements CDOMPrimaryToken<CDOMObject>
 		}
 		catch (IllegalArgumentException e1)
 		{
-			return new ParseResult.Fail("Found unexpected sub tag " + firstItem + " in "
-				+ getTokenName() + Constants.COLON + value + ". Must be one of "
-				+ StringUtils.join(DefineStatSubToken.values(), ", ") + Constants.DOT,
-				context);
+			return new ParseResult.Fail(
+				"Found unexpected sub tag " + firstItem + " in " + getTokenName() + Constants.COLON + value
+					+ ". Must be one of " + StringUtils.join(DefineStatSubToken.values(), ", ") + Constants.DOT);
 		}
 
 		if (!sep.hasNext())
 		{
-			return new ParseResult.Fail(getTokenName()
-				+ Constants.COLON+subToken+"| must be followed by a stat.", context);
+			return new ParseResult.Fail(getTokenName() + Constants.COLON + subToken + "| must be followed by a stat.");
 		}
 		String statKey = sep.next();
-		CDOMSingleRef<PCStat> stat =
-				context.getReferenceContext().getCDOMReference(PCSTAT_CLASS,
-					statKey);
-		
+		CDOMSingleRef<PCStat> stat = context.getReferenceContext().getCDOMReference(PCSTAT_CLASS, statKey);
+
 		Formula f = null;
-		if (subToken == DefineStatSubToken.LOCK
-			|| subToken == DefineStatSubToken.MINVALUE
+		if (subToken == DefineStatSubToken.LOCK || subToken == DefineStatSubToken.MINVALUE
 			|| subToken == DefineStatSubToken.MAXVALUE)
 		{
 			if (!sep.hasNext())
 			{
-				return new ParseResult.Fail(getTokenName() + Constants.COLON + subToken
-					+ "| must be followed by both a stat and a value.", context);
+				return new ParseResult.Fail(
+					getTokenName() + Constants.COLON + subToken + "| must be followed by both a stat and a value.");
 			}
 			String formula = sep.next();
 			f = FormulaFactory.getFormulaFor(formula);
 			if (!f.isValid())
 			{
-				return new ParseResult.Fail("Formula in " + getTokenName()
-						+ " was not valid: " + f.toString(), context);
+				return new ParseResult.Fail("Formula in " + getTokenName() + " was not valid: " + f.toString());
 			}
 		}
-		
+
 		if (sep.hasNext())
 		{
-			return new ParseResult.Fail(getTokenName() + Constants.COLON + value
-				+ " has too many pipe separated item.", context);
+			return new ParseResult.Fail(
+				getTokenName() + Constants.COLON + value + " has too many pipe separated item.");
 		}
 
 		switch (subToken)
 		{
 			case LOCK:
-				context.getObjectContext().addToList(obj, ListKey.STAT_LOCKS,
-					new StatLock(stat, f));
+				context.getObjectContext().addToList(obj, ListKey.STAT_LOCKS, new StatLock(stat, f));
 				break;
 
 			case UNLOCK:
@@ -151,34 +142,32 @@ public class DefineStatLst implements CDOMPrimaryToken<CDOMObject>
 				break;
 
 			case MINVALUE:
-				context.getObjectContext().addToList(obj, ListKey.STAT_MINVALUE,
-					new StatLock(stat, f));
+				context.getObjectContext().addToList(obj, ListKey.STAT_MINVALUE, new StatLock(stat, f));
 				break;
 
 			case MAXVALUE:
-				context.getObjectContext().addToList(obj, ListKey.STAT_MAXVALUE,
-					new StatLock(stat, f));
+				context.getObjectContext().addToList(obj, ListKey.STAT_MAXVALUE, new StatLock(stat, f));
+				break;
+			default:
+				//Case not caught, should this cause an error?
 				break;
 		}
-		
+
 		return ParseResult.SUCCESS;
 	}
 
 	@Override
 	public String[] unparse(LoadContext context, CDOMObject obj)
 	{
-		Changes<StatLock> lockChanges = context.getObjectContext().getListChanges(
-				obj, ListKey.STAT_LOCKS);
-		Changes<CDOMSingleRef<PCStat>> ulchanges = context.getObjectContext().getListChanges(
-				obj, ListKey.UNLOCKED_STATS);
-		Changes<CDOMSingleRef<PCStat>> nonStatChanges = context.getObjectContext().getListChanges(
-			obj, ListKey.NONSTAT_STATS);
-		Changes<CDOMSingleRef<PCStat>> nonStatToStatChanges = context.getObjectContext().getListChanges(
-			obj, ListKey.NONSTAT_TO_STAT_STATS);
-		Changes<StatLock> minValueChanges = context.getObjectContext().getListChanges(
-			obj, ListKey.STAT_MINVALUE);
-		Changes<StatLock> maxValueChanges = context.getObjectContext().getListChanges(
-			obj, ListKey.STAT_MAXVALUE);
+		Changes<StatLock> lockChanges = context.getObjectContext().getListChanges(obj, ListKey.STAT_LOCKS);
+		Changes<CDOMSingleRef<PCStat>> ulchanges =
+				context.getObjectContext().getListChanges(obj, ListKey.UNLOCKED_STATS);
+		Changes<CDOMSingleRef<PCStat>> nonStatChanges =
+				context.getObjectContext().getListChanges(obj, ListKey.NONSTAT_STATS);
+		Changes<CDOMSingleRef<PCStat>> nonStatToStatChanges =
+				context.getObjectContext().getListChanges(obj, ListKey.NONSTAT_TO_STAT_STATS);
+		Changes<StatLock> minValueChanges = context.getObjectContext().getListChanges(obj, ListKey.STAT_MINVALUE);
+		Changes<StatLock> maxValueChanges = context.getObjectContext().getListChanges(obj, ListKey.STAT_MAXVALUE);
 		TreeSet<String> set = new TreeSet<>();
 		if (lockChanges != null && !lockChanges.isEmpty())
 		{
@@ -191,8 +180,7 @@ public class DefineStatLst implements CDOMPrimaryToken<CDOMObject>
 			{
 				for (StatLock sl : lockChanges.getAdded())
 				{
-					set.add("LOCK|" + sl.getLSTformat() + Constants.PIPE
-							+ sl.getLockValue());
+					set.add("LOCK|" + sl.getLSTformat() + Constants.PIPE + sl.getLockValue());
 				}
 			}
 		}
@@ -200,8 +188,7 @@ public class DefineStatLst implements CDOMPrimaryToken<CDOMObject>
 		{
 			if (ulchanges.includesGlobalClear())
 			{
-				context.addWriteMessage("DEFINE:UNLOCK "
-						+ "does not support .CLEAR");
+				context.addWriteMessage("DEFINE:UNLOCK " + "does not support .CLEAR");
 				return null;
 			}
 			if (ulchanges.hasAddedItems())
@@ -238,8 +225,7 @@ public class DefineStatLst implements CDOMPrimaryToken<CDOMObject>
 			{
 				for (StatLock sl : minValueChanges.getAdded())
 				{
-					set.add("MINVALUE|" + sl.getLSTformat() + Constants.PIPE
-							+ sl.getLockValue());
+					set.add("MINVALUE|" + sl.getLSTformat() + Constants.PIPE + sl.getLockValue());
 				}
 			}
 		}
@@ -249,8 +235,7 @@ public class DefineStatLst implements CDOMPrimaryToken<CDOMObject>
 			{
 				for (StatLock sl : maxValueChanges.getAdded())
 				{
-					set.add("MAXVALUE|" + sl.getLSTformat() + Constants.PIPE
-							+ sl.getLockValue());
+					set.add("MAXVALUE|" + sl.getLSTformat() + Constants.PIPE + sl.getLockValue());
 				}
 			}
 		}

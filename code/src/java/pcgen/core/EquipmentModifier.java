@@ -31,14 +31,15 @@ import pcgen.cdom.content.SpellResistance;
 import pcgen.cdom.enumeration.ListKey;
 import pcgen.cdom.enumeration.ObjectKey;
 import pcgen.cdom.enumeration.Type;
+import pcgen.cdom.formula.scope.EquipmentPartScope;
 import pcgen.core.analysis.BonusCalc;
 import pcgen.core.bonus.Bonus;
 import pcgen.core.bonus.BonusObj;
-import pcgen.facade.core.EquipModFacade;
 import pcgen.core.prereq.PrereqHandler;
 import pcgen.core.prereq.Prerequisite;
 import pcgen.core.utils.MessageType;
 import pcgen.core.utils.ShowMessageDelegate;
+import pcgen.facade.core.EquipModFacade;
 import pcgen.util.Delta;
 
 /**
@@ -46,8 +47,7 @@ import pcgen.util.Delta;
  */
 public final class EquipmentModifier extends PObject implements Comparable<Object>, EquipModFacade, Cloneable
 {
-	private static final String PERCENT_CHOICE_PATTERN = Pattern
-								.quote(Constants.LST_PERCENT_CHOICE);
+	private static final String PERCENT_CHOICE_PATTERN = Pattern.quote(Constants.LST_PERCENT_CHOICE);
 	private static final Formula CHOICE_FORMULA = FormulaFactory.getFormulaFor("%CHOICE");
 
 	/**
@@ -67,8 +67,7 @@ public final class EquipmentModifier extends PObject implements Comparable<Objec
 
 		for (BonusObj bonus : getBonusList(caller))
 		{
-			if (PrereqHandler.passesAll(bonus.getPrerequisiteList(), caller,
-					aPC))
+			if (PrereqHandler.passesAll(bonus, caller, aPC))
 			{
 				aPC.setApplied(bonus, true);
 				aList.add(bonus);
@@ -90,7 +89,7 @@ public final class EquipmentModifier extends PObject implements Comparable<Objec
 		throw new UnsupportedOperationException(
 			"Cannot resolve bonuses on EqMod via PlayerCharacter - requires Equipment");
 	}
-	
+
 	/**
 	 * This method assumes that there can only be one bonus in any given
 	 * Equipment modifier that uses %CHOICE.  It retrieves the list of bonuses
@@ -108,15 +107,14 @@ public final class EquipmentModifier extends PObject implements Comparable<Objec
 	{
 		return getBonusList(super.getBonusList(e), e.getAssociationList(this));
 	}
-	
-	private List<BonusObj> getBonusList(List<BonusObj> bonusList,
-		List<String> associations)
+
+	private List<BonusObj> getBonusList(List<BonusObj> bonusList, List<String> associations)
 	{
 		ArrayList<BonusObj> myBonusList = new ArrayList<>(bonusList);
 		for (int i = myBonusList.size() - 1; i > -1; i--)
 		{
-			final BonusObj aBonus  = myBonusList.get(i);
-			final String   aString = aBonus.toString();
+			final BonusObj aBonus = myBonusList.get(i);
+			final String aString = aBonus.toString();
 
 			final int idx = aString.indexOf("%CHOICE");
 
@@ -125,8 +123,8 @@ public final class EquipmentModifier extends PObject implements Comparable<Objec
 				// Add an entry for each of the associated list entries
 				for (String assoc : associations)
 				{
-					final BonusObj newBonus = Bonus.newBonus(Globals.getContext(), aString
-							.replaceAll(PERCENT_CHOICE_PATTERN, assoc));
+					final BonusObj newBonus =
+							Bonus.newBonus(Globals.getContext(), aString.replaceAll(PERCENT_CHOICE_PATTERN, assoc));
 
 					if (aBonus.hasPrerequisites())
 					{
@@ -216,11 +214,7 @@ public final class EquipmentModifier extends PObject implements Comparable<Objec
 	 * @param obj
 	 * @return bonus
 	 */
-	public double bonusTo(
-		final PlayerCharacter  aPC,
-		final String           aType,
-		final String           aName,
-		final Equipment obj)
+	public double bonusTo(final PlayerCharacter aPC, final String aType, final String aName, final Equipment obj)
 	{
 		return BonusCalc.bonusTo(this, aType, aName, obj, getBonusList(obj), aPC);
 	}
@@ -241,10 +235,7 @@ public final class EquipmentModifier extends PObject implements Comparable<Objec
 		}
 		catch (CloneNotSupportedException exc)
 		{
-			ShowMessageDelegate.showMessageDialog(
-				exc.getMessage(),
-				Constants.APPLICATION_NAME,
-				MessageType.ERROR);
+			ShowMessageDelegate.showMessageDialog(exc.getMessage(), Constants.APPLICATION_NAME, MessageType.ERROR);
 		}
 
 		return aObj;
@@ -273,7 +264,7 @@ public final class EquipmentModifier extends PObject implements Comparable<Objec
 			return 0;
 		}
 
-		if (sr.getReduction().equals(CHOICE_FORMULA)&& parent.hasAssociations(this))
+		if (sr.getReduction().equals(CHOICE_FORMULA) && parent.hasAssociations(this))
 		{
 			return Delta.parseInt(parent.getFirstAssociation(this));
 		}
@@ -309,7 +300,7 @@ public final class EquipmentModifier extends PObject implements Comparable<Objec
 	@Override
 	public String getLocalScopeName()
 	{
-		return "EQUIPMENT.PART";
+		return EquipmentPartScope.PC_EQUIPMENT_PART;
 	}
 
 	private VarScoped variableParent;

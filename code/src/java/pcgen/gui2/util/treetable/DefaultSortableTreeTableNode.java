@@ -21,52 +21,40 @@ package pcgen.gui2.util.treetable;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Vector;
+
 import pcgen.gui2.util.table.Row;
 
 /**
  *
  */
-public class DefaultSortableTreeTableNode extends DefaultTreeTableNode
-        implements SortableTreeTableNode
+public class DefaultSortableTreeTableNode extends DefaultTreeTableNode implements SortableTreeTableNode
 {
 
-    public DefaultSortableTreeTableNode()
-    {
-        this(Collections.emptyList());
-    }
+	public DefaultSortableTreeTableNode()
+	{
+		this(Collections.emptyList());
+	}
 
-    public DefaultSortableTreeTableNode(List<?> data)
-    {
-        setValues(data);
-    }
-
-//    public DefaultSortableTreeTableNode(TreeNode node)
-//    {
-//        this();
-//        if (node instanceof TreeTableNode)
-//        {
-//            TreeTableNode treeTableNode = (TreeTableNode) node;
-//            setValues(treeTableNode.getValues());
-//        }
-//        for (int x = 0; x < node.getChildCount(); x++)
-//        {
-//            add(new DefaultSortableTreeTableNode(node.getChildAt(x)));
-//        }
-//    }
+	public DefaultSortableTreeTableNode(List<?> data)
+	{
+		setValues(data);
+	}
 
 	@Override
-    @SuppressWarnings("unchecked")
-    public void sortChildren(Comparator<Row> comparator)
-    {
-        if (children != null)
-        {
-            children.sort(comparator);
-            for (int x = 0; x < children.size(); x++)
-            {
-                SortableTreeTableNode child = (SortableTreeTableNode) children.get(x);
-                child.sortChildren(comparator);
-            }
-        }
-    }
+	@SuppressWarnings("unchecked")
+	public void sortChildren(Comparator<Row> comparator)
+	{
+		if (children != null)
+		{
+			Vector nonGenericChildren = children;
+			nonGenericChildren.sort(comparator);
+			for (int x = 0; x < children.size(); x++)
+			{
+				SortableTreeTableNode child = (SortableTreeTableNode) children.get(x);
+				child.sortChildren(comparator);
+			}
+		}
+	}
 
 }

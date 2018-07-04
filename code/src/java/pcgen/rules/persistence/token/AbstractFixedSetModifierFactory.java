@@ -15,11 +15,11 @@
  */
 package pcgen.rules.persistence.token;
 
-import pcgen.base.calculation.PCGenModifier;
+import pcgen.base.calculation.FormulaModifier;
 import pcgen.base.formula.base.FormulaManager;
-import pcgen.base.formula.base.LegalScope;
 import pcgen.base.formula.base.ManagerFactory;
 import pcgen.base.util.FormatManager;
+import pcgen.cdom.formula.scope.PCGenScope;
 
 /**
  * An AbstractFixedSetModifierFactory is a ModifierToken/BasicCalculation that returns a
@@ -29,21 +29,18 @@ import pcgen.base.util.FormatManager;
  * 
  * @param <T> The format of the object handled by this AbstractFixedSetModifierFactory
  */
-public abstract class AbstractFixedSetModifierFactory<T>
-		extends AbstractSetModifierFactory<T>
+public abstract class AbstractFixedSetModifierFactory<T> extends AbstractSetModifierFactory<T>
 {
 
 	@Override
-	public PCGenModifier<T> getModifier(int userPriority, String instructions,
-		ManagerFactory managerFactory, FormulaManager ignored, LegalScope varScope,
-		FormatManager<T> formatManager)
+	public FormulaModifier<T> getModifier(String instructions, ManagerFactory managerFactory, FormulaManager ignored,
+		PCGenScope varScope, FormatManager<T> formatManager)
 	{
 		if (!getVariableFormat().isAssignableFrom(formatManager.getManagedClass()))
 		{
-			throw new IllegalArgumentException(
-				"FormatManager must manage " + getVariableFormat().getName());
+			throw new IllegalArgumentException("FormatManager must manage " + getVariableFormat().getName());
 		}
-		return getFixedModifier(userPriority, formatManager, instructions);
+		return getFixedModifier(formatManager, instructions);
 	}
 
 }

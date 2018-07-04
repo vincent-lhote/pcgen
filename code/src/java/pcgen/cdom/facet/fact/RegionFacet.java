@@ -17,7 +17,8 @@
  */
 package pcgen.cdom.facet.fact;
 
-import pcgen.base.lang.ObjectUtil;
+import java.util.Objects;
+
 import pcgen.cdom.base.Constants;
 import pcgen.cdom.enumeration.CharID;
 import pcgen.cdom.enumeration.ObjectKey;
@@ -35,8 +36,8 @@ import pcgen.core.PCTemplate;
  * the PCTemplate objects possessed by the PlayerCharacter.
  * 
  */
-public class RegionFacet extends AbstractDataFacet<CharID, String> implements
-		DataFacetChangeListener<CharID, PCTemplate>
+public class RegionFacet extends AbstractDataFacet<CharID, String>
+		implements DataFacetChangeListener<CharID, PCTemplate>
 {
 
 	/*
@@ -230,8 +231,7 @@ public class RegionFacet extends AbstractDataFacet<CharID, String> implements
 		 * building of Region.NONE or we have to double test here? or two ways
 		 * of specifying NONE?
 		 */
-		return (r == null && Constants.NONE.equals(current))
-				|| (r != null && r.toString().equalsIgnoreCase(current));
+		return (r == null && Constants.NONE.equals(current)) || (r != null && r.toString().equalsIgnoreCase(current));
 	}
 
 	/**
@@ -333,8 +333,7 @@ public class RegionFacet extends AbstractDataFacet<CharID, String> implements
 	public String getFullRegion(CharID id)
 	{
 		final String sub = getSubRegion(id);
-		final StringBuilder tempRegName = new StringBuilder(40)
-				.append(getRegion(id));
+		final StringBuilder tempRegName = new StringBuilder(40).append(getRegion(id));
 
 		if (!sub.equals(Constants.NONE))
 		{
@@ -356,28 +355,27 @@ public class RegionFacet extends AbstractDataFacet<CharID, String> implements
 		public Region region;
 
 		public SubRegion subregion;
-		
+
 		@Override
 		public String toString()
 		{
 			return region + " " + subregion + " " + cachedRegion;
 		}
-		
+
 		@Override
 		public int hashCode()
 		{
 			return (region == null ? -1 : region.hashCode());
 		}
-		
+
 		@Override
 		public boolean equals(Object o)
 		{
 			if (o instanceof RegionCacheInfo)
 			{
 				RegionCacheInfo other = (RegionCacheInfo) o;
-				return ObjectUtil.compareWithNull(region, other.region)
-					&& ObjectUtil.compareWithNull(subregion, other.subregion)
-					&& ObjectUtil.compareWithNull(cachedRegion, other.cachedRegion);
+				return Objects.equals(region, other.region) && Objects.equals(subregion, other.subregion)
+					&& Objects.equals(cachedRegion, other.cachedRegion);
 			}
 			return false;
 		}
@@ -429,8 +427,6 @@ public class RegionFacet extends AbstractDataFacet<CharID, String> implements
 	 * @param dfce
 	 *            The DataFacetChangeEvent containing the information about the
 	 *            change
-	 * 
-	 * @see pcgen.cdom.facet.event.DataFacetChangeListener#dataAdded(pcgen.cdom.facet.event.DataFacetChangeEvent)
 	 */
 	@Override
 	public void dataAdded(DataFacetChangeEvent<CharID, PCTemplate> dfce)
@@ -447,12 +443,10 @@ public class RegionFacet extends AbstractDataFacet<CharID, String> implements
 		{
 			if (current != null)
 			{
-				fireDataFacetChangeEvent(id, current,
-						DataFacetChangeEvent.DATA_REMOVED);
+				fireDataFacetChangeEvent(id, current, DataFacetChangeEvent.DATA_REMOVED);
 			}
 			rci.cachedRegion = newRegion;
-			fireDataFacetChangeEvent(id, newRegion,
-					DataFacetChangeEvent.DATA_ADDED);
+			fireDataFacetChangeEvent(id, newRegion, DataFacetChangeEvent.DATA_ADDED);
 		}
 	}
 
@@ -467,8 +461,6 @@ public class RegionFacet extends AbstractDataFacet<CharID, String> implements
 	 * @param dfce
 	 *            The DataFacetChangeEvent containing the information about the
 	 *            change
-	 * 
-	 * @see pcgen.cdom.facet.event.DataFacetChangeListener#dataRemoved(pcgen.cdom.facet.event.DataFacetChangeEvent)
 	 */
 	@Override
 	public void dataRemoved(DataFacetChangeEvent<CharID, PCTemplate> dfce)

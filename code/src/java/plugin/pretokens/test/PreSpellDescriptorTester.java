@@ -17,6 +17,8 @@
  */
 package plugin.pretokens.test;
 
+import java.util.List;
+
 import pcgen.cdom.base.CDOMObject;
 import pcgen.core.PlayerCharacter;
 import pcgen.core.prereq.AbstractPrerequisiteTest;
@@ -25,16 +27,9 @@ import pcgen.core.prereq.PrerequisiteTest;
 import pcgen.core.spell.Spell;
 import pcgen.system.LanguageBundle;
 
-import java.util.List;
-
-
-public class PreSpellDescriptorTester extends AbstractPrerequisiteTest
-		implements PrerequisiteTest
+public class PreSpellDescriptorTester extends AbstractPrerequisiteTest implements PrerequisiteTest
 {
 
-	/**
-	 * @see pcgen.core.prereq.PrerequisiteTest#passes(pcgen.core.PlayerCharacter)
-	 */
 	@Override
 	public int passes(final Prerequisite prereq, final PlayerCharacter character, CDOMObject source)
 	{
@@ -45,8 +40,7 @@ public class PreSpellDescriptorTester extends AbstractPrerequisiteTest
 				character.aggregateSpellList(
 					"No-Match", "A", descriptor, requiredLevel, 20); //$NON-NLS-1$ //$NON-NLS-2$
 
-		final int runningTotal =
-				prereq.getOperator().compare(aArrayList.size(), 1);
+		final int runningTotal = prereq.getOperator().compare(aArrayList.size(), 1);
 		return countedTotal(prereq, runningTotal);
 	}
 
@@ -54,22 +48,17 @@ public class PreSpellDescriptorTester extends AbstractPrerequisiteTest
 	 * Get the type of prerequisite handled by this token.
 	 * @return the type of prerequisite handled by this token.
 	 */
-    @Override
+	@Override
 	public String kindHandled()
 	{
 		return "SPELLDESCRIPTOR"; //$NON-NLS-1$
 	}
 
-	/**
-	 * @see pcgen.core.prereq.PrerequisiteTest#toHtmlString(pcgen.core.prereq.Prerequisite)
-	 */
 	@Override
 	public String toHtmlString(final Prerequisite prereq)
 	{
-		final Object[] args =
-				new Object[]{prereq.getOperator().toDisplayString(),
-					prereq.getOperand(), prereq.getSubKey(), prereq.getKey()};
-		return LanguageBundle.getFormattedString(
-			"PreSpellDescriptor.toHtml", args); //$NON-NLS-1$
+		final Object[] args = new Object[]{prereq.getOperator().toDisplayString(), prereq.getOperand(),
+			prereq.getSubKey(), prereq.getKey()};
+		return LanguageBundle.getFormattedString("PreSpellDescriptor.toHtml", args); //$NON-NLS-1$
 	}
 }

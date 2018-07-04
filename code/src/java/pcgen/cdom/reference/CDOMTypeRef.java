@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2007 Tom Parker <thpr@users.sourceforge.net>
+ * Copyright (c) 2007-18 Tom Parker <thpr@users.sourceforge.net>
  * 
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -24,6 +24,7 @@ import java.util.Collections;
 import java.util.List;
 
 import pcgen.base.lang.StringUtil;
+import pcgen.cdom.base.ClassIdentity;
 import pcgen.cdom.enumeration.GroupingState;
 
 /**
@@ -35,6 +36,11 @@ import pcgen.cdom.enumeration.GroupingState;
  */
 public final class CDOMTypeRef<T> extends CDOMGroupRef<T>
 {
+
+	/**
+	 * The ClassIdentity that represents the objects contained in this CDOMTypeRef.
+	 */
+	private final ClassIdentity<T> identity;
 
 	/**
 	 * The objects of the Class this CDOMTypeRef represents
@@ -56,12 +62,12 @@ public final class CDOMTypeRef<T> extends CDOMGroupRef<T>
 	 * @param typeArray
 	 *            An array of the Types of objects this CDOMTypeRef contains.
 	 */
-	public CDOMTypeRef(Class<T> objClass, String[] typeArray)
+	public CDOMTypeRef(ClassIdentity<T> objClass, String[] typeArray)
 	{
-		super(objClass, objClass.getSimpleName() + " "
-				+ Arrays.deepToString(typeArray));
+		super(objClass.getReferenceDescription() + " " + Arrays.deepToString(typeArray));
 		types = new String[typeArray.length];
 		System.arraycopy(typeArray, 0, types, 0, typeArray.length);
+		identity = objClass;
 	}
 
 	/**
@@ -102,8 +108,7 @@ public final class CDOMTypeRef<T> extends CDOMGroupRef<T>
 	{
 		if (referencedList == null)
 		{
-			throw new IllegalStateException(
-					"Cannot ask for contains: Reference has not been resolved");
+			throw new IllegalStateException("Cannot ask for contains: Reference has not been resolved");
 		}
 		return referencedList.contains(item);
 	}
@@ -122,9 +127,8 @@ public final class CDOMTypeRef<T> extends CDOMGroupRef<T>
 		if (obj instanceof CDOMTypeRef)
 		{
 			CDOMTypeRef<?> ref = (CDOMTypeRef<?>) obj;
-			return getReferenceClass().equals(ref.getReferenceClass())
-					&& getName().equals(ref.getName())
-					&& Arrays.deepEquals(types, ref.types);
+			return getReferenceClass().equals(ref.getReferenceClass()) && getName().equals(ref.getName())
+				&& Arrays.deepEquals(types, ref.types);
 		}
 		return false;
 	}
@@ -166,9 +170,8 @@ public final class CDOMTypeRef<T> extends CDOMGroupRef<T>
 		}
 		else
 		{
-			throw new IllegalArgumentException("Cannot resolve a "
-					+ getReferenceClass().getSimpleName() + " Reference to a "
-					+ item.getClass().getSimpleName());
+			throw new IllegalArgumentException("Cannot resolve a " + getReferenceClass().getSimpleName()
+				+ " Reference to a " + item.getClass().getSimpleName());
 		}
 	}
 
@@ -210,8 +213,7 @@ public final class CDOMTypeRef<T> extends CDOMGroupRef<T>
 	{
 		if (referencedList == null)
 		{
-			throw new IllegalStateException(
-					"Cannot ask for contained objects: Reference has not been resolved");
+			throw new IllegalStateException("Cannot ask for contained objects: Reference has not been resolved");
 		}
 		return Collections.unmodifiableList(referencedList);
 	}
@@ -233,5 +235,23 @@ public final class CDOMTypeRef<T> extends CDOMGroupRef<T>
 	public String getChoice()
 	{
 		return null;
+	}
+
+	@Override
+	public Class<T> getReferenceClass()
+	{
+		return identity.getReferenceClass();
+	}
+
+	@Override
+	public String getReferenceDescription()
+	{
+		return identity.getReferenceDescription() + " of TYPE=" + Arrays.asList(types);
+	}
+
+	@Override
+	public String getPersistentFormat()
+	{
+		return identity.getPersistentFormat();
 	}
 }

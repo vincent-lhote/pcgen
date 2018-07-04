@@ -32,9 +32,6 @@ import pcgen.system.LanguageBundle;
 public class PrePointBuyMethodTester extends AbstractDisplayPrereqTest implements PrerequisiteTest
 {
 
-	/**
-	 * @see pcgen.core.prereq.PrerequisiteTest#passes(pcgen.core.PlayerCharacter)
-	 */
 	@Override
 	public int passes(final Prerequisite prereq, final CharacterDisplay display, CDOMObject source)
 	{
@@ -43,8 +40,7 @@ public class PrePointBuyMethodTester extends AbstractDisplayPrereqTest implement
 		if (gm != null)
 		{
 			final String purchaseMode = gm.getPurchaseModeMethodName();
-			if ((purchaseMode != null)
-				&& purchaseMode.equalsIgnoreCase(prereq.getKey()))
+			if ((purchaseMode != null) && purchaseMode.equalsIgnoreCase(prereq.getKey()))
 			{
 				++runningTotal;
 			}
@@ -56,21 +52,17 @@ public class PrePointBuyMethodTester extends AbstractDisplayPrereqTest implement
 	 * Get the type of prerequisite handled by this token.
 	 * @return the type of prerequisite handled by this token.
 	 */
-    @Override
+	@Override
 	public String kindHandled()
 	{
 		return "POINTBUYMETHOD"; //$NON-NLS-1$
 	}
 
-	/**
-	 * @see pcgen.core.prereq.PrerequisiteTest#toHtmlString(pcgen.core.prereq.Prerequisite)
-	 */
 	@Override
 	public String toHtmlString(final Prerequisite prereq)
 	{
-		final String foo =
-				LanguageBundle.getFormattedString("PrePointBuyMethod.toHtml", //$NON-NLS-1$
-						prereq.getKey());
+		final String foo = LanguageBundle.getFormattedString("PrePointBuyMethod.toHtml", //$NON-NLS-1$
+			prereq.getKey());
 		return foo;
 	}
 

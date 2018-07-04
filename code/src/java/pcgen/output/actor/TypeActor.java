@@ -18,10 +18,11 @@
  */
 package pcgen.output.actor;
 
-import freemarker.template.TemplateModel;
-import freemarker.template.TemplateModelException;
 import java.util.ArrayList;
 import java.util.List;
+
+import freemarker.template.TemplateModel;
+import freemarker.template.TemplateModelException;
 import pcgen.cdom.base.CDOMObject;
 import pcgen.cdom.enumeration.CharID;
 import pcgen.cdom.enumeration.ListKey;
@@ -38,14 +39,8 @@ import pcgen.output.model.CollectionModel;
  */
 public class TypeActor implements OutputActor<CDOMObject>
 {
-
-	/**
-	 * @see pcgen.output.base.OutputActor#process(pcgen.cdom.enumeration.CharID,
-	 * java.lang.Object)
-	 */
 	@Override
-	public TemplateModel process(CharID id, CDOMObject d)
-			throws TemplateModelException
+	public TemplateModel process(CharID id, CDOMObject d) throws TemplateModelException
 	{
 		final List<Type> types = d.getSafeListFor(ListKey.TYPE);
 		List<String> strings = new ArrayList<>(types.size());

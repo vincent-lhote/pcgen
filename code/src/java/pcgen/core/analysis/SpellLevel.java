@@ -19,9 +19,11 @@ package pcgen.core.analysis;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
+
 import pcgen.base.util.HashMapToList;
 import pcgen.cdom.base.AssociatedPrereqObject;
 import pcgen.cdom.base.CDOMList;
@@ -44,9 +46,8 @@ public final class SpellLevel
 	{
 	}
 
-	public static boolean levelForKeyContains(Spell sp,
-	                                          List<? extends CDOMList<Spell>> lists, int levelMatch,
-	                                          PlayerCharacter aPC)
+	public static boolean levelForKeyContains(Spell sp, List<? extends CDOMList<Spell>> lists, int levelMatch,
+		PlayerCharacter aPC)
 	{
 		if (lists == null || aPC == null)
 		{
@@ -62,12 +63,10 @@ public final class SpellLevel
 				resultList.addAll(levels);
 			}
 		}
-		return levelMatch == -1 && !resultList.isEmpty() || levelMatch >= 0
-				&& resultList.contains(levelMatch);
+		return levelMatch == -1 && !resultList.isEmpty() || levelMatch >= 0 && resultList.contains(levelMatch);
 	}
 
-	public static Integer[] levelForKey(Spell sp,
-			List<? extends CDOMList<Spell>> lists, PlayerCharacter aPC)
+	public static Integer[] levelForKey(Spell sp, List<? extends CDOMList<Spell>> lists, PlayerCharacter aPC)
 	{
 		List<Integer> list = new ArrayList<>();
 
@@ -91,8 +90,7 @@ public final class SpellLevel
 	 * @param aPC The character who must already have the spell.
 	 * @return The level of the spell, or -1 if not found.
 	 */
-	public static int getFirstLvlForKey(Spell sp, CDOMList<Spell> list,
-			PlayerCharacter aPC)
+	public static int getFirstLvlForKey(Spell sp, CDOMList<Spell> list, PlayerCharacter aPC)
 	{
 		HashMapToList<CDOMList<Spell>, Integer> wLevelInfo = aPC.getSpellLevelInfo(sp);
 		if ((wLevelInfo != null) && (!wLevelInfo.isEmpty()))
@@ -100,8 +98,8 @@ public final class SpellLevel
 			List<Integer> levelList = wLevelInfo.getListFor(list);
 			if (levelList != null)
 			{
-				// We assume those calling this method know what they are doing!
-				return levelList.get(0);
+				// In specific situations, this list may not be sorted, so we won't assume it is
+				return Collections.min(levelList);
 			}
 		}
 		return -1;
@@ -122,17 +120,14 @@ public final class SpellLevel
 		for (PCClass pcc : aPC.getClassSet())
 		{
 			ClassSpellList csl = pcc.get(ObjectKey.CLASS_SPELLLIST);
-			Collection<AssociatedPrereqObject> assoc = masterLists
-					.getAssociations(csl, sp);
+			Collection<AssociatedPrereqObject> assoc = masterLists.getAssociations(csl, sp);
 			if (assoc != null)
 			{
 				for (AssociatedPrereqObject apo : assoc)
 				{
-					if (PrereqHandler.passesAll(apo.getPrerequisiteList(), aPC,
-							sp))
+					if (PrereqHandler.passesAll(apo, aPC, sp))
 					{
-						if (levelKey.equals(apo
-								.getAssociation(AssociationKey.SPELL_LEVEL)))
+						if (levelKey.equals(apo.getAssociation(AssociationKey.SPELL_LEVEL)))
 						{
 							return true;
 						}
@@ -143,17 +138,14 @@ public final class SpellLevel
 		for (Domain domain : aPC.getDomainSet())
 		{
 			DomainSpellList dsl = domain.get(ObjectKey.DOMAIN_SPELLLIST);
-			Collection<AssociatedPrereqObject> assoc = masterLists
-					.getAssociations(dsl, sp);
+			Collection<AssociatedPrereqObject> assoc = masterLists.getAssociations(dsl, sp);
 			if (assoc != null)
 			{
 				for (AssociatedPrereqObject apo : assoc)
 				{
-					if (PrereqHandler.passesAll(apo.getPrerequisiteList(), aPC,
-							sp))
+					if (PrereqHandler.passesAll(apo, aPC, sp))
 					{
-						if (levelKey.equals(apo
-								.getAssociation(AssociationKey.SPELL_LEVEL)))
+						if (levelKey.equals(apo.getAssociation(AssociationKey.SPELL_LEVEL)))
 						{
 							return true;
 						}
@@ -164,8 +156,7 @@ public final class SpellLevel
 		return false;
 	}
 
-	public static int getFirstLevelForKey(Spell sp,
-			List<? extends CDOMList<Spell>> lists, PlayerCharacter aPC)
+	public static int getFirstLevelForKey(Spell sp, List<? extends CDOMList<Spell>> lists, PlayerCharacter aPC)
 	{
 		Integer[] levelInt = levelForKey(sp, lists, aPC);
 		int result = -1;

@@ -22,6 +22,7 @@ import java.text.MessageFormat;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
+
 import pcgen.util.Logging;
 
 /**
@@ -130,14 +131,11 @@ public final class LanguageBundle
 		{
 			Logging.log(Logging.WARNING, "Reinitialising the language bundle."); //$NON-NLS-1$
 		}
-		Logging.log(Logging.INFO,
-				MessageFormat.format("Initialising language bundle with locale {0}.", //$NON-NLS-1$
-						Locale.getDefault()));
+		Logging.log(Logging.INFO, MessageFormat.format("Initialising language bundle with locale {0}.", //$NON-NLS-1$
+			Locale.getDefault()));
 		try
 		{
-			bundle =
-					ResourceBundle.getBundle(
-						BUNDLE_NAME + ".LanguageBundle"); //$NON-NLS-1$
+			bundle = ResourceBundle.getBundle(BUNDLE_NAME + ".LanguageBundle"); //$NON-NLS-1$
 		}
 		catch (MissingResourceException mrex)
 		{
@@ -152,9 +150,7 @@ public final class LanguageBundle
 	public static void reload()
 	{
 		Locale l = Locale.getDefault();
-		if (bundle != null
-			&& ((l == null && bundle.getLocale() == null) || !l.equals(bundle
-				.getLocale())))
+		if (bundle != null && ((l == null && bundle.getLocale() == null) || !l.equals(bundle.getLocale())))
 		{
 			bundle = null;
 		}
@@ -164,7 +160,7 @@ public final class LanguageBundle
 	 * Standard bundle key prefix.
 	 */
 	public static final String KEY_PREFIX = "in_"; //$NON-NLS-1$
-	
+
 	/**
 	 * Allow pretty formatting of multiplier. For example, if d is 0.5d, it 
 	 * returns x 1/2 ( 

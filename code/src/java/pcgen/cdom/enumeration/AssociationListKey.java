@@ -72,13 +72,18 @@ public final class AssociationListKey<T>
 		// Only allow instantiation here
 	}
 
+	/**
+	 * Casts an object with the Generics on this AssociationListKey.
+	 * 
+	 * @return An object cast to the Generics on this AssociationListKey
+	 */
+	@SuppressWarnings("unchecked")
 	public T cast(Object obj)
 	{
 		return (T) obj;
 	}
 
-	public static <OT> AssociationListKey<OT> getKeyFor(Class<OT> keyClass,
-			String keyName)
+	public static <OT> AssociationListKey<OT> getKeyFor(Class<OT> keyClass, String keyName)
 	{
 		if (map == null)
 		{
@@ -110,16 +115,14 @@ public final class AssociationListKey<T>
 		{
 			int mod = fields[i].getModifiers();
 
-			if (Modifier.isStatic(mod) && Modifier.isFinal(mod)
-					&& Modifier.isPublic(mod))
+			if (Modifier.isStatic(mod) && Modifier.isFinal(mod) && Modifier.isPublic(mod))
 			{
 				try
 				{
 					Object obj = fields[i].get(null);
 					if (obj instanceof AssociationListKey)
 					{
-						map.put(fields[i].getName(),
-								(AssociationListKey<?>) obj);
+						map.put(fields[i].getName(), (AssociationListKey<?>) obj);
 					}
 				}
 				catch (IllegalArgumentException | IllegalAccessException e)

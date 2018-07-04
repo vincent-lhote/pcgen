@@ -34,19 +34,13 @@ import pcgen.persistence.lst.GameModeLstToken;
 public class CharacterTypeToken implements GameModeLstToken
 {
 
-	/**
-	 * @see pcgen.persistence.lst.LstToken#getTokenName()
-	 */
-    @Override
+	@Override
 	public String getTokenName()
 	{
 		return "CHARACTERTYPE";
 	}
 
-	/**
-	 * @see pcgen.persistence.lst.GameModeLstToken#parse(pcgen.core.GameMode, java.lang.String, java.net.URI)
-	 */
-    @Override
+	@Override
 	public boolean parse(GameMode gameMode, String value, URI source)
 	{
 		List<String> typelist = new ArrayList<>();

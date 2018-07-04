@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2007 Tom Parker <thpr@users.sourceforge.net>
+ * Copyright (c) 2007-18 Tom Parker <thpr@users.sourceforge.net>
  * 
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -18,6 +18,7 @@
 package pcgen.cdom.reference;
 
 import java.util.Collection;
+import java.util.Objects;
 
 import pcgen.cdom.base.Loadable;
 import pcgen.cdom.enumeration.GroupingState;
@@ -37,9 +38,14 @@ import pcgen.cdom.enumeration.GroupingState;
  *            The Class of the underlying object contained by this
  *            CDOMTransparentSingleRef
  */
-public class CDOMTransparentSingleRef<T extends Loadable> extends CDOMSingleRef<T> implements
-		TransparentReference<T>
+public class CDOMTransparentSingleRef<T extends Loadable> extends CDOMSingleRef<T> implements TransparentReference<T>
 {
+
+	/**
+	 * The Class that indicates the types of objects objects contained in this
+	 * CDOMTransparentSingleRef.
+	 */
+	private final Class<T> refClass;
 
 	/**
 	 * Holds the reference to which this CDOMTransparentSingleRef will delegate
@@ -48,18 +54,28 @@ public class CDOMTransparentSingleRef<T extends Loadable> extends CDOMSingleRef<
 	private CDOMSingleRef<T> subReference = null;
 
 	/**
+	 * The String representation of the Format of objects in this CDOMTransparentSingleRef (e.g.
+	 * "ABILITY=FEAT").
+	 */
+	private final String formatRepresentation;
+
+	/**
 	 * Constructs a new CDOMTransparentSingleRef for the given Class and name.
 	 * 
+	 * @param formatRepresentation
+	 *            the persistent representation of the ClassIdentity of the objects to be
+	 *            stored in this CDOMTransparentSingleRef
 	 * @param objClass
 	 *            The Class of the underlying object contained by this
 	 *            CDOMTransparentSingleRef.
 	 * @param key
-	 *            An identifier of the object this CDOMTransparentSingleRef
-	 *            contains.
+	 *            An identifier of the object this CDOMTransparentSingleRef contains.
 	 */
-	public CDOMTransparentSingleRef(Class<T> objClass, String key)
+	public CDOMTransparentSingleRef(String formatRepresentation, Class<T> objClass, String key)
 	{
-		super(objClass, key);
+		super(key);
+		this.formatRepresentation = Objects.requireNonNull(formatRepresentation);
+		refClass = Objects.requireNonNull(objClass);
 	}
 
 	/**
@@ -82,9 +98,8 @@ public class CDOMTransparentSingleRef<T extends Loadable> extends CDOMSingleRef<
 	{
 		if (subReference == null)
 		{
-			throw new IllegalStateException("Cannot ask for contains: "
-					+ getReferenceClass().getName() + " Reference " + getName()
-					+ " has not been resolved");
+			throw new IllegalStateException("Cannot ask for contains: " + getReferenceClass().getName() + " Reference "
+				+ getName() + " has not been resolved");
 		}
 		return subReference.contains(item);
 	}
@@ -104,8 +119,7 @@ public class CDOMTransparentSingleRef<T extends Loadable> extends CDOMSingleRef<
 	{
 		if (subReference == null)
 		{
-			throw new IllegalStateException(
-					"Cannot ask for resolution: Reference has not been resolved");
+			throw new IllegalStateException("Cannot ask for resolution: Reference has not been resolved");
 		}
 		return subReference.get();
 	}
@@ -153,8 +167,7 @@ public class CDOMTransparentSingleRef<T extends Loadable> extends CDOMSingleRef<
 		if (obj instanceof CDOMTransparentSingleRef)
 		{
 			CDOMTransparentSingleRef<?> ref = (CDOMTransparentSingleRef<?>) obj;
-			return getReferenceClass().equals(ref.getReferenceClass())
-					&& getName().equals(ref.getName());
+			return getReferenceClass().equals(ref.getReferenceClass()) && getName().equals(ref.getName());
 		}
 		return false;
 	}
@@ -186,8 +199,7 @@ public class CDOMTransparentSingleRef<T extends Loadable> extends CDOMSingleRef<
 	@Override
 	public void addResolution(T item)
 	{
-		throw new IllegalStateException(
-				"Cannot resolve a Transparent Reference");
+		throw new IllegalStateException("Cannot resolve a Transparent Reference");
 	}
 
 	/**
@@ -217,9 +229,8 @@ public class CDOMTransparentSingleRef<T extends Loadable> extends CDOMSingleRef<
 		}
 		else
 		{
-			throw new IllegalArgumentException("Cannot resolve a "
-					+ getReferenceClass().getSimpleName() + " Reference to a "
-					+ rm.getReferenceClass().getSimpleName());
+			throw new IllegalArgumentException("Cannot resolve a " + getReferenceClass().getSimpleName()
+				+ " Reference to a " + rm.getReferenceClass().getSimpleName());
 		}
 	}
 
@@ -266,9 +277,28 @@ public class CDOMTransparentSingleRef<T extends Loadable> extends CDOMSingleRef<
 	}
 
 	@Override
-	public void setChoice(String c)
+	public void setChoice(String choice)
 	{
-		throw new IllegalStateException(
-				"Cannot set Choice on a Transparent Reference");
+		throw new IllegalStateException("Cannot set Choice on a Transparent Reference");
+	}
+
+	@Override
+	public Class<T> getReferenceClass()
+	{
+		return refClass;
+	}
+
+	@Override
+	public String getReferenceDescription()
+	{
+		return (subReference == null) ? (refClass.getSimpleName() + " " + getName())
+			: subReference.getReferenceDescription();
+	}
+
+	@Override
+	public String getPersistentFormat()
+	{
+		// TODO Auto-generated method stub
+		return formatRepresentation;
 	}
 }
