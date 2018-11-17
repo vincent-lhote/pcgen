@@ -12,8 +12,8 @@
 !define APPNAME "PCGen"
 !define APPNAMEANDVERSION "${APPNAME} ${LONGVER}"
 !define APPDIR "${LONGVER}"
-!define TargetVer "1.7"
-!define OverVer "1.9"
+!define TargetVer "1.10"
+!define OverVer "1.11"
 !define OutName "pcgen-${LONGVER}_win_install"
 
 ;Change the icons
@@ -139,6 +139,8 @@ Section "-Local" Section4
 # We no longer provide the .bat file.
 #	CreateShortCut "$SMPROGRAMS\PCGEN\${APPDIR}\${APPDIR}-Low.lnk" "$INSTDIR\${APPDIR}\pcgen_low_mem.bat" "" \
 #				"$INSTDIR\${APPDIR}\Local\PCGen.ico" 0 SW_SHOWMINIMIZED
+        CreateShortCut "$SMPROGRAMS\PCGEN\${APPDIR}\${APPDIR}-Bat.lnk" "$INSTDIR\${APPDIR}\pcgen.bat" "" \
+				"$INSTDIR\${APPDIR}\Local\PCGen.ico" 0 SW_SHOWMINIMIZED
 	CreateShortCut "$SMPROGRAMS\PCGEN\${APPDIR}\${APPDIR}.lnk" "$INSTDIR\${APPDIR}\pcgen.exe" "" \
 				"$INSTDIR\${APPDIR}\Local\pcgen2.ico" 0 SW_SHOWMINIMIZED
         CreateShortCut "$SMPROGRAMS\PCGen\${APPDIR}\Convert Data.lnk" "$INSTDIR\${APPDIR}\jre\bin\javaw.exe" \ 
@@ -161,24 +163,24 @@ Section "-Local" Section4
 
 SectionEnd
 
-Section "JRE 64 Bit" Section5
+Section "Java 64 Bit" Section5
         SectionIn RO
 
         ;Use the right java version
-        DetailPrint "JRE extraction..."
+        DetailPrint "Java extraction..."
         SetOutPath "$INSTDIR\${APPDIR}\jre"
-        File /a /r "${SrcDir}\..\..\jre\jre_64\jre\*.*"
-        DetailPrint "JRE extraction complete!"
+        File /a /r "${SrcDir}\..\..\jre\jre_x64\*.*"
+        DetailPrint "Java extraction complete!"
 SectionEnd
 
-Section "JRE 32 Bit" Section6
+Section "Java 32 Bit" Section6
         SectionIn RO
 
         ;Use the right java version
-        DetailPrint "JRE extraction..."
+        DetailPrint "Java extraction..."
         SetOutPath "$INSTDIR\${APPDIR}\jre"
-        File /a /r "${SrcDir}\..\..\jre\jre_32\jre\*.*"
-        DetailPrint "JRE extraction complete!"
+        File /a /r "${SrcDir}\..\..\jre\jre_x32\*.*"
+        DetailPrint "Java extraction complete!"
 SectionEnd
 
 Section -FinishSection
@@ -224,12 +226,12 @@ Section Uninstall
 	CreateDirectory "$INSTDIR\${APPDIR}_Save\customsources"
 	CreateDirectory "$INSTDIR\${APPDIR}_Save\settings"
 	CreateDirectory "$INSTDIR\${APPDIR}_Save\GMGen"
-	CopyFiles /SILENT "$INSTDIR\${APPDIR}\characters\*.*" 			"$INSTDIR\${APPDIR}_Save\characters\"
-	CopyFiles /SILENT "$INSTDIR\${APPDIR}\data\customsources\*.*" 	"$INSTDIR\${APPDIR}_Save\customsources\"
-	CopyFiles /SILENT "$INSTDIR\${APPDIR}\*.ini" 						"$INSTDIR\${APPDIR}_Save\"
-	CopyFiles /SILENT "$INSTDIR\${APPDIR}\settings\*.*" 				"$INSTDIR\${APPDIR}_Save\settings\"
+	CopyFiles /SILENT "$INSTDIR\${APPDIR}\characters\*.*" "$INSTDIR\${APPDIR}_Save\characters\"
+	CopyFiles /SILENT "$INSTDIR\${APPDIR}\data\customsources\*.*" "$INSTDIR\${APPDIR}_Save\customsources\"
+	CopyFiles /SILENT "$INSTDIR\${APPDIR}\*.ini" "$INSTDIR\${APPDIR}_Save\"
+	CopyFiles /SILENT "$INSTDIR\${APPDIR}\settings\*.*" "$INSTDIR\${APPDIR}_Save\settings\"
 	;Ed- This has not been tested, Please test.
-	CopyFiles /SILENT "$INSTDIR\${APPDIR}\plugins\Notes\*.*" 				"$INSTDIR\${APPDIR}_Save\GMGen\"
+	CopyFiles /SILENT "$INSTDIR\${APPDIR}\plugins\Notes\*.*" "$INSTDIR\${APPDIR}_Save\GMGen\"
 	MessageBox MB_ICONINFORMATION|MB_OK "A shortcut will be created on your desktop to the saved files."
 	CreateShortCut "$DESKTOP\${APPDIR}_Save.lnk" "$INSTDIR\${APPDIR}_Save"
 

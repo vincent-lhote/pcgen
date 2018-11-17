@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import javax.swing.AbstractAction;
 import javax.swing.Box;
@@ -56,6 +57,7 @@ import pcgen.facade.util.ListFacades;
 import pcgen.facade.util.event.ListEvent;
 import pcgen.facade.util.event.ListListener;
 import pcgen.gui2.PCGenFrame;
+import pcgen.gui2.UIContext;
 import pcgen.gui2.UIPropertyContext;
 import pcgen.gui2.filter.FilterBar;
 import pcgen.gui2.filter.FilteredTreeViewTable;
@@ -83,7 +85,7 @@ class AdvancedSourceSelectionPanel extends JPanel
 		implements ListSelectionListener, ListListener<CampaignFacade>, ActionListener
 {
 
-	private static final UIPropertyContext context = 
+	private static final UIPropertyContext CONTEXT = 
 			UIPropertyContext.createContext("advancedSourceSelectionPanel"); //$NON-NLS-1$
 	private static final String PROP_SELECTED_GAME = "selectedGame"; //$NON-NLS-1$
 	private static final String PROP_SELECTED_SOURCES = "selectedSources."; //$NON-NLS-1$
@@ -102,8 +104,14 @@ class AdvancedSourceSelectionPanel extends JPanel
 	private final DefaultListFacade<CampaignFacade> selectedCampaigns;
 	private final PCGenFrame frame;
 
-	public AdvancedSourceSelectionPanel(PCGenFrame frame)
+	/**
+	 * The context indicating what items are currently loaded/being processed in the UI
+	 */
+	private final UIContext uiContext;
+	
+	public AdvancedSourceSelectionPanel(PCGenFrame frame, UIContext uiContext)
 	{
+		this.uiContext = Objects.requireNonNull(uiContext);
 		this.frame = frame;
 		this.availableTable = new FilteredTreeViewTable<>();
 		this.selectedTable = new FilteredTreeViewTable<>();
@@ -200,7 +208,7 @@ class AdvancedSourceSelectionPanel extends JPanel
 
 	private void initDefaults()
 	{
-		String defaultGame = context.initProperty(PROP_SELECTED_GAME, "");
+		String defaultGame = CONTEXT.initProperty(PROP_SELECTED_GAME, "");
 		GameModeDisplayFacade modeDisplay = null;
 		if (StringUtils.isNotEmpty(defaultGame))
 		{
@@ -231,7 +239,7 @@ class AdvancedSourceSelectionPanel extends JPanel
 		if (mode != null)
 		{
 			List<String> sourceNames;
-			String defaultSelectedSources = context.initProperty(
+			String defaultSelectedSources = CONTEXT.initProperty(
 				PROP_SELECTED_SOURCES + mode.toString(), ""); //$NON-NLS-1$
 			if (defaultSelectedSources == null || "".equals(defaultSelectedSources))
 			{
@@ -290,7 +298,7 @@ class AdvancedSourceSelectionPanel extends JPanel
 	private void setSelectedGameMode(GameModeDisplayFacade elementAt)
 	{
 		this.gameMode = elementAt.getGameMode();
-		context.setProperty(PROP_SELECTED_GAME, gameMode.toString());
+		CONTEXT.setProperty(PROP_SELECTED_GAME, gameMode.toString());
 		selectedCampaigns.clearContents();
 		availTreeViewModel.setGameModel(elementAt.getGameMode());
 		selectDefaultSources(gameMode);
@@ -380,7 +388,7 @@ class AdvancedSourceSelectionPanel extends JPanel
 	void rememberSelectedSources()
 	{
 		String sources = StringUtils.join(getSelectedCampaigns(), "|"); //$NON-NLS-1$
-		context.setProperty(PROP_SELECTED_SOURCES + gameMode.toString(), sources);
+		CONTEXT.setProperty(PROP_SELECTED_SOURCES + gameMode.toString(), sources);
 	}
 
 	private class AddAction extends AbstractAction
@@ -529,8 +537,8 @@ class AdvancedSourceSelectionPanel extends JPanel
 		@Override
 		public Object getData(CampaignFacade obj, int column)
 		{
-			SourceSelectionFacade sourceFacade = frame.getCurrentSourceSelectionRef().get();
-			boolean isLoaded = sourceFacade != null && sourceFacade.getCampaigns().containsElement(obj);
+			SourceSelectionFacade sourceFacade = uiContext.getCurrentSourceSelectionRef().get();
+			boolean isLoaded = (sourceFacade != null) && sourceFacade.getCampaigns().containsElement(obj);
 			switch (column)
 			{
 				case 0:

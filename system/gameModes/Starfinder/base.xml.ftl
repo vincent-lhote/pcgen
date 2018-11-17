@@ -44,11 +44,11 @@
 	  ====================================-->
 	<basics>
 		<rules>
-			<pfs>
-				<os>${pcstring('VAR.PFS_System.INTVAL')}</os>
-				<id_number>${pcstring('ABILITYALL.ANY.0.ASPECT=PFS_ID.ASPECT.PFS_ID')}</id_number>
-				<faction>${pcstring('ABILITYALL.ANY.0.TYPE=Society Faction.NAME')}</faction>
-			</pfs>
+			<society>
+				<os>${pcstring('VAR.Society_System.INTVAL')}</os>
+				<id_number>${pcstring('ABILITYALL.ANY.0.ASPECT=Society_ID.ASPECT.Society_ID')}</id_number>
+				<faction>${pcstring('ABILITYALL.ANY.0.TYPE=Faction.NAME')}</faction>
+			</society>
 		</rules>
 		<bonuses>${pcstring('BONUSLIST.STAT.STR')}</bonuses>
 		<bonuses>${pcstring('BONUSLIST.STAT.STR.TOTAL')}</bonuses>
@@ -640,10 +640,7 @@
 					<output>${pcstring('WEAPON.${weap}.OUTPUTNAME')}</output>
 				</name>
 				<category>${pcstring('WEAPON.${weap}.CATEGORY')}</category>
-				<critical>
-					<range>${pcstring('WEAPON.${weap}.CRIT')}</range>
-					<multiplier>${pcstring('WEAPON.${weap}.MULT')}</multiplier>
-				</critical>
+				<critical>${pcstring('WEAPON.${weap}.QUALITY.Critical')}</critical>
 				<to_hit>
 					<hit>${pcstring('WEAPON.${weap}.HIT')}</hit>
 					<magic_hit>${pcstring('WEAPON.${weap}.MAGICHIT')}</magic_hit>

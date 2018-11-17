@@ -33,7 +33,6 @@ import pcgen.base.util.CaseInsensitiveMap;
 import pcgen.base.util.DoubleKeyMap;
 import pcgen.base.util.TreeMapToList;
 import pcgen.cdom.base.CDOMObject;
-import pcgen.cdom.base.ClassIdentity;
 import pcgen.cdom.base.GroupDefinition;
 import pcgen.cdom.base.Loadable;
 import pcgen.cdom.grouping.GroupingDefinition;
@@ -78,7 +77,7 @@ public final class TokenLibrary implements PluginLoader
 	 * Contains legal GroupingDefinition objects loaded from plugins
 	 */
 	private static final DoubleKeyMap<Class<?>, String, GroupingDefinition<?>> GROUPING_MAP = new DoubleKeyMap<>();
-	private static final DoubleKeyMap<Class<?>, String, ModifierFactory<?>> modifierMap = new DoubleKeyMap<>();
+	private static final DoubleKeyMap<Class<?>, String, ModifierFactory<?>> MODIFIER_MAP = new DoubleKeyMap<>();
 
 	/**
 	 * Contains the interface tokens mapped by the token name.
@@ -128,11 +127,11 @@ public final class TokenLibrary implements PluginLoader
 	 * 
 	 * @return The GroupingDefinition available with the given Format and grouping key.
 	 */
-	public static <T extends Loadable> GroupingDefinition<T> getGrouping(ClassIdentity<T> classIdentity,
+	public static <T> GroupingDefinition<T> getGrouping(Class<T> inputClass,
 		String tokenKey)
 	{
 		boolean isDirect = true;
-		Class<?> actingClass = classIdentity.getReferenceClass();
+		Class<? super T> actingClass = inputClass;
 		while (actingClass != null)
 		{
 			GroupingDefinition token = GROUPING_MAP.get(actingClass, tokenKey);
@@ -162,7 +161,7 @@ public final class TokenLibrary implements PluginLoader
 		{
 			String name = m.getIdentification();
 			Class<?> cl = m.getVariableFormat();
-			ModifierFactory<?> prev = modifierMap.put(cl, name, m);
+			ModifierFactory<?> prev = MODIFIER_MAP.put(cl, name, m);
 			if (prev != null)
 			{
 				Logging.errorPrint("Found a second " + name + " Modifier for " + cl);
@@ -599,7 +598,7 @@ public final class TokenLibrary implements PluginLoader
 			{
 				return null;
 			}
-			return (T) modifierMap.get(cl, key);
+			return (T) MODIFIER_MAP.get(cl, key);
 		}
 
 	}
@@ -621,9 +620,12 @@ public final class TokenLibrary implements PluginLoader
 	}
 
 	/**
-	 * Add a CLASS via a BONUS
-	 * 
+	 * Add a CLASS via a BONUS.
+	 *
+	 * @param bonusClass the bonus class
 	 * @return true if successful
+	 * @throws InstantiationException the instantiation exception
+	 * @throws IllegalAccessException the illegal access exception
 	 */
 	public static boolean addBonusClass(Class bonusClass) throws InstantiationException, IllegalAccessException
 	{

@@ -178,63 +178,57 @@ launch4j {
     //Can't be longer than 150 characters
     copyright = "PCGen's source-code is distributed under the GNU Lesser General Public License (LGPL)"
     version = "${shortVerNum}"
+    jvmOptions = ["-Dsun.java2d.dpiaware=false"]
 }
 
 task downloadJRE doLast {
-    def major = 1
-    def micro = 8
-    def update = 121
+    def major = 11
+    def archs = ['x64','x32']
+    def osList = ['windows']
     def extension = 'zip'
-    def jre64Dir = new File("${projectDir}/jre/jre_64")
-    def jre32Dir = new File("${projectDir}/jre/jre_32")
-    if(!jre64Dir.exists()){
-        //Only download Windows libraries. Need to add more OS if we go multi OS at any time.
-        def filename = "jre-${major}.${micro}.${update}-windows-x64"
-        def jre64URL = "http://maven.nuiton.org/nexus/content/repositories/jvm/com/oracle/jre/${major}.${micro}.${update}/${filename}.zip"
-        println("Downloading JRE ${major}.${micro}.${update} from ${jre64URL}")
-        if(!jre64Dir.exists()){
-            download {
-                src jre64URL
-                dest new File("${projectDir}/jre/", "jre_64.${extension}")
-                overwrite false
+    osList.each{
+        def os = "${it}"
+        archs.each {
+            def arch = "${it}"
+            def url = "https://api.adoptopenjdk.net/v2/binary/nightly/openjdk${major}?openjdk_impl=hotspot&os=${os}&arch=${arch}&release=latest&type=jre"
+            def jreDir = new File("${projectDir}/jre/jre_${arch}")
+            if(!jreDir.exists()){
+                //Only download Windows libraries. Need to add more OS if we go multi OS at any time.
+                println("Downloading Java ${major} from ${url}")
+                if(!jreDir.exists()){
+                    download {
+                        src url
+                        dest new File("${projectDir}/jre/", "jre_${arch}.${extension}")
+                        overwrite false
+                    }
+                    //Now untar them
+                    fileTree(dir: "${projectDir}/jre/").include("*.${extension}").each { simLib ->
+                        copy {
+                            println "Unzip $simLib.name"
+                            def name = simLib.name - '.$extension'
+                            def zipFile = file("${projectDir}/jre/${simLib.name}")
+                            def outputDir = "${projectDir}/jre/jre_${arch}/"
+                            from zipTree(zipFile)
+                            into outputDir
+                            eachFile { fcd ->
+                                def relPath = fcd.relativePath
+                                if(relPath.lastName.startsWith("jdk-")  && fcd.isDirectory()) {
+                                    fcd.exclude()
+                                } else {
+                                    def segments = relPath.segments
+                                    fcd.relativePath = new RelativePath( !fcd.isDirectory() ,(segments[1..-1]) as String[]  )
+                                }
+                            }
+                        }
+                        new File("${projectDir}/jre/${simLib.name}").delete()
+                    }
+                    file("${projectDir}/jre/jre_${arch}").list().each { f->
+                        if(f.startsWith("jdk")) {
+                            file("${projectDir}/jre/jre_${arch}/"+f).deleteDir()
+                        }
+                    }
+                }
             }
-        }
-        //Now untar them
-        fileTree(dir: "${projectDir}/jre/").include("*.${extension}").each { simLib ->
-            copy {
-                println "Unzip $simLib.name"
-                def name = simLib.name - '.$extension'
-                def zipFile = file("${projectDir}/jre/${simLib.name}")
-                def outputDir = "${projectDir}/jre/jre_64/"
-                from zipTree(zipFile)
-                into outputDir
-            }
-            new File("${projectDir}/jre/${simLib.name}").delete()
-        }
-    }
-    if(!jre32Dir.exists()){
-        //Only download Windows libraries. Need to add more OS if we go multi OS at any time.
-        def filename = "jre-${major}.${micro}.${update}-windows-i586"
-        def jre32URL = "http://maven.nuiton.org/nexus/content/repositories/jvm/com/oracle/jre/${major}.${micro}.${update}/${filename}.zip"
-        println("Downloading JRE ${major}.${micro}.${update} from ${jre32URL}")
-        if(!jre32Dir.exists()){
-            download {
-                src jre32URL
-                dest new File("${projectDir}/jre/", "jre_32.${extension}")
-                overwrite false
-            }
-        }
-        //Now untar them
-        fileTree(dir: "${projectDir}/jre/").include("*.${extension}").each { simLib ->
-            copy {
-                println "Unzip $simLib.name"
-                def name = simLib.name - '.$extension'
-                def zipFile = file("${projectDir}/jre/${simLib.name}")
-                def outputDir = "${projectDir}/jre/jre_32/"
-                from zipTree(zipFile)
-                into outputDir
-            }
-            new File("${projectDir}/jre/${simLib.name}").delete()
         }
     }
 }

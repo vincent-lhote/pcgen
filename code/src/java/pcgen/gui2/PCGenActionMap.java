@@ -21,14 +21,11 @@ package pcgen.gui2;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
-import java.util.Collection;
+import java.util.Objects;
 
 import javax.swing.ActionMap;
 import javax.swing.JOptionPane;
 
-import gmgen.GMGenSystem;
-import pcgen.cdom.content.Sponsor;
-import pcgen.core.Globals;
 import pcgen.facade.core.AbilityFacade;
 import pcgen.facade.core.CharacterFacade;
 import pcgen.facade.core.ClassFacade;
@@ -51,6 +48,7 @@ import pcgen.gui2.dialog.ExportDialog;
 import pcgen.gui2.dialog.KitSelectionDialog;
 import pcgen.gui2.dialog.PrintPreviewDialog;
 import pcgen.gui2.solverview.SolverViewFrame;
+import pcgen.gui2.tools.DesktopBrowserLauncher;
 import pcgen.gui2.tools.Icons;
 import pcgen.gui2.tools.PCGenAction;
 import pcgen.gui2.tools.Utility;
@@ -58,6 +56,8 @@ import pcgen.system.CharacterManager;
 import pcgen.system.ConfigurationSettings;
 import pcgen.system.LanguageBundle;
 import pcgen.util.Logging;
+
+import gmgen.GMGenSystem;
 
 /**
  * The PCGenActionMap is the action map for the PCGenFrame, and as such
@@ -138,7 +138,6 @@ public final class PCGenActionMap extends ActionMap
 	public static final String HELP_CONTEXT_COMMAND = HELP_COMMAND + ".context";
 	public static final String HELP_DOCS_COMMAND = HELP_COMMAND + ".docs";
 	public static final String HELP_OGL_COMMAND = HELP_COMMAND + ".ogl";
-	public static final String HELP_SPONSORS_COMMAND = HELP_COMMAND + ".sponsors";
 	public static final String HELP_TIPOFTHEDAY_COMMAND = HELP_COMMAND + ".tod";
 	public static final String HELP_ABOUT_COMMAND = HELP_COMMAND + ".about";
 	private final PCGenFrame frame;
@@ -148,8 +147,14 @@ public final class PCGenActionMap extends ActionMap
 	public static final String MNU_EDIT = "mnuEdit"; //$NON-NLS-1$
 	public static final String MNU_FILE = "mnuFile"; //$NON-NLS-1$
 
-	public PCGenActionMap(PCGenFrame frame)
+	/**
+	 * The context indicating what items are currently loaded/being processed in the UI
+	 */
+	private final UIContext uiContext;
+
+	public PCGenActionMap(PCGenFrame frame, UIContext uiContext)
 	{
+		this.uiContext = Objects.requireNonNull(uiContext);
 		this.frame = frame;
 		initActions();
 	}
@@ -238,7 +243,6 @@ public final class PCGenActionMap extends ActionMap
 		put(HELP_CONTEXT_COMMAND, new ContextHelpAction());
 		put(HELP_DOCS_COMMAND, new DocsHelpAction());
 		put(HELP_OGL_COMMAND, new OGLHelpAction());
-		put(HELP_SPONSORS_COMMAND, new SponsorsHelpAction());
 		put(HELP_TIPOFTHEDAY_COMMAND, new TipOfTheDayHelpAction());
 		put(HELP_ABOUT_COMMAND, new AboutHelpAction());
 	}
@@ -869,7 +873,8 @@ public final class PCGenActionMap extends ActionMap
 		public ReloadSourcesAction()
 		{
 			super("mnuSourcesReload", SOURCES_RELOAD_COMMAND, "shift-shortcut R");
-			ReferenceFacade<SourceSelectionFacade> currentSourceSelectionRef = frame.getCurrentSourceSelectionRef();
+			ReferenceFacade<SourceSelectionFacade> currentSourceSelectionRef =
+					uiContext.getCurrentSourceSelectionRef();
 			currentSourceSelectionRef.addReferenceListener(this);
 			checkEnabled(currentSourceSelectionRef.get());
 		}
@@ -877,7 +882,8 @@ public final class PCGenActionMap extends ActionMap
 		@Override
 		public void actionPerformed(ActionEvent e)
 		{
-			SourceSelectionFacade sources = frame.getCurrentSourceSelectionRef().get();
+			SourceSelectionFacade sources =
+					uiContext.getCurrentSourceSelectionRef().get();
 			if (sources != null)
 			{
 				frame.unloadSources();
@@ -904,7 +910,8 @@ public final class PCGenActionMap extends ActionMap
 		public UnloadSourcesAction()
 		{
 			super("mnuSourcesUnload", SOURCES_UNLOAD_COMMAND, "shortcut U");
-			ReferenceFacade<SourceSelectionFacade> currentSourceSelectionRef = frame.getCurrentSourceSelectionRef();
+			ReferenceFacade<SourceSelectionFacade> currentSourceSelectionRef =
+					uiContext.getCurrentSourceSelectionRef();
 			currentSourceSelectionRef.addReferenceListener(this);
 			checkEnabled(currentSourceSelectionRef.get());
 		}
@@ -1028,7 +1035,7 @@ public final class PCGenActionMap extends ActionMap
 		{
 			try
 			{
-				Utility.viewInBrowser(new File(ConfigurationSettings.getDocsDir(), "index.html"));
+				DesktopBrowserLauncher.viewInBrowser(new File(ConfigurationSettings.getDocsDir(), "index.html"));
 			}
 			catch (IOException ex)
 			{
@@ -1052,30 +1059,6 @@ public final class PCGenActionMap extends ActionMap
 		public void actionPerformed(ActionEvent e)
 		{
 			frame.showOGLDialog();
-		}
-
-	}
-
-	private class SponsorsHelpAction extends PCGenAction
-	{
-
-		public SponsorsHelpAction()
-		{
-			super("mnuHelpSponsors", HELP_SPONSORS_COMMAND);
-		}
-
-		@Override
-		public void actionPerformed(ActionEvent e)
-		{
-			Collection<Sponsor> sponsors =
-					Globals.getGlobalContext().getReferenceContext().getConstructedCDOMObjects(Sponsor.class);
-			if (sponsors.size() > 1)
-			{
-				frame.showSponsorsDialog();
-				return;
-			}
-			JOptionPane.showMessageDialog(frame, "There are no sponsors", "Missing Sponsors",
-				JOptionPane.INFORMATION_MESSAGE);
 		}
 
 	}
